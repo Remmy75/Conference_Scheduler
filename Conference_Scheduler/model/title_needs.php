@@ -7,10 +7,10 @@
  */
 
 /**
- * Description of speaker_needs_db
+ * Description of speaker_needs
  *
  * @author Home
  */
-class speaker_needs_db {
+class title_needs {
     //put your code here
 }
