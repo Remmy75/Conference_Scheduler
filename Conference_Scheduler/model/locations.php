@@ -7,10 +7,44 @@
  */
 
 /**
- * Description of locations
+ * Description of location
  *
  * @author Home
  */
 class locations {
-    //put your code here
+    private $locationID, $bldg_name, $roomID;
+    function __construct($locationID, $bldg_name, $roomID) {
+        
+        $this->locationID = $locationID;
+        $this->bldg_name = $bldg_name;
+        $this->roomID = $roomID;
+        
+        
+        
+    }
+    function getLocationID() {
+        return $this->locationID;
+    }
+
+    function getBldgName() {
+        return $this->bldg_name;
+    }
+
+    function getRoomID() {
+        return $this->roomID;
+    }
+
+    function setLocationID($locationID) {
+        $this->locationID = $locationID;
+    }
+
+    function setBldgName($bldg_name) {
+        $this->bldg_name = $bldg_name;
+    }
+
+    function setRoomID($roomID) {
+        $this->roomID = $roomID;
+    }
+
+  
 }
