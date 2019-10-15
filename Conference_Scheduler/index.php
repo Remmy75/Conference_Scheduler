@@ -30,10 +30,82 @@
         include('view/home.php');
         die();
         break;
+    
     case '':
         include('');
         die();
         break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
+    case '':
+        include('');
+        die();
+        break;
+    
     case '':
         include('');
         die();
