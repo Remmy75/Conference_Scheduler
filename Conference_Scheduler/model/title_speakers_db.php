@@ -3,35 +3,41 @@
 //title_speakerID
 //titleID
 //speakerID
+//
+//$title_speakerID
+//$titleID
+//$speakerID
 //need to add fields to finish
 class title_speakers_db {
-    public static function get_user($userName) {
-    $db = Database::getDB();
     
-    $query = 'SELECT * FROM users
-              WHERE userName = :userName';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->execute();
-    $user = $statement->fetch();
-    $statement->closeCursor();
-    return $user;
-}
+    public static function select_all() {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT * FROM title_speakers';
+        $statement = $db->prepare($queryUsers);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $equipment = [];
+
+        foreach ($rows as $value) {
+            $equipment[$value['title_speakerID']] = new equipment($value['title_speakerID'], $value['titleID'], $value['speakerID']);
+        }
+        $statement->closeCursor();
+
+        return $equipment;
+    }
 
 
-    public static function add_user($userName, $userFName, $userLName, $hashedPW, $userEmail) {
+    public static function add_title_speakers($titleID, $speakerID) {
     $db = Database::getDB();
 
     $query = 'INSERT INTO users
-                 (userName, userFName, userLName, userPWord, userEmail)
+                 (titleID, speakerID)
               VALUES
-                 (:userName, :userFName, :userLName, :userPWord, :userEmail)';
+                 (:titleID, :speakerID)';
     $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->bindValue(':userFName', $userFName);
-    $statement->bindValue(':userLName', $userLName);
-    $statement->bindValue(':userPWord', $hashedPW);
-    $statement->bindValue(':userEmail', $userEmail);
+    $statement->bindValue(':titleID', $titleID);
+    $statement->bindValue(':speakerID', $speakerID);
     $statement->execute();
     $statement->closeCursor();
     
@@ -41,51 +47,51 @@ class title_speakers_db {
             
 }
 
-    public static function check_user_by_email($userEmail) {
+    public static function update_speakers_by_title($titleID, $speakerID) {
         $db = Database::getDB();
-        $query = 'SELECT userEmail
-              FROM users
-              WHERE userEmail= :userEmail';
-
+        $query = 'UPDATE equipment
+              SET speakerID = :speakerID,
+              WHERE titleID = :titleID';
         $statement = $db->prepare($query);
-        $statement->bindValue(':userEmail', $userEmail);
+        $statement->bindValue(':speakerID', $speakerID);
+        $statement->bindValue(':titleID', $titleID);
         $statement->execute();
-        $user = $statement->fetch();
         $statement->closeCursor();
-        
-        return $user;
-}
-    
-    public static function get_user_by_username($userName) {
-        $db = Database::getDB();
-        $query = 'SELECT userName
-              FROM users
-              WHERE userName= :userName';
-
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
-        $statement->execute();
-        $user = $statement->fetch();
-        $statement->closeCursor();
-        
-        return $user;
     }
     
-    public static function validate_user_login($userName) {
-        $db = Database::getDB();;
-        $query = 'SELECT userIDNum, userName, userFName, userLName, userPWord, userEmail
-              FROM users
-              WHERE userName= :userName';
+    
+    public static function get_speakers_by_titleID($titleID) {
+        $db = Database::getDB();
+        $query = 'SELECT *
+              FROM title_speakers
+              WHERE titleID = :titleID';
 
         $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
+        $statement->bindValue(':titleID', $titleID);
         $statement->execute();
-        $value = $statement->fetch();
+        $user = $statement->fetch();
+        $title_speaker = [];
 
-        $theUser = new user($value['userIDNum'], $value['userName'], $value['userFName'], $value['userLName'], $value['userPWord'], $value['userEmail']);
-        
+        foreach ($rows as $value) {
+            $title_speaker[$value['$title_speakerID']] = new title_speaker($value['$title_speakerID'], $value['speakerID'], $value['titleID']);
+        }
         $statement->closeCursor();
 
-        return $theUser;
+        return $title_speaker;
+    }
+    
+    public static function delete_by_ID($title_speakerID) {
+        $db = Database::getDB();
+        $query = 'DELETE from title_speakers WHERE title_speakerID = :title_speakerID';
+        try {
+            $statement = $db->prepare($query);
+            $statement->bindValue(':title_speakerID', $title_speakerID);
+            $row_count = $statement->execute();
+            $statement->closeCursor();
+            return $row_count;
+        } catch (PDOException $e) {
+            $error_message = $e->getMessage();
+            display_db_error($error_message);
+        }
     }
 }

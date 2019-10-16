@@ -2,36 +2,39 @@
 
 //conference_locationsID
 //locationID
+//
+//$conference_locationsID
+//$locationID
 //need to add all fields to finish
 class conference_locations_db {
     
-    public static function get_user($userName) {
+    public static function select_all() {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT * FROM conference_locations';
+        $statement = $db->prepare($queryUsers);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $conference_location = [];
+
+        foreach ($rows as $value) {
+            $conference_location[$value['conference_locationsID']] = new conference_location($value['conference_locationsID'], $value['locationID']);
+        }
+        $statement->closeCursor();
+
+        return $conference_location;
+    }
+
+
+    public static function add_conference_locations($locationID) {
     $db = Database::getDB();
-    
-    $query = 'SELECT * FROM users
-              WHERE userName = :userName';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->execute();
-    $user = $statement->fetch();
-    $statement->closeCursor();
-    return $user;
-}
 
-
-    public static function add_user($userName, $userFName, $userLName, $hashedPW, $userEmail) {
-    $db = Database::getDB();
-
-    $query = 'INSERT INTO users
-                 (userName, userFName, userLName, userPWord, userEmail)
+    $query = 'INSERT INTO conference_locations
+                 (locationID)
               VALUES
-                 (:userName, :userFName, :userLName, :userPWord, :userEmail)';
+                 (:locationID)';
     $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->bindValue(':userFName', $userFName);
-    $statement->bindValue(':userLName', $userLName);
-    $statement->bindValue(':userPWord', $hashedPW);
-    $statement->bindValue(':userEmail', $userEmail);
+    $statement->bindValue(':locationID', $locationID);
     $statement->execute();
     $statement->closeCursor();
     
@@ -39,53 +42,20 @@ class conference_locations_db {
             return $user_id;
     
             
-}
-
-    public static function check_user_by_email($userEmail) {
-        $db = Database::getDB();
-        $query = 'SELECT userEmail
-              FROM users
-              WHERE userEmail= :userEmail';
-
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userEmail', $userEmail);
-        $statement->execute();
-        $user = $statement->fetch();
-        $statement->closeCursor();
-        
-        return $user;
-}
-    
-    public static function get_user_by_username($userName) {
-        $db = Database::getDB();
-        $query = 'SELECT userName
-              FROM users
-              WHERE userName= :userName';
-
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
-        $statement->execute();
-        $user = $statement->fetch();
-        $statement->closeCursor();
-        
-        return $user;
     }
-    
-    public static function validate_user_login($userName) {
-        $db = Database::getDB();;
-        $query = 'SELECT userIDNum, userName, userFName, userLName, userPWord, userEmail
-              FROM users
-              WHERE userName= :userName';
 
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
-        $statement->execute();
-        $value = $statement->fetch();
-
-        $theUser = new user($value['userIDNum'], $value['userName'], $value['userFName'], $value['userLName'], $value['userPWord'], $value['userEmail']);
-        
-        $statement->closeCursor();
-
-        return $theUser;
+    public static function delete_by_ID($conference_locationsID) {
+        $db = Database::getDB();
+        $query = 'DELETE from conference_locations WHERE conference_locationsID = :conference_locationsID';
+        try {
+            $statement = $db->prepare($query);
+            $statement->bindValue(':conference_locationsID', $conference_locationsID);
+            $row_count = $statement->execute();
+            $statement->closeCursor();
+            return $row_count;
+        } catch (PDOException $e) {
+            $error_message = $e->getMessage();
+            display_db_error($error_message);
+        }
     }
 }

@@ -3,89 +3,81 @@
 //location_equipID
 //equipID
 //locationID
+//
+//$location_equipID
+//$equipID
+//$locationID
 //need to add fields to finish
 class location_equipment_db {
-   public static function get_user($userName) {
-    $db = Database::getDB();
     
-    $query = 'SELECT * FROM users
-              WHERE userName = :userName';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->execute();
-    $user = $statement->fetch();
-    $statement->closeCursor();
-    return $user;
-}
+   public static function select_all() {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT * FROM location_equipment';
+        $statement = $db->prepare($queryUsers);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $location_equipment = [];
+
+        foreach ($rows as $value) {
+            $location_equipment[$value['location_equipID']] = new location_equipment($value['location_equipID'], $value['equipID'], $value['locationID']);
+        }
+        $statement->closeCursor();
+
+        return $location_equipment;
+    }
 
 
-    public static function add_user($userName, $userFName, $userLName, $hashedPW, $userEmail) {
+    public static function add_location_equipment($equipID, $locationID) {
     $db = Database::getDB();
 
     $query = 'INSERT INTO users
-                 (userName, userFName, userLName, userPWord, userEmail)
+                 (equipID, locationID)
               VALUES
-                 (:userName, :userFName, :userLName, :userPWord, :userEmail)';
+                 (:equipID, :locationID)';
     $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->bindValue(':userFName', $userFName);
-    $statement->bindValue(':userLName', $userLName);
-    $statement->bindValue(':userPWord', $hashedPW);
-    $statement->bindValue(':userEmail', $userEmail);
+    $statement->bindValue(':equipID', $equipID);
+    $statement->bindValue(':locationID', $locationID);
     $statement->execute();
     $statement->closeCursor();
     
      $user_id = $db->lastInsertId();
             return $user_id;
-    
-            
-}
-
-    public static function check_user_by_email($userEmail) {
-        $db = Database::getDB();
-        $query = 'SELECT userEmail
-              FROM users
-              WHERE userEmail= :userEmail';
-
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userEmail', $userEmail);
-        $statement->execute();
-        $user = $statement->fetch();
-        $statement->closeCursor();
-        
-        return $user;
-}
-    
-    public static function get_user_by_username($userName) {
-        $db = Database::getDB();
-        $query = 'SELECT userName
-              FROM users
-              WHERE userName= :userName';
-
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
-        $statement->execute();
-        $user = $statement->fetch();
-        $statement->closeCursor();
-        
-        return $user;
     }
     
-    public static function validate_user_login($userName) {
-        $db = Database::getDB();;
-        $query = 'SELECT userIDNum, userName, userFName, userLName, userPWord, userEmail
-              FROM users
-              WHERE userName= :userName';
+    
+    public static function get_equipment_by_location($locationID) {
+        $db = Database::getDB();
+        $query = 'SELECT *
+              FROM location_equipment
+              WHERE locationID = :locationID';
 
         $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
+        $statement->bindValue(':locationID', $locationID);
         $statement->execute();
-        $value = $statement->fetch();
+        $user = $statement->fetch();
+        $title_need = [];
 
-        $theUser = new user($value['userIDNum'], $value['userName'], $value['userFName'], $value['userLName'], $value['userPWord'], $value['userEmail']);
-        
+        foreach ($rows as $value) {
+            $title_need[$value['location_equipID']] = new title_need($value['location_equipID'], $value['equipID'], $value['locationID']);
+        }
         $statement->closeCursor();
 
-        return $theUser;
+        return $title_need;
+    }
+    
+    public static function delete_by_ID($location_equipID) {
+        $db = Database::getDB();
+        $query = 'DELETE from location_equipment WHERE location_equipID = :location_equipID';
+        try {
+            $statement = $db->prepare($query);
+            $statement->bindValue(':location_equipID', $location_equipID);
+            $row_count = $statement->execute();
+            $statement->closeCursor();
+            return $row_count;
+        } catch (PDOException $e) {
+            $error_message = $e->getMessage();
+            display_db_error($error_message);
+        }
     }
 }
