@@ -1,17 +1,50 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <?php
-        // put your code here
-        ?>
-    </body>
-</html>
+<div class="nav">
+    <table class="center">
+        <tr>
+            <td>
+                <form action="index.php" method="post">
+                    <input type="hidden" value="home" name="action">
+                    <input class="button" type="submit" value="Home">
+                </form>
+            </td>
+                    <td>
+                        <form action="index.php" method="post">
+                            <input type="hidden" value="login" name="action">
+                            <input class="button" type="submit" value="Login">
+                        </form>
+                    </td>
+               
+                    <td>
+                        <form action="index.php" method="post">
+                            <input type="hidden" value="profile" name="action">
+                            <input class="button" type="submit" value="Conferences">
+                        </form>
+                    </td>
+                    <td>
+                        <form action="index.php" method="post">
+                            <input type="hidden" value="drills" name="action">
+                            <input class="button" type="submit" value="Equipment">
+                        </form>
+                    </td>
+                    <td>
+                        <form action="index.php" method="post">
+                            <input type="hidden" value="tests" name="action">
+                            <input class="button" type="submit" value="Locations">
+                        </form>
+                    </td>
+                        <td>
+                            <form action="index.php" method="post">
+                                <input type="hidden" value="baseline" name="action">
+                                <input class="button" type="submit" value="Speakers">
+                            </form>
+                        </td>
+                    
+                <td>
+                    <form action="index.php" method="post">
+                        <input type="hidden" value="logout" name="action">
+                        <input class="button" type="submit" value="Logout">
+                    </form>
+                </td>
+        </tr>
+    </table>
+</div>

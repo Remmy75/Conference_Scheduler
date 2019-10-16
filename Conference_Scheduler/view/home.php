@@ -3,7 +3,7 @@
     <body>
         <div class="wrapper">
             <div class="heading"> 
-           <h1>Math Drill Site</h1>
+           <h1>Conference Scheduler</h1>
             </div>
              
             <?php include 'view/nav.php'; ?>

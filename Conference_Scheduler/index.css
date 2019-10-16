@@ -1,10 +1,12 @@
 
+html {
+    background-image:               url("conference2.jpg");  
+    background-size:                100% ;
+}
+
 .wrapper {
     margin:			auto;
     background-color:		#FDFEFE;
-    border-style:		solid;
-    border-color:		black;
-    border-width:		3px;
     width:			80%;
     min-width:			700px;
     max-width:			960px;
@@ -22,10 +24,30 @@ body {
     border:                     5px solid #001963;
 }
 
+body p {
+    text-indent: 20px;
+}
+
 footer {
     text-align:			center;
     font-size:			.70em;
     font-style:			italic;
     padding:			10px;
     clear:			left;
+}
+
+.heading{
+    text-align: center;
+    border: solid black 2px;
+}
+
+.nav{    
+    height: 2em; 
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+table.center {
+    margin-left:auto; 
+    margin-right:auto;
 }
