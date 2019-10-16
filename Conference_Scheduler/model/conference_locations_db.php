@@ -1,7 +1,10 @@
 <?php
 
+//conference_locationsID
+//locationID
 //need to add all fields to finish
 class conference_locations_db {
+    
     public static function get_user($userName) {
     $db = Database::getDB();
     

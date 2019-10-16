@@ -1,88 +1,113 @@
 <?php
 
+//speakerID
+//fname
+//lname
+//phone_num
+//email
+//
+//$speakerID
+//$fname
+//$lname
+//$phone_num
+//$email
 //need to add fields to finish
 class speakers_db {
+    
     public static function get_speaker($speakerID) {
-    $db = Database::getDB();
+        $db = Database::getDB();
     
-    $query = 'SELECT * FROM speakers
+        $query = 'SELECT * FROM speakers
               WHERE speakerID = :speakerID';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':speakerID', $speakerID);
-    $statement->execute();
-    $user = $statement->fetch();
-    $statement->closeCursor();
-    return $speaker;
-}
+        $statement = $db->prepare($query);
+        $statement->bindValue(':speakerID', $speakerID);
+        $statement->execute();
+        $user = $statement->fetch();
+        $statement->closeCursor();
+        return $speaker;
+    }
 
 
-    public static function add_speaker($userName, $userFName, $userLName, $hashedPW, $userEmail) {
-    $db = Database::getDB();
+    public static function add_speaker($fname, $lname, $phone_num, $email) {
+        $db = Database::getDB();
 
-    $query = 'INSERT INTO users
-                 (userName, userFName, userLName, userPWord, userEmail)
+        $query = 'INSERT INTO users
+                 (fname, lname, phone_num, email)
               VALUES
-                 (:userName, :userFName, :userLName, :userPWord, :userEmail)';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->bindValue(':userFName', $userFName);
-    $statement->bindValue(':userLName', $userLName);
-    $statement->bindValue(':userPWord', $hashedPW);
-    $statement->bindValue(':userEmail', $userEmail);
-    $statement->execute();
-    $statement->closeCursor();
-    
-     $user_id = $db->lastInsertId();
-            return $user_id;
-    
-            
-}
-
-    public static function check_user_by_email($userEmail) {
-        $db = Database::getDB();
-        $query = 'SELECT userEmail
-              FROM users
-              WHERE userEmail= :userEmail';
-
+                 (:fname, :lname, :phone_num, :email)';
         $statement = $db->prepare($query);
-        $statement->bindValue(':userEmail', $userEmail);
+        $statement->bindValue(':fname', $fname);
+        $statement->bindValue(':lname', $lname);
+        $statement->bindValue(':phone_num', $phone_num);
+        $statement->bindValue(':email', $email);
         $statement->execute();
-        $user = $statement->fetch();
         $statement->closeCursor();
-        
-        return $user;
-}
     
-    public static function get_user_by_username($userName) {
-        $db = Database::getDB();
-        $query = 'SELECT userName
-              FROM users
-              WHERE userName= :userName';
-
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
-        $statement->execute();
-        $user = $statement->fetch();
-        $statement->closeCursor();
-        
-        return $user;
+        $user_id = $db->lastInsertId();
+            return $user_id;       
     }
     
-    public static function validate_user_login($userName) {
-        $db = Database::getDB();;
-        $query = 'SELECT userIDNum, userName, userFName, userLName, userPWord, userEmail
-              FROM users
-              WHERE userName= :userName';
-
+    public static function update_speakers_fName($speakerID, $fname) {
+        $db = Database::getDB();
+        $query = 'UPDATE speakers
+              SET fname = :fname,
+              WHERE speakerID = :speakerID';
         $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
+        $statement->bindValue(':fname', $fname);
+        $statement->bindValue(':speakerID', $speakerID);
         $statement->execute();
-        $value = $statement->fetch();
-
-        $theUser = new user($value['userIDNum'], $value['userName'], $value['userFName'], $value['userLName'], $value['userPWord'], $value['userEmail']);
-        
         $statement->closeCursor();
-
-        return $theUser;
     }
+    
+    public static function update_speakers_lName($speakerID, $lname) {
+        $db = Database::getDB();
+        $query = 'UPDATE speakers
+              SET lname = :lname,
+              WHERE speakerID = :speakerID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':lname', $lname);
+        $statement->bindValue(':speakerID', $speakerID);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
+    public static function update_speakers_phone_num($speakerID, $phone_num) {
+        $db = Database::getDB();
+        $query = 'UPDATE speakers
+              SET phone_num = :phone_num,
+              WHERE speakerID = :speakerID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':phone_num', $phone_num);
+        $statement->bindValue(':speakerID', $speakerID);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+    
+    public static function update_speakers_email($speakerID, $email) {
+        $db = Database::getDB();
+        $query = 'UPDATE speakers
+              SET email = :email,
+              WHERE speakerID = :speakerID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':email', $email);
+        $statement->bindValue(':speakerID', $speakerID);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+    
+    public static function delete_by_ID($speakerID) {
+        $db = Database::getDB();
+        $query = 'DELETE from speakers WHERE speakerID = :speakerID';
+        try {
+            $statement = $db->prepare($query);
+            $statement->bindValue(':speakerID', $speakerID);
+            $row_count = $statement->execute();
+            $statement->closeCursor();
+            return $row_count;
+        } catch (PDOException $e) {
+            $error_message = $e->getMessage();
+            display_db_error($error_message);
+        }
+    }
+    
 }

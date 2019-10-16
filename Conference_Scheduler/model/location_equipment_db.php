@@ -1,5 +1,8 @@
 <?php
 
+//location_equipID
+//equipID
+//locationID
 //need to add fields to finish
 class location_equipment_db {
    public static function get_user($userName) {

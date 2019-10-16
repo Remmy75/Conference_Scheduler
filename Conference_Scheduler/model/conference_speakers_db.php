@@ -1,5 +1,7 @@
 <?php
 
+//conference_titleID
+//titleID
 //need to add fields to finish
 class conference_speakers_db {
     public static function get_user($userName) {

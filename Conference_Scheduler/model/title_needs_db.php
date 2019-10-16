@@ -1,5 +1,8 @@
 <?php
 
+//title_needsID
+//equipmentID
+//titleID
 //need to add fields to finish
 class title_needs_db {
     public static function get_user($userName) {

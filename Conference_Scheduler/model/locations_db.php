@@ -1,4 +1,8 @@
 <?php
+
+//locationID
+//bldg_name
+//room_num
 //need to edit field names
 class locations_db {
     

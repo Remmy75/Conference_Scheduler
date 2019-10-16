@@ -1,88 +1,84 @@
 <?php
 
+//equipID
+//name
+//
+//$equipID
+//$name
 //need to add fields to finish
 class equipment_db {
-    public static function get_user($userName) {
-    $db = Database::getDB();
     
-    $query = 'SELECT * FROM users
-              WHERE userName = :userName';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->execute();
-    $user = $statement->fetch();
-    $statement->closeCursor();
-    return $user;
-}
-
-
-    public static function add_user($userName, $userFName, $userLName, $hashedPW, $userEmail) {
-    $db = Database::getDB();
-
-    $query = 'INSERT INTO users
-                 (userName, userFName, userLName, userPWord, userEmail)
-              VALUES
-                 (:userName, :userFName, :userLName, :userPWord, :userEmail)';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->bindValue(':userFName', $userFName);
-    $statement->bindValue(':userLName', $userLName);
-    $statement->bindValue(':userPWord', $hashedPW);
-    $statement->bindValue(':userEmail', $userEmail);
-    $statement->execute();
-    $statement->closeCursor();
-    
-     $user_id = $db->lastInsertId();
-            return $user_id;
-    
-            
-}
-
-    public static function check_user_by_email($userEmail) {
+    public static function select_all() {
         $db = Database::getDB();
-        $query = 'SELECT userEmail
-              FROM users
-              WHERE userEmail= :userEmail';
 
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userEmail', $userEmail);
+        $queryUsers = 'SELECT * FROM equipment';
+        $statement = $db->prepare($queryUsers);
         $statement->execute();
-        $user = $statement->fetch();
-        $statement->closeCursor();
-        
-        return $user;
-}
-    
-    public static function get_user_by_username($userName) {
-        $db = Database::getDB();
-        $query = 'SELECT userName
-              FROM users
-              WHERE userName= :userName';
+        $rows = $statement->fetchAll();
+        $equipment = [];
 
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
-        $statement->execute();
-        $user = $statement->fetch();
+        foreach ($rows as $value) {
+            $equipment[$value['equipID']] = new equipment($value['equipID'], $value['name']);
+        }
         $statement->closeCursor();
-        
-        return $user;
+
+        return $equipment;
     }
     
-    public static function validate_user_login($userName) {
-        $db = Database::getDB();;
-        $query = 'SELECT userIDNum, userName, userFName, userLName, userPWord, userEmail
-              FROM users
-              WHERE userName= :userName';
-
+    public static function get_equipment($equipID) {
+        $db = Database::getDB();
+    
+        $query = 'SELECT * FROM equipment
+              WHERE equipID = :equipID';
         $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
+        $statement->bindValue(':equipID', $equipID);
         $statement->execute();
-        $value = $statement->fetch();
-
-        $theUser = new user($value['userIDNum'], $value['userName'], $value['userFName'], $value['userLName'], $value['userPWord'], $value['userEmail']);
-        
+        $user = $statement->fetch();
         $statement->closeCursor();
+        return $user;
+    }
 
-        return $theUser;
+
+    public static function add_equipment($name) {
+        $db = Database::getDB();
+
+        $query = 'INSERT INTO equipment
+                 (name)
+                 VALUES
+                 (:name)';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':name', $name);
+        $statement->execute();
+        $statement->closeCursor();
+    
+        $user_id = $db->lastInsertId();
+            return $user_id;   
+    }
+
+    public static function delete_by_ID($equipID) {
+        $db = Database::getDB();
+        $query = 'DELETE from equipment WHERE equipID = :equipID';
+        try {
+            $statement = $db->prepare($query);
+            $statement->bindValue(':equipID', $equipID);
+            $row_count = $statement->execute();
+            $statement->closeCursor();
+            return $row_count;
+        } catch (PDOException $e) {
+            $error_message = $e->getMessage();
+            display_db_error($error_message);
+        }
+    }
+    
+    public static function update_equipment($equipID, $name) {
+        $db = Database::getDB();
+        $query = 'UPDATE equipment
+              SET name = :name,
+              WHERE equipID = :equipID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':name', $name);
+        $statement->bindValue(':equipID', $equipID);
+        $statement->execute();
+        $statement->closeCursor();
     }
 }

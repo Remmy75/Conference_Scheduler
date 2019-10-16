@@ -1,88 +1,146 @@
 <?php
 
+//scheduleID
+//conferenceID
+//titleID
+//locationID
+//time
+//
+//$scheduleID
+//$conferenceID
+//$titleID
+//$locationID
+//$time
 //need to add all fields to finish
 class conference_schedule_db {
-    public static function get_user($userName) {
-    $db = Database::getDB();
     
-    $query = 'SELECT * FROM users
-              WHERE userName = :userName';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->execute();
-    $user = $statement->fetch();
-    $statement->closeCursor();
-    return $user;
-}
+    public static function select_all() {
+        $db = Database::getDB();
 
+        $queryUsers = 'SELECT * FROM conference_schedule';
+        $statement = $db->prepare($queryUsers);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $conference_scheduled = [];
 
-    public static function add_user($userName, $userFName, $userLName, $hashedPW, $userEmail) {
+        foreach ($rows as $value) {
+            $conference_scheduled[$value['scheduleID']] = new conference_scheduled($value['scheduleID'], $value['conferenceID'], $value['titleID'], $value['locationID'], $value['time']);
+        }
+        $statement->closeCursor();
+
+        return $conference_scheduled;
+    }
+
+    public static function update_conference_schedule_conferenceID($scheduleID, $conferenceID) {
+        $db = Database::getDB();
+        $query = 'UPDATE conference_schedule
+              SET conferenceID = :conferenceID,
+              WHERE scheduleID = :scheduleID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':conferenceID', $conferenceID);
+        $statement->bindValue(':scheduleID', $scheduleID);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
+    public static function update_conference_schedule_titleID($scheduleID, $titleID) {
+        $db = Database::getDB();
+        $query = 'UPDATE conference_schedule
+              SET titleID = :titleID,
+              WHERE scheduleID = :scheduleID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':titleID', $titleID);
+        $statement->bindValue(':scheduleID', $scheduleID);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+    
+    public static function update_conference_schedule_locationID($scheduleID, $locationID) {
+        $db = Database::getDB();
+        $query = 'UPDATE conference_schedule
+              SET locationID = :locationID,
+              WHERE scheduleID = :scheduleID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':locationID', $locationID);
+        $statement->bindValue(':scheduleID', $scheduleID);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+    
+    public static function update_conference_schedule_time($scheduleID, $time) {
+        $db = Database::getDB();
+        $query = 'UPDATE conference_schedule
+              SET time = :time,
+              WHERE scheduleID = :scheduleID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':time', $time);
+        $statement->bindValue(':scheduleID', $scheduleID);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+    
+    public static function add_to_conference($conferenceID, $titleID, $locationID, $time) {
     $db = Database::getDB();
 
-    $query = 'INSERT INTO users
-                 (userName, userFName, userLName, userPWord, userEmail)
+    $query = 'INSERT INTO conference_schedule
+                 (conferenceID, titleID, locationID, time)
               VALUES
-                 (:userName, :userFName, :userLName, :userPWord, :userEmail)';
+                 (:conferenceID, :titleID, :locationID, :time)';
     $statement = $db->prepare($query);
-    $statement->bindValue(':userName', $userName);
-    $statement->bindValue(':userFName', $userFName);
-    $statement->bindValue(':userLName', $userLName);
-    $statement->bindValue(':userPWord', $hashedPW);
-    $statement->bindValue(':userEmail', $userEmail);
+    $statement->bindValue(':conferenceID', $conferenceID);
+    $statement->bindValue(':titleID', $titleID);
+    $statement->bindValue(':locationID', $locationID);
+    $statement->bindValue(':time', $time);
     $statement->execute();
     $statement->closeCursor();
     
      $user_id = $db->lastInsertId();
             return $user_id;
-    
-            
+             
 }
 
-    public static function check_user_by_email($userEmail) {
+    public static function delete_by_ID($scheduleID) {
         $db = Database::getDB();
-        $query = 'SELECT userEmail
-              FROM users
-              WHERE userEmail= :userEmail';
+        $query = 'DELETE from conference_schedule WHERE scheduleID = :scheduleID';
+        try {
+            $statement = $db->prepare($query);
+            $statement->bindValue(':scheduleID', $scheduleID);
+            $row_count = $statement->execute();
+            $statement->closeCursor();
+            return $row_count;
+        } catch (PDOException $e) {
+            $error_message = $e->getMessage();
+            display_db_error($error_message);
+        }
+    }
+
+    public static function get_scheduled_by_conferenceID($conferenceID) {
+        $db = Database::getDB();
+        $query = 'SELECT conferenceID
+              FROM conference_schedule
+              WHERE conferenceID = :conferenceID';
 
         $statement = $db->prepare($query);
-        $statement->bindValue(':userEmail', $userEmail);
+        $statement->bindValue(':conferenceID', $conferenceID);
         $statement->execute();
-        $user = $statement->fetch();
+        $conference = $statement->fetch();
         $statement->closeCursor();
         
-        return $user;
-}
-    
-    public static function get_user_by_username($userName) {
-        $db = Database::getDB();
-        $query = 'SELECT userName
-              FROM users
-              WHERE userName= :userName';
-
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
-        $statement->execute();
-        $user = $statement->fetch();
-        $statement->closeCursor();
-        
-        return $user;
+        return $conference;
     }
     
-    public static function validate_user_login($userName) {
-        $db = Database::getDB();;
-        $query = 'SELECT userIDNum, userName, userFName, userLName, userPWord, userEmail
-              FROM users
-              WHERE userName= :userName';
+    public static function get_scheduled_by_titleID($titleID) {
+        $db = Database::getDB();
+        $query = 'SELECT titleID
+              FROM conference_schedule
+              WHERE titleID = :titleID';
 
         $statement = $db->prepare($query);
-        $statement->bindValue(':userName', $userName);
+        $statement->bindValue(':titleID', $titleID);
         $statement->execute();
-        $value = $statement->fetch();
-
-        $theUser = new user($value['userIDNum'], $value['userName'], $value['userFName'], $value['userLName'], $value['userPWord'], $value['userEmail']);
-        
+        $conference = $statement->fetch();
         $statement->closeCursor();
-
-        return $theUser;
+        
+        return $conference;
     }
 }
