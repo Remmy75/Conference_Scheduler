@@ -26,38 +26,40 @@
     
     
     switch ($action) {
-        case 'home': //default action set above if other action filters false.
+    case 'home': //default action set above if other action filters false.
         include('view/home.php');
         die();
         break;
     
-    case '':
+    case 'speakers':
+        
+        include('view/enter_speakers.php');
+        die();
+        break;
+    
+    case 'equipment':
+        include('view/enter_equipment.php');
+        die();
+        break;
+    
+    case 'locations':
+        include('view/enter_locations.php');
+        die();
+        break;
+    
+    case 'conferences':
+        include('view/enter_conferences.php');
+        die();
+        break;
+    
+    case 'logout':
         include('');
         die();
         break;
     
-    case '':
-        include('');
-        die();
-        break;
-    
-    case '':
-        include('');
-        die();
-        break;
-    
-    case '':
-        include('');
-        die();
-        break;
-    
-    case '':
-        include('');
-        die();
-        break;
-    
-    case '':
-        include('');
+    case 'add_speakers':
+        
+        include('view/add_confirmation.php');
         die();
         break;
     
