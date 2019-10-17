@@ -1,16 +1,34 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of conference_locations
- *
- * @author Home
- */
+//conference_locationsID
+//locationID
+//
+//$conference_locationsID
+//$locationID
 class conference_locations {
-    //put your code here
+
+    private $conference_locationsID, $locationID;
+    function __construct($conference_locationsID, $locationID) {
+        
+        $this->conference_locationsID = $conference_locationsID;
+        $this->locationID = $locationID;
+    }
+    
+    function getConference_locationsID() {
+        return $this->conference_locationsID;
+    }
+
+    function getLocationID() {
+        return $this->locationID;
+    }
+
+    function setConference_locationsID($conference_locationsID) {
+        $this->conference_locationsID = $conference_locationsID;
+    }
+
+    function setLocationID($locationID) {
+        $this->locationID = $locationID;
+    }
 }
+
+

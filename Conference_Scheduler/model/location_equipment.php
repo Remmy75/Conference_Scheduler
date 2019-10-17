@@ -1,16 +1,42 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of location_equipment
- *
- * @author Home
- */
+//location_equipID
+//equipID
+//locationID
+//
+//$location_equipID
+//$equipID
+//$locationID
 class location_equipment {
-    //put your code here
+   private $location_equipID, $equipID, $locationID;
+    function __construct($location_equipID, $equipID, $locationID) {
+        
+        $this->location_equipID = $location_equipID;
+        $this->equipID = $equipID;
+        $this->locationID = $locationID;
+    }
+    
+    function getLocation_equipID() {
+        return $this->location_equipID;
+    }
+
+    function getEquipID() {
+        return $this->equipID;
+    }
+
+    function getLocationID() {
+        return $this->locationID;
+    }
+    
+    function setLocation_equipID($location_equipID) {
+        $this->location_equipID = $location_equipID;
+    }
+
+    function setEquipID($equipID) {
+        $this->equipID = $equipID;
+    }
+    
+    function setLocationID($locationID) {
+        $this->locationID = $locationID;
+    }
 }

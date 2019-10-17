@@ -1,16 +1,31 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of equipment
- *
- * @author Home
- */
+//equipID
+//name
+//
+//$equipID
+//$name
 class equipment {
-    //put your code here
+    private $equipID, $name;
+    function __construct($equipID, $name) {
+        
+        $this->equipID = $equipID;
+        $this->name = $name;
+    }
+    
+    function getEquipID() {
+        return $this->equipID;
+    }
+
+    function getName() {
+        return $this->name;
+    }
+
+    function setEquipID($equipID) {
+        $this->equipID = $equipID;
+    }
+
+    function setName($name) {
+        $this->name = $name;
+    }
 }

@@ -38,36 +38,36 @@ class locations_db {
 
         $locations = [];
         foreach ($rows as $row) {
-            $locations[$row['bldg_name']] = new location($value['locationID'], $value['bldg_name'], $value['roomID']);
+            $locations[$row['bldg_name']] = new location($value['locationID'], $value['bldg_name'], $value['room_num']);
         }
 
         $statement->closeCursor();
         return $stores;
     }
     
-    public static function add_location($bldg_name, $roomID) {
+    public static function add_location($bldg_name, $room_num) {
         $db = Database::getDB();
         $query = 'INSERT INTO locations
-                 (bldg_name, roomID)
+                 (bldg_name, room_num)
               VALUES
-                 (:bldg_name, :roomID)';
+                 (:bldg_name, :room_num)';
         $statement = $db->prepare($query);
 
         $statement->bindValue(':bldg_name', $bldg_name);
-        $statement->bindValue(':roomID', $roomID);
+        $statement->bindValue(':room_num', $room_num);
         $statement->execute();
         $statement->closeCursor();
     }
 
-    public static function update_location($locationID, $bldg_name, $roomID) {
+    public static function update_location($locationID, $bldg_name, $room_num) {
         $db = Database::getDB();
         $query = 'UPDATE locations
               SET bldg_name = :bldg_name,
-                  roomID = :roomID,
+                  room_num = :room_num,
               WHERE locationID = :locationID';
         $statement = $db->prepare($query);
         $statement->bindValue(':bldg_name', $bldg_name);
-        $statement->bindValue(':roomID', $roomID);
+        $statement->bindValue(':room_num', $roomID);
         $statement->bindValue(':locationID', $locationID);
         $statement->execute();
         $statement->closeCursor();

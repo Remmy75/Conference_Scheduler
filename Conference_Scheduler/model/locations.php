@@ -1,23 +1,19 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//locationID
+//bldg_name
+//room_num
 
-/**
- * Description of location
- *
- * @author Home
- */
+//$locationID
+//$bldg_name
+//$room_num
 class locations {
-    private $locationID, $bldg_name, $roomID;
-    function __construct($locationID, $bldg_name, $roomID) {
+    private $locationID, $bldg_name, $room_num;
+    function __construct($locationID, $bldg_name, $room_num) {
         
         $this->locationID = $locationID;
         $this->bldg_name = $bldg_name;
-        $this->roomID = $roomID;
+        $this->room_num = $room_num;
         
         
         
@@ -30,8 +26,8 @@ class locations {
         return $this->bldg_name;
     }
 
-    function getRoomID() {
-        return $this->roomID;
+    function getRoom_num() {
+        return $this->room_num;
     }
 
     function setLocationID($locationID) {
@@ -42,8 +38,8 @@ class locations {
         $this->bldg_name = $bldg_name;
     }
 
-    function setRoomID($roomID) {
-        $this->roomID = $roomID;
+    function setRoom_num($room_num) {
+        $this->room_num = $room_num;
     }
 
   

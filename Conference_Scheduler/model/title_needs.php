@@ -1,16 +1,44 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of speaker_needs
- *
- * @author Home
- */
+//title_needsID
+//equipmentID
+//titleID
+//
+//$title_needsID
+//$equipmentID
+//$titleID
 class title_needs {
-    //put your code here
+    private $title_needsID, $equipmentID, $titleID;
+    function __construct($title_needsID, $equipmentID, $titleID) {
+        
+        $this->title_needsID = $title_needsID;
+        $this->equipmentID = $equipmentID;
+        $this->titleID = $titleID;
+        
+        
+        
+    }
+    function getTitle_needsID() {
+        return $this->title_needsID;
+    }
+
+    function getEquipmentID() {
+        return $this->equipmentID;
+    }
+
+    function getTitleID() {
+        return $this->titleID;
+    }
+
+    function setTitle_needsID($title_needsID) {
+        $this->title_needsID = $title_needsID;
+    }
+
+    function setEquipmentID($equipmentID) {
+        $this->equipmentID = $equipmentID;
+    }
+
+    function setTitleID($titleID) {
+        $this->titleID = $titleID;
+    }
 }

@@ -1,16 +1,31 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of title
- *
- * @author Home
- */
+//titleID
+//title_name
+//
+//$titleID
+//$title_name
 class title {
-    //put your code here
+    private $titleID, $title_name;
+    function __construct($titleID, $title_name) {
+        
+        $this->titleID = $titleID;
+        $this->title_name = $title_name;
+    }
+    
+    function getTitleID() {
+        return $this->titleID;
+    }
+
+    function getTitle_name() {
+        return $this->title_name;
+    }
+
+    function setTitleID($titleID) {
+        $this->titleID = $titleID;
+    }
+
+    function setTitle_name($title_name) {
+        $this->title_name = $title_name;
+    }
 }
