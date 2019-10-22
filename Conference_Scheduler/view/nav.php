@@ -38,6 +38,12 @@
                                 <input class="button" type="submit" value="Speakers">
                             </form>
                         </td>
+                        <td>
+                            <form action="index.php" method="post">
+                                <input type="hidden" value="titles" name="action">
+                                <input class="button" type="submit" value="Titles">
+                            </form>
+                        </td>
                     
                 <td>
                     <form action="index.php" method="post">
