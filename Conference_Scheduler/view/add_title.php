@@ -20,19 +20,19 @@ if (!isset($error_message)) {
             <?php include 'view/nav.php'; ?>
            
             <div class="content"> 
-                <h2>Add Speaker Topic</h2>
+                <h2>Add Speaker Title</h2>
                 <form action="index.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="add_title">
                     
                     <ul class="form-wrapper">
                     <li class="form-row">
-                    <label>First Name:</label>
+                    <label>Title Name:</label>
                     <input type="text" name="title_name" value="<?php echo htmlspecialchars($title_name); ?>">
                     <div id="error"><?php echo htmlspecialchars($error_message['title_name']); ?></div>
                     </li>
                     
                     <li class="form-row">
-                    <button type="submit" value="add_title">Add Speaker Topic</button>
+                    <button type="submit" value="add_title">Add Speaker Title</button>
                     </li>
                     
           

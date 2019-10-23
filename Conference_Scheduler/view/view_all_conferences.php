@@ -1,11 +1,4 @@
-conference_num
-conference_name
-conference_location
-start_time
-end_time
-lunch
-session_length
-break_length
+
 <?php include 'view/header.php'; ?>
 
 <body>
@@ -17,7 +10,7 @@ break_length
             <?php include 'view/nav.php'; ?>
         <div class="content">
             <main>
-                <h1>Speakers</h1>
+                <h1>Conferences</h1>
                 <table>
                     <tr>
                         <th>Conference Number</th>

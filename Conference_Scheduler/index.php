@@ -94,7 +94,7 @@
         break;
     
     case 'enter_location':
-        include('view/enter_location.php');
+        include('view/enter_locations.php');
         die();
         break;
     
@@ -104,12 +104,12 @@
         break;
     
     case 'titles':
-        include('view/view_titles.php');
+        include('view/view_title.php');
         die();
         break;
     
      case 'enter_title':
-        include('view/enter_title.php');
+        include('view/add_title.php');
         die();
         break;
     

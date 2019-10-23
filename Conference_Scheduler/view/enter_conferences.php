@@ -101,10 +101,9 @@ if (!isset($error_message)) {
                     </li>
 
                     <li class="form-row">
-                    <button type="submit" value="add_conference">Add Speaker</button>
+                    <button type="submit" value="add_conference">Add Conference</button>
                     </li>
                     
-          
                     </ul>
                 </form>
                 
