@@ -43,7 +43,7 @@
 
                 </table><br>
                 <form action="index.php" method="post">
-                    <input type="hidden" name="action" value="enter_equipment">
+                    <input type="hidden" name="action" value="view_enter_equipment">
                     <input type="submit" value="Enter Equipment">
                 </form>
             </main>

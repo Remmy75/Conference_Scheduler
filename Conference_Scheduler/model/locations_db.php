@@ -22,6 +22,19 @@ class locations_db {
 
         return $locations;
     }
+    
+    public static function get_location($locationID) {
+        $db = Database::getDB();
+    
+        $query = 'SELECT * FROM locations
+              WHERE locationID = :locationID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':locationID', $locationID);
+        $statement->execute();
+        $user = $statement->fetch();
+        $statement->closeCursor();
+        return $location;
+    }
 
     public static function get_locations($bldg_name) {
         $db = Database::getDB();

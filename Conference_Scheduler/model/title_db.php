@@ -16,16 +16,28 @@ class title_db {
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $title = [];
+        $titles = [];
 
         foreach ($rows as $value) {
-            $title[$value['titleID']] = new title($value['titleID'], $value['title_name']);
+            $titles[$value['titleID']] = new title($value['titleID'], $value['title_name']);
         }
         $statement->closeCursor();
 
+        return $titles;
+    }
+    
+    public static function get_title($titleID) {
+        $db = Database::getDB();
+    
+        $query = 'SELECT * FROM title
+              WHERE titleID = :titleID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':titleID', $titleID);
+        $statement->execute();
+        $user = $statement->fetch();
+        $statement->closeCursor();
         return $title;
     }
-
 
     public static function add_title($title_name) {
     $db = Database::getDB();

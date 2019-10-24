@@ -33,25 +33,174 @@
     
     case 'speakers':
         
+        $speakers = speakers_db::select_all();
+        
+        
         include('view/view_speakers.php');
         die();
         break;
     
-    case 'add_speakers':
+    case 'view_enter_speakers':
         
-        include('view/add_confirmation.php');
+        if (!isset($fname)) {
+            $fname = '';
+        }
+        
+        if (!isset($lname)) {
+            $lname = '';
+        }
+        
+        if (!isset($phone_num)) {
+            $phone_num = '';
+        }
+
+        if (!isset($email)) {
+            $email = '';
+        }   
+
+        if (!isset($error_message)) {
+        $error_message = [];
+        $error_message['fname'] = '';
+        $error_message['lname'] = '';
+        $error_message['phone_num'] = '';
+        $error_message['email'] = '';
+        }
+        
+        include 'view/enter_speakers.php';
+        
+        die();
+        break;
+        
+    case 'enter_speakers':
+        
+        $fname = filter_input(INPUT_POST, 'fname');
+        $lname = filter_input(INPUT_POST, 'lname');
+        $phone_num = filter_input(INPUT_POST, 'phone_num');
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+       
+        $error_message = [];
+        
+        $error_message['fname'] = '';
+        $error_message['lname'] = '';
+        $error_message['phone_num'] = '';
+        $error_message['email'] = '';
+
+        $namePattern = '/^[a-zA-Z]/';
+        $fnameValid = preg_match($namePattern, $fname);
+        $lnameValid = preg_match($namePattern, $lname);
+
+        if ($fname === null || $fname === "") {
+            $error_message['fname'] = 'You must enter speakers first name.';
+        } else if ($fnameValid === FALSE || $fnameValid === 0) {
+            $error_message['fname'] = 'The first name must start with a letter.';
+        }
+        
+        if ($lname === null || $lname === "") {
+            $error_message['lname'] = 'You must enter speakers last name.';
+        } else if ($lnameValid === FALSE || $lnameValid === 0) {
+            $error_message['lname'] = 'The last name must start with a letter.';
+        }
+        
+         // speaker phone number validation
+        $phonePattern = '/^[0-9]{10}$/';
+        $phoneValid = preg_match($phonePattern, $phone_num);
+        
+        if ($phone_num === null || $phone_num === "") {
+            $error_message['phone_num'] = 'You must enter a Phone number with no dashes (ex 0001112222)';
+        } else if ($phoneValid === FALSE || $phoneValid === 0) {
+            $error_message['phone_num'] = "The phone must be 10 numbers, no dashes" ;
+        }
+
+        if ($error_message['fname'] != '' || $error_message['lname'] != '' || $error_message['phone_num'] != '' ||  $error_message['email'] != '') {
+            include 'view/enter_speakers.php';
+            exit();
+        } else {
+
+                speakers_db::add_speaker($fname, $lname, $storeCity, $phone_num, $email);
+                include 'view/add_confirmation.php';    
+        }
+        
         die();
         break;
     
-    case 'enter_speakers':
-        include('view/enter_speakers.php');
-        die();
-        break;
     
     case 'edit_speakers':
+        
+        $speakerID = filter_input(INPUT_POST, 'speakerID', FILTER_VALIDATE_INT);
+        
+        $speaker = speakers_db::get_speaker($speakerID);
+        
+        $fname = $speaker->getFname();
+        $lname = $speaker ->getLname();
+        $phone_num = $speaker->getPhone_num();
+        $email = $speaker->getEmail();
+        
+        $error_message = [];
+        $error_message['fname'] = '';
+        $error_message['lname'] = '';
+        $error_message['phone_num'] = '';
+        $error_message['email'] = '';
+        
+        include('view/edit_speakers');
+        die();
+        break;
+    
+    case 'commitSpeakerUpdate':
+        
+        $fname = filter_input(INPUT_POST, 'fname');
+        $lname = filter_input(INPUT_POST, 'lname');
+        $phone_num = filter_input(INPUT_POST, 'phone_num');
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+       
+        $error_message = [];
+        
+        $error_message['fname'] = '';
+        $error_message['lname'] = '';
+        $error_message['phone_num'] = '';
+        $error_message['email'] = '';
+
+        $namePattern = '/^[a-zA-Z]/';
+        $fnameValid = preg_match($namePattern, $fname);
+        $lnameValid = preg_match($namePattern, $lname);
+
+        if ($fname === null || $fname === "") {
+            $error_message['fname'] = 'You must enter speakers first name.';
+        } else if ($fnameValid === FALSE || $fnameValid === 0) {
+            $error_message['storeName'] = 'The first name must start with a letter.';
+        }
+        
+        if ($lname === null || $lname === "") {
+            $error_message['lname'] = 'You must enter speakers last name.';
+        } else if ($lnameValid === FALSE || $lnameValid === 0) {
+            $error_message['storeName'] = 'The last name must start with a letter.';
+        }
+        
+         // speaker phone number validation
+        $phonePattern = '/^[0-9]{10}$/';
+        $phoneValid = preg_match($phonePattern, $phone_num);
+        
+        if ($phone_num === null || $phone_num === "") {
+            $error_message['storePhone'] = 'You must enter a Phone number with no dashes (ex 0001112222)';
+        } else if ($phoneValid === FALSE || $phoneValid === 0) {
+            $error_message['storePhone'] = "The phone must be 10 numbers, no dashes" ;
+        }
+
+        if ($error_message['fname'] != '' || $error_message['lname'] != '' || $error_message['phone_num'] != '' ||  $error_message['email'] != '') {
+            include 'view/edit_speakers.php';
+            exit();
+        } else {
+
+               speakers_db::update_speakers($storeName, $storeAddress, $storeCity, $storePhone, $franchise, $userName);
+                include 'view/update_confirmation.php';    
+        }
+        
+        die();
+        break;
+        
         include('');
         die();
         break;
+    
     
     case 'speakers_to_title':
         include('');
@@ -59,12 +208,57 @@
         break;
     
     case 'equipment':
+        
+        $equipment = equipment_db::select_all();
+        
         include('view/view_equipment.php');
         die();
         break;
     
-    case 'enter_equipment':
+    case 'view_enter_equipment':
+        
+        if (!isset($name)) {
+            $name = '';
+        }
+
+
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['name'] = '';
+        }
+        
         include('view/enter_equipment.php');
+        die();
+        break;
+        
+    case 'enter_equipment':
+        
+        $name = filter_input(INPUT_POST, 'name');
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['name'] = '';
+        }
+
+        $namePattern = '/^[a-zA-Z]/';
+        $nameValid = preg_match($namePattern, $name);
+
+        if ($name === null || $name === "") {
+            $error_message['fname'] = 'You must enter equipment name.';
+        } else if ($nameValid === FALSE || $nameValid === 0) {
+            $error_message['fname'] = 'The name must start with a letter.';
+        }
+        
+
+        if ($error_message['name'] != '') {
+            include 'view/enter_equipment.php';
+            exit();
+        } else {
+
+                equipment_db::add_equipment($name);
+                include 'view/add_confirmation.php';    
+        }
+
         die();
         break;
     
@@ -79,22 +273,154 @@
         break;
     
     case 'edit_equipment':
+        
+        $name = filter_input(INPUT_POST, 'name');
+        $equipID = equipment_DB::get_equipment($equipID);
+        
+        $name = $equipID->getName();
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['name'] = '';
+        }
+        
         include('view/edit_equipment.php');
         die();
         break;
-    
+        
+    case 'commitEquipmentUpdate':
+        
+        $name = filter_input(INPUT_POST, 'name');
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['name'] = '';
+        }
+
+        $namePattern = '/^[a-zA-Z]/';
+        $nameValid = preg_match($namePattern, $name);
+
+        if ($name === null || $name === "") {
+            $error_message['fname'] = 'You must enter equipment name.';
+        } else if ($nameValid === FALSE || $nameValid === 0) {
+            $error_message['fname'] = 'The name must start with a letter.';
+        }
+        
+
+        if ($error_message['name'] != '') {
+            include 'view/edit_equipment.php';
+            exit();
+        } else {
+
+                equipment_db::update_equipment($equipID, $name);
+                include 'view/add_confirmation.php';    
+        }
+        
     case 'locations':
+        
+        $locations = locations_db::select_all();
+        
         include('view/view_locations.php');
         die();
         break;
     
-    case 'edit_location':
-        include('view/edit_location.php');
+    case 'view_enter_locations':
+        
+        if (!isset($bldg_name)) {
+            $bldg_name = '';
+        }
+
+        if (!isset($room_num)) {
+            $room_num = '';
+        }
+
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['bldg_name'] = '';
+            $error_message['room_num'] = '';
+        }
+        
+        include('view/enter_locations');
         die();
         break;
     
     case 'enter_location':
-        include('view/enter_locations.php');
+        
+        $bldg_name = filter_input(INPUT_POST, 'bldg_name');
+        $room_num = filter_input(INPUT_POST, 'room_num');
+       
+        $error_message = [];
+        $error_message['bldg_name'] = '';
+        $error_message['room_num'] = '';
+
+        if ($bldg_name === null || $bldg_name === "") {
+            $error_message['bldg_name'] = 'You must enter the buildings name.';
+        } 
+        
+        if ($room_num === null || $room_num === "") {
+            $error_message['room_num'] = 'You must enter the room number.';
+        } 
+
+        if ($error_message['bldg_name'] != '' || $error_message['room_num'] != '' ) {
+            include 'view/enter_locations.php';
+            exit();
+        } else {
+
+                locations_db::add_location($bldg_name, $room_num);
+                include 'view/add_confirmation.php';    
+        }
+        
+        die();
+        break;
+    
+    case 'edit_location':
+        
+        $bldg_name = filter_input(INPUT_POST, 'bldg_name');
+        $room_num = filter_input(INPUT_POST, 'room_num');
+        
+        $locationID = locations_DB::get_location($locationID);
+        
+        $bldg_name = $locationID->getBldgName();
+        $room_num = $locationID->getRoom_num();
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['bldg_name'] = '';
+            $error_message['room_num'] = '';
+        }
+        
+        include('view/edit_location.php');
+        die();
+        break;
+    
+    case 'commitLocationUpdate':
+        
+        $bldg_name = filter_input(INPUT_POST, 'bldg_name');
+        $room_num = filter_input(INPUT_POST, 'room_num');
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['bldg_name'] = '';
+            $error_message['room_num'] = '';
+        }
+
+         if ($bldg_name === null || $bldg_name === "") {
+            $error_message['bldg_name'] = 'You must enter the buildings name.';
+        } 
+        
+        if ($room_num === null || $room_num === "") {
+            $error_message['room_num'] = 'You must enter the room number.';
+        } 
+
+        if ($error_message['bldg_name'] != '' || $error_message['room_num'] != '' ) {
+            include 'view/edit_locations.php';
+            exit();
+        } else {
+
+                locations_db::update_location($locationID, $bldg_name, $room_num);
+                include 'view/update_confirmation.php';    
+        }
+       
         die();
         break;
     
@@ -104,17 +430,91 @@
         break;
     
     case 'titles':
+        
+        $titles = title_db::select_all();
+        
         include('view/view_title.php');
         die();
         break;
     
-     case 'enter_title':
-        include('view/add_title.php');
+    case 'view_enter_titles':
+        
+        if (!isset($title_name)) {
+            $title_name = '';
+        }
+
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['title_name'] = '';
+        }
+        
+        include('view/add_title');
+        die();
+        break;
+    
+    
+    case 'enter_title':
+         
+        $title_name = filter_input(INPUT_POST, 'title_name');
+       
+        $error_message = [];
+        $error_message['title_name'] = '';
+
+        if ($title_name === null || $title_name === "") {
+            $error_message['title_name'] = 'You must enter a title.';
+        }
+
+        if ($error_message['title_name'] != '' ) {
+            include 'view/add_title.php';
+            exit();
+        } else {
+
+                title_db::add_title($title_name);
+                include 'view/add_confirmation.php';    
+        }
+        
         die();
         break;
     
     case 'edit_title':
+        
+        $title_name = filter_input(INPUT_POST, 'title_name');
+        
+        $titleID = title_db::get_title($titleID);
+        
+        $title_name = $titleID->getTitle_name();
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['title_name'] = '';
+        }
+
         include('view/edit_title.php');
+        die();
+        break;
+    
+    case 'commitTitleUpdate':
+        
+        $title_name = filter_input(INPUT_POST, 'title_name');
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['title_name'] = '';
+        }
+
+        if ($title_name === null || $title_name === "") {
+            $error_message['title_name'] = 'You must enter a title.';
+        }
+
+        if ($error_message['title_name'] != '' ) {
+            include 'view/edit_title.php';
+            exit();
+        } else {
+
+                title_db::update_title($titleID, $title_name);
+                include 'view/update_confirmation.php';    
+        }
+
         die();
         break;
     
@@ -124,27 +524,249 @@
         break;
     
     case 'conferences':
+        
+        $conferences = conference_db::select_all();
+        
         include('view/view_all_conferences.php');
         die();
         break;
     
-    case 'edit_conference':
-        include('view/edit_conference.php');
+    case 'view_enter_conference':
+        
+        if (!isset($conference_name)) {
+            $conference_name = '';
+        }
+
+        if (!isset($conference_location)) {
+            $conference_location = '';
+        }
+
+        if (!isset($start_time)) {
+            $start_time = '';
+        }
+
+        if (!isset($end_time)) {
+            $end_time = '';
+        }
+
+        if (!isset($lunch)) {
+            $lunch = '';
+        }
+
+        if (!isset($session_length)) {
+            $session_length = '';
+        }
+
+        if (!isset($break_length)) {
+            $break_length = '';
+        }
+
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['conference_name'] = '';
+            $error_message['conference_location'] = '';
+            $error_message['start_time'] = '';
+            $error_message['end_time'] = '';
+            $error_message['lunch'] = '';
+            $error_message['session_length'] = '';
+            $error_message['break_length'] = '';
+        }
+        
+        include('view/enter_conferences.php');
         die();
         break;
     
     case 'enter_conference':
-        include('view/enter_conferences.php');
+        
+        $conference_name = filter_input(INPUT_POST, 'conference_name');
+        $conference_location = filter_input(INPUT_POST, 'conference_location');
+        $start_time = filter_input(INPUT_POST, 'start_time');
+        $end_time = filter_input(INPUT_POST, 'end_time');
+        $lunch = filter_input(INPUT_POST, 'lunch');
+        $session_length = filter_input(INPUT_POST, 'session_length', FILTER_VALIDATE_FLOAT);
+        $break_length = filter_input(INPUT_POST, 'break_length', FILTER_VALIDATE_FLOAT);
+       
+        $error_message = [];
+        $error_message['conference_name'] = '';
+        $error_message['conference_location'] = '';
+        $error_message['start_time'] = '';
+        $error_message['end_time'] = '';
+        $error_message['lunch'] = '';
+        $error_message['session_length'] = '';
+        $error_message['break_length'] = '';
+
+        
+
+        if ($conference_name === null || $conference_name === "") {
+            $error_message['conference_name'] = 'You must enter a conference name.';
+        } 
+        
+        if ($conference_location === null || $conference_location === "") {
+            $error_message['conference_location'] = 'You must enter a conference location.';
+        } 
+        
+        //time entered must be in military time ex. 0800, 1700
+        $timePattern = '/^([01][0-9]|2[0-3]):([0-5][0-9])$/';
+        $sTimeValid = preg_match($timePattern, $start_time);
+        $eTimeValid = preg_match($namePattern, $end_time);
+        $lTimeValid = preg_match($namePattern, $lunch);
+        
+        if ($start_time === null || $start_time === "") {
+            $error_message['start_time'] = 'You must enter a start time in military time (ex 0800, 1700)';
+        } else if ($sTimeValid === FALSE || $sTimeValid === 0) {
+            $error_message['start_time'] = 'You must enter the time in military time (ex 0800, 1700)';
+        }
+
+        if ($end_time === null || $end_time === "") {
+            $error_message['end_time'] = 'You must enter an end time in military time (ex 0800, 1700)';
+        } else if ($eTimeValid === FALSE || $eTimeValid === 0) {
+            $error_message['end_time'] = 'You must enter the time in military time (ex 0800, 1700)';
+        }
+        
+        if ($lunch === null || $lunch === "") {
+            $error_message['lunch'] = 'You must enter a lunch time in military time (ex 0800, 1700)';
+        } else if ($lTimeValid === FALSE || $lTimeValid === 0) {
+            $error_message['lunch'] = 'You must enter the lunch time in military time (ex 0800, 1700)';
+        }
+        
+        $floatPattern = '/^-?(?:\d+|\d*\.\d+)$/';
+        $sessionValid = preg_match($floatPattern, $session_length);
+        $breakValid = preg_match($floatPattern, $break_length);
+        
+        if ($session_length === null || $session_length === "") {
+            $error_message['session_length'] = 'You must enter a session length';
+        } else if ($sessionValid === FALSE || $sessionValid === 0) {
+            $error_message['session_length'] = 'You must enter session length in 1.00 float format (ex. .75 for 45 min)';
+        }
+        
+        if ($break_length === null || $break_length === "") {
+            $error_message['break_length'] = 'You must enter a break length';
+        } else if ($breakValid === FALSE || $breakValid === 0) {
+            $error_message['break_length'] = 'You must enter the break length in 1.00 format (ex .25 for 15 minutes)';
+        }
+        
+        if ($error_message['conference_name'] != '' || $error_message['conference_location'] != '' || $error_message['start_time'] != '' ||  $error_message['end_time'] != '' || $error_message['lunch'] != '' || $error_message['session_length'] != '' ||  $error_message['break_length'] != '') {
+            include 'view/enter_conferences.php';
+            exit();
+        } else {
+
+                conference_db::add_conference($conference_name, $conference_location, $start_time, $end_time, $lunch, $session_length, $break_length);
+                include 'view/add_confirmation.php';    
+        }
+        
+        die();
+        break;
+        
+    case 'edit_conference':
+        
+        $conference_num = filter_input(INPUT_POST, 'conference_num', FILTER_VALIDATE_INT);
+        
+        $conference = conference_db::get_conference($conference_num);
+        
+        $conference_name = $conference_name->getConference_name();
+        $conference_location = $conference_location->getConference_location();
+        $start_time = $start_time->getStart_time();
+        $end_time = $end_time->getEnd_time();
+        $lunch = $lunch->getLunch();
+        $session_length = $session_length->getSession_length();
+        $break_length = $break_length->getBreak_length();
+        
+        $error_message = [];
+        $error_message['conference_name'] = '';
+        $error_message['conference_location'] = '';
+        $error_message['start_time'] = '';
+        $error_message['end_time'] = '';
+        $error_message['lunch'] = '';
+        $error_message['session_length'] = '';
+        $error_message['break_length'] = '';
+        
+        include('view/edit_speakers');
+        die();
+        break;
+    
+    case 'commitConferenceUpdate':
+        
+        $conference_name = filter_input(INPUT_POST, 'conference_name');
+        $conference_location = filter_input(INPUT_POST, 'conference_location');
+        $start_time = filter_input(INPUT_POST, 'start_time');
+        $end_time = filter_input(INPUT_POST, 'end_time');
+        $lunch = filter_input(INPUT_POST, 'lunch');
+        $session_length = filter_input(INPUT_POST, 'session_length', FILTER_VALIDATE_FLOAT);
+        $break_length = filter_input(INPUT_POST, 'break_length', FILTER_VALIDATE_FLOAT);
+       
+        $error_message = [];
+        $error_message['conference_name'] = '';
+        $error_message['conference_location'] = '';
+        $error_message['start_time'] = '';
+        $error_message['end_time'] = '';
+        $error_message['lunch'] = '';
+        $error_message['session_length'] = '';
+        $error_message['break_length'] = '';
+
+        
+
+        if ($conference_name === null || $conference_name === "") {
+            $error_message['conference_name'] = 'You must enter a conference name.';
+        } 
+        
+        if ($conference_location === null || $conference_location === "") {
+            $error_message['conference_location'] = 'You must enter a conference location.';
+        } 
+        
+        //time entered must be in military time ex. 0800, 1700
+        $timePattern = '/^([01][0-9]|2[0-3]):([0-5][0-9])$/';
+        $sTimeValid = preg_match($timePattern, $start_time);
+        $eTimeValid = preg_match($namePattern, $end_time);
+        $lTimeValid = preg_match($namePattern, $lunch);
+        
+        if ($start_time === null || $start_time === "") {
+            $error_message['start_time'] = 'You must enter a start time in military time (ex 0800, 1700)';
+        } else if ($sTimeValid === FALSE || $sTimeValid === 0) {
+            $error_message['start_time'] = 'You must enter the time in military time (ex 0800, 1700)';
+        }
+
+        if ($end_time === null || $end_time === "") {
+            $error_message['end_time'] = 'You must enter an end time in military time (ex 0800, 1700)';
+        } else if ($eTimeValid === FALSE || $eTimeValid === 0) {
+            $error_message['end_time'] = 'You must enter the time in military time (ex 0800, 1700)';
+        }
+        
+        if ($lunch === null || $lunch === "") {
+            $error_message['lunch'] = 'You must enter a lunch time in military time (ex 0800, 1700)';
+        } else if ($lTimeValid === FALSE || $lTimeValid === 0) {
+            $error_message['lunch'] = 'You must enter the lunch time in military time (ex 0800, 1700)';
+        }
+        
+        $floatPattern = '/^-?(?:\d+|\d*\.\d+)$/';
+        $sessionValid = preg_match($floatPattern, $session_length);
+        $breakValid = preg_match($floatPattern, $break_length);
+        
+        if ($session_length === null || $session_length === "") {
+            $error_message['session_length'] = 'You must enter a session length';
+        } else if ($sessionValid === FALSE || $sessionValid === 0) {
+            $error_message['session_length'] = 'You must enter session length in 1.00 float format (ex. .75 for 45 min)';
+        }
+        
+        if ($break_length === null || $break_length === "") {
+            $error_message['break_length'] = 'You must enter a break length';
+        } else if ($breakValid === FALSE || $breakValid === 0) {
+            $error_message['break_length'] = 'You must enter the break length in 1.00 format (ex .25 for 15 minutes)';
+        }
+        
+        if ($error_message['conference_name'] != '' || $error_message['conference_location'] != '' || $error_message['start_time'] != '' ||  $error_message['end_time'] != '' || $error_message['lunch'] != '' || $error_message['session_length'] != '' ||  $error_message['break_length'] != '') {
+            include 'view/edit_conferences.php';
+            exit();
+        } else {
+
+                conference_db::update_conference($conference_name, $conference_location, $start_time, $end_time, $lunch, $session_length, $break_length);
+                include 'view/update_confirmation.php';    
+        }
+        
         die();
         break;
     
     case 'view_conference':
         include('view/view_conference');
-        die();
-        break;
-    
-    case '':
-        include('');
         die();
         break;
     

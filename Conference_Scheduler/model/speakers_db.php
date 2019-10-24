@@ -14,6 +14,23 @@
 //need to add fields to finish
 class speakers_db {
     
+    public static function select_all() {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT * FROM speakers';
+        $statement = $db->prepare($queryUsers);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $speakers = [];
+
+        foreach ($rows as $value) {
+            $speakers[$value['speakerID']] = new speaker($value['speakerID'], $value['fname'], $value['lname'], $value['phone_num'], $value['email']);
+        }
+        $statement->closeCursor();
+
+        return $speakers;
+    }
+    
     public static function get_speaker($speakerID) {
         $db = Database::getDB();
     
@@ -89,6 +106,24 @@ class speakers_db {
               SET email = :email,
               WHERE speakerID = :speakerID';
         $statement = $db->prepare($query);
+        $statement->bindValue(':email', $email);
+        $statement->bindValue(':speakerID', $speakerID);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+    
+    public static function update_speakers($speakerID, $fname, $lname, $phone_num, $email) {
+        $db = Database::getDB();
+        $query = 'UPDATE speakers
+              SET fname = :fname,
+                  lname = :lname,
+                  phone_num = :phone_num,
+                  email = :email
+              WHERE speakerID = :speakerID';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':fname', $fname);
+        $statement->bindValue(':lname', $lname);
+        $statement->bindValue(':phone_num', $phone_num);
         $statement->bindValue(':email', $email);
         $statement->bindValue(':speakerID', $speakerID);
         $statement->execute();

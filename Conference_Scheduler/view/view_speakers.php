@@ -41,7 +41,7 @@
 
                 </table><br>
                 <form action="index.php" method="post">
-                    <input type="hidden" name="action" value="enter_speakers">
+                    <input type="hidden" name="action" value="view_enter_speakers">
                     <input type="submit" value="Enter Speaker">
                 </form>
             </main>

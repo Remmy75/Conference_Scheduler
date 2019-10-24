@@ -1,17 +1,26 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <?php
-        // put your code here
-        ?>
-    </body>
-</html>
+
+<?php include 'view/header.php'; ?>
+
+<body>
+    <div class="wrapper">
+            <div class="heading"> 
+           <h1>Conference Scheduler</h1>
+            </div>
+             
+            <?php include 'view/nav.php'; ?>
+        <div class="content">
+            <main>
+                <h1>Speakers</h1>
+                
+                
+                <form action="index.php" method="post">
+                    <input type="hidden" name="action" value="view_enter_speakers">
+                    <input type="submit" value="Enter Speaker">
+                </form>
+            </main>
+        </div>
+    </div>
+    
+<?php include 'view/footer.php'; ?>
+
+
