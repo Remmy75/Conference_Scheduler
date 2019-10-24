@@ -1,16 +1,29 @@
 <?php
-
-    require_once 'model/conference_db.php';
-    require_once 'model/conference_locations_db.php';
-    require_once 'model/conference_schedule_db.php';
-    require_once 'model/conference_speakers_db.php';
-    require_once 'model/equipment_db.php';
-    require_once 'model/location_equipment_db.php';
-    require_once 'model/locations_db.php';
-    require_once 'model/speakers_db.php';
-    require_once 'model/title_db.php';
-    require_once 'model/title_needs_db.php';
-    require_once 'model/title_speakers_db.php';
+    require_once 'model/database.php';
+    require('model/conference_db.php');
+    require('model/conference_locations_db.php');
+    require('model/conference_schedule_db.php');
+    require('model/conference_speakers_db.php');
+    require('model/equipment_db.php');
+    require('model/location_equipment_db.php');
+    require('model/locations_db.php');
+    require('model/speakers_db.php');
+    require('model/title_db.php');
+    require('model/title_needs_db.php');
+    require('model/title_speakers_db.php');
+    
+    require('model/locations.php');
+    require('model/speakers.php');
+    require('model/title.php');
+    require('model/title_needs.php');
+    require('model/title_speakers.php');
+    require('model/conference.php');
+    require('model/conference_locations.php');
+    require('model/conference_schedule.php');
+    require('model/conference_speakers.php');
+    require('model/equipment.php');
+    require('model/location_equipment.php');
+    
     
     session_start();
     
@@ -131,7 +144,7 @@
         $speaker = speakers_db::get_speaker($speakerID);
         
         $fname = $speaker->getFname();
-        $lname = $speaker ->getLname();
+        $lname = $speaker->getLname();
         $phone_num = $speaker->getPhone_num();
         $email = $speaker->getEmail();
         
@@ -375,13 +388,14 @@
     
     case 'edit_location':
         
+        $locationID = filter_input(INPUT_POST, 'locationID');
         $bldg_name = filter_input(INPUT_POST, 'bldg_name');
         $room_num = filter_input(INPUT_POST, 'room_num');
         
-        $locationID = locations_DB::get_location($locationID);
+        $locations = locations_DB::get_location($locationID);
         
-        $bldg_name = $locationID->getBldgName();
-        $room_num = $locationID->getRoom_num();
+        $bldg_name = $locations->getBldgName();
+        $room_num = $locations->getRoom_num();
         
         if (!isset($error_message)) {
             $error_message = [];

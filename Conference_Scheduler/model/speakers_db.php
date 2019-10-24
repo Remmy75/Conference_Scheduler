@@ -24,7 +24,7 @@ class speakers_db {
         $speakers = [];
 
         foreach ($rows as $value) {
-            $speakers[$value['speakerID']] = new speaker($value['speakerID'], $value['fname'], $value['lname'], $value['phone_num'], $value['email']);
+            $speakers[$value['speakerID']] = new speakers($value['speakerID'], $value['fName'], $value['lName'], $value['phone_num'], $value['email']);
         }
         $statement->closeCursor();
 
@@ -39,12 +39,15 @@ class speakers_db {
         $statement = $db->prepare($query);
         $statement->bindValue(':speakerID', $speakerID);
         $statement->execute();
-        $user = $statement->fetch();
+        $row = $statement->fetch();
+        
+        $speakers[$row['speakerID']] = new speakers($row['speakerID'], $row['fName'], $row['lName'], $row['phone_num'], $row['email']);
+        
         $statement->closeCursor();
-        return $speaker;
+        return $speakers;
     }
-
-
+    
+    
     public static function add_speaker($fname, $lname, $phone_num, $email) {
         $db = Database::getDB();
 

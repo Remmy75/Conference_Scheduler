@@ -1,6 +1,6 @@
 <?php
 class Database {
-    private static $dsn = 'mysql:host=localhost;dbname=scheduler';
+    private static $dsn = 'mysql:host=localhost;dbname=conference_scheduler';
     private static $username = 'root';
     private static $password = '';
     private static $db;
@@ -22,3 +22,5 @@ class Database {
     }
 
 }
+
+?>

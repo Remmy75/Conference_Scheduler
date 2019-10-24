@@ -16,24 +16,30 @@ class locations_db {
         $locations = [];
 
         foreach ($rows as $value) {
-            $locations[$value['locationID']] = new location($value['locationID'], $value['bldg_name'], $value['roomID']);
+            $locations[$value['locationID']] = new locations($value['locationID'], $value['bldg_name'], $value['room_num']);
         }
         $statement->closeCursor();
 
         return $locations;
     }
     
+    
     public static function get_location($locationID) {
         $db = Database::getDB();
-    
         $query = 'SELECT * FROM locations
               WHERE locationID = :locationID';
         $statement = $db->prepare($query);
         $statement->bindValue(':locationID', $locationID);
         $statement->execute();
-        $user = $statement->fetch();
+        $row = $statement->fetch();
+
+        
+        $locations[$row['locationID']] = new locations(
+                $row['locationID'], $row['bldg_name'], $row['room_num']);
+
         $statement->closeCursor();
-        return $location;
+
+        return $locations;
     }
 
     public static function get_locations($bldg_name) {
@@ -51,7 +57,7 @@ class locations_db {
 
         $locations = [];
         foreach ($rows as $row) {
-            $locations[$row['bldg_name']] = new location($value['locationID'], $value['bldg_name'], $value['room_num']);
+            $locations[$row['bldg_name']] = new locations($value['locationID'], $value['bldg_name'], $value['room_num']);
         }
 
         $statement->closeCursor();
@@ -80,7 +86,7 @@ class locations_db {
               WHERE locationID = :locationID';
         $statement = $db->prepare($query);
         $statement->bindValue(':bldg_name', $bldg_name);
-        $statement->bindValue(':room_num', $roomID);
+        $statement->bindValue(':room_num', $room_num);
         $statement->bindValue(':locationID', $locationID);
         $statement->execute();
         $statement->closeCursor();

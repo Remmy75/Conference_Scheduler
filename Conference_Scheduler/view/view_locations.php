@@ -17,7 +17,7 @@
                         <th>Building Name</th>
                         <th>Room Number</th>
                     </tr>
-                        <?php foreach ($location as $l) : ?>
+                        <?php foreach ($locations as $l) : ?>
                             <tr>                
                                 <td><?php echo htmlspecialchars($l->getLocationID()); ?></td>
                                 <td><?php echo htmlspecialchars($l->getBldgName()); ?></td>

@@ -6,7 +6,7 @@
             <div class="heading"> 
            <h1>Conference Scheduler</h1>
             </div>
-             
+
             <?php include 'view/nav.php'; ?>
         <div class="content">
             <main>
@@ -24,7 +24,7 @@
                                 <td><?php echo htmlspecialchars($s->getSpeakerID()); ?></td>
                                 <td><?php echo htmlspecialchars($s->getFname()); ?></td>
                                 <td><?php echo htmlspecialchars($s->getLname()); ?></td>
-                                <td><?php echo htmlspecialchars($s->getPhoneNum()); ?></td>
+                                <td><?php echo htmlspecialchars($s->getPhone_Num()); ?></td>
                                 <td><?php echo htmlspecialchars($s->getEmail()); ?></td>
                                 <td><form action="index.php" method="post">
                                         <input type="hidden" name="action" value="edit_speakers">
