@@ -24,7 +24,8 @@
     require('model/equipment.php');
     require('model/location_equipment.php');
     
-    
+    $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds
+    session_set_cookie_params($lifetime, '/');
     session_start();
     
     $errors = '';
@@ -140,8 +141,9 @@
     case 'edit_speakers':
         
         $speakerID = filter_input(INPUT_POST, 'speakerID', FILTER_VALIDATE_INT);
-        
+    
         $speaker = speakers_db::get_speaker($speakerID);
+        $_SESSION['currentSpeaker'] = $speaker;
         
         $fname = $speaker->getFname();
         $lname = $speaker->getLname();
