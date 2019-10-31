@@ -21,14 +21,14 @@ class conference_schedule_db {
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $conference_scheduled = [];
+        $conference_schedules = [];
 
         foreach ($rows as $value) {
-            $conference_scheduled[$value['scheduleID']] = new conference_scheduled($value['scheduleID'], $value['conferenceID'], $value['titleID'], $value['locationID'], $value['time']);
+            $conference_schedules[$value['scheduleID']] = new conference_scheduled($value['scheduleID'], $value['conferenceID'], $value['titleID'], $value['locationID'], $value['time']);
         }
         $statement->closeCursor();
 
-        return $conference_scheduled;
+        return $conference_schedules;
     }
 
     public static function update_conference_schedule_conferenceID($scheduleID, $conferenceID) {

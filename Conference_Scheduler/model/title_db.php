@@ -34,7 +34,7 @@ class title_db {
         $statement = $db->prepare($query);
         $statement->bindValue(':titleID', $titleID);
         $statement->execute();
-        $user = $statement->fetch();
+        $title = $statement->fetch();
         $statement->closeCursor();
         return $title;
     }

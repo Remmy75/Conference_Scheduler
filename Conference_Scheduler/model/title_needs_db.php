@@ -17,14 +17,14 @@ class title_needs_db {
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $title_need = [];
+        $title_needs = [];
 
         foreach ($rows as $value) {
-            $title_need[$value['title_needsID']] = new title_need($value['title_needsID'], $value['equipmentID'], $value['titleID']);
+            $title_needs[$value['title_needsID']] = new title_needs($value['title_needsID'], $value['equipmentID'], $value['titleID']);
         }
         $statement->closeCursor();
 
-        return $title_need;
+        return $title_needs;
     }
 
 
@@ -55,14 +55,14 @@ class title_needs_db {
         $statement->bindValue(':titleID', $titleID);
         $statement->execute();
         $user = $statement->fetch();
-        $title_need = [];
+        $title_needs = [];
 
         foreach ($rows as $value) {
-            $title_need[$value['title_needsID']] = new title_need($value['title_needsID'], $value['equipmentID'], $value['titleID']);
+            $title_needs[$value['title_needsID']] = new title_needs($value['title_needsID'], $value['equipmentID'], $value['titleID']);
         }
         $statement->closeCursor();
 
-        return $title_need;
+        return $title_needs;
     }
     
 }

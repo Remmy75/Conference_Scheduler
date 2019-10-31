@@ -61,7 +61,7 @@ class locations_db {
         }
 
         $statement->closeCursor();
-        return $stores;
+        return $locations;
     }
     
     public static function add_location($bldg_name, $room_num) {

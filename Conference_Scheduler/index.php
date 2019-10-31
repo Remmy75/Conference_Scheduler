@@ -56,12 +56,12 @@
     
     case 'view_enter_speakers':
         
-        if (!isset($fname)) {
-            $fname = '';
+        if (!isset($fName)) {
+            $fName = '';
         }
         
-        if (!isset($lname)) {
-            $lname = '';
+        if (!isset($lName)) {
+            $lName = '';
         }
         
         if (!isset($phone_num)) {
@@ -87,8 +87,8 @@
         
     case 'enter_speakers':
         
-        $fname = filter_input(INPUT_POST, 'fname');
-        $lname = filter_input(INPUT_POST, 'lname');
+        $fName = filter_input(INPUT_POST, 'fname');
+        $lName = filter_input(INPUT_POST, 'lname');
         $phone_num = filter_input(INPUT_POST, 'phone_num');
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
        
@@ -100,16 +100,16 @@
         $error_message['email'] = '';
 
         $namePattern = '/^[a-zA-Z]/';
-        $fnameValid = preg_match($namePattern, $fname);
-        $lnameValid = preg_match($namePattern, $lname);
+        $fnameValid = preg_match($namePattern, $fName);
+        $lnameValid = preg_match($namePattern, $lName);
 
-        if ($fname === null || $fname === "") {
+        if ($fName === null || $fName === "") {
             $error_message['fname'] = 'You must enter speakers first name.';
         } else if ($fnameValid === FALSE || $fnameValid === 0) {
             $error_message['fname'] = 'The first name must start with a letter.';
         }
         
-        if ($lname === null || $lname === "") {
+        if ($lName === null || $lName === "") {
             $error_message['lname'] = 'You must enter speakers last name.';
         } else if ($lnameValid === FALSE || $lnameValid === 0) {
             $error_message['lname'] = 'The last name must start with a letter.';
@@ -130,7 +130,7 @@
             exit();
         } else {
 
-                speakers_db::add_speaker($fname, $lname, $storeCity, $phone_num, $email);
+                speakers_db::add_speaker($fName, $lName, $phone_num, $email);
                 include 'view/add_confirmation.php';    
         }
         
@@ -145,8 +145,8 @@
         $speaker = speakers_db::get_speaker($speakerID);
         $_SESSION['currentSpeaker'] = $speaker;
         
-        $fname = $speaker->getFname();
-        $lname = $speaker->getLname();
+        $fName = $speaker->getFname();
+        $lName = $speaker->getLname();
         $phone_num = $speaker->getPhone_num();
         $email = $speaker->getEmail();
         
@@ -162,8 +162,8 @@
     
     case 'commitSpeakerUpdate':
         
-        $fname = filter_input(INPUT_POST, 'fname');
-        $lname = filter_input(INPUT_POST, 'lname');
+        $fName = filter_input(INPUT_POST, 'fname');
+        $lName = filter_input(INPUT_POST, 'lname');
         $phone_num = filter_input(INPUT_POST, 'phone_num');
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
        
@@ -175,16 +175,16 @@
         $error_message['email'] = '';
 
         $namePattern = '/^[a-zA-Z]/';
-        $fnameValid = preg_match($namePattern, $fname);
-        $lnameValid = preg_match($namePattern, $lname);
+        $fnameValid = preg_match($namePattern, $fName);
+        $lnameValid = preg_match($namePattern, $lName);
 
-        if ($fname === null || $fname === "") {
+        if ($fName === null || $fName === "") {
             $error_message['fname'] = 'You must enter speakers first name.';
         } else if ($fnameValid === FALSE || $fnameValid === 0) {
             $error_message['storeName'] = 'The first name must start with a letter.';
         }
         
-        if ($lname === null || $lname === "") {
+        if ($lName === null || $lName === "") {
             $error_message['lname'] = 'You must enter speakers last name.';
         } else if ($lnameValid === FALSE || $lnameValid === 0) {
             $error_message['storeName'] = 'The last name must start with a letter.';
@@ -205,7 +205,7 @@
             exit();
         } else {
 
-               speakers_db::update_speakers($storeName, $storeAddress, $storeCity, $storePhone, $franchise, $userName);
+               speakers_db::update_speakers($fName, $lName, $storeCity, $phone_num, $email);
                 include 'view/update_confirmation.php';    
         }
         
@@ -218,9 +218,24 @@
     
     
     case 'speakers_to_title':
-        include('');
+        
+        $speakerID = filter_input(INPUT_POST, 'speakerID', FILTER_VALIDATE_INT);
+        
+        $speaker = speakers_db::get_speaker($speakerID);
+        $fName = $speaker->getFname();
+        $lName = $speaker->getLname();
+        
+        $titles = title_db::select_all();
+        
+        include('view/add_speakers_to_titles.php');
         die();
         break;
+    
+    case 'add_speakers_title':
+        include('view/add_confirmation.php');
+        die();
+        break;
+    
     
     case 'equipment':
         
@@ -278,21 +293,54 @@
         break;
     
     case 'equipment_to_title':
+        
+        $equipID = filter_input(INPUT_POST, 'equipID', FILTER_VALIDATE_INT);
+        
+        $equipment = equipment_db::get_equipment($equipID);
+        $name = $equipment->getName();
+        
+        $titles = title_db::select_all();
+        
         include('view/add_equipment_to_titles.php');
         die();
         break;
     
+    case 'add_equipment_title':
+        
+        include('view/add_confirmation.php');
+        die();
+        break;
+    
     case 'equipment_to_location':
+        
+        $equipID = filter_input(INPUT_POST, 'equipID', FILTER_VALIDATE_INT);
+        
+        $equipment = equipment_db::get_equipment($equipID);
+        $name = $equipment->getName();
+        
+        $locations = locations_bd::select_all();
+        
+        
+        
         include('view/add_equipment_to_locations');
         die();
         break;
     
+    case 'add_equipment_location':
+        
+        
+        
+        include('view/add_confirmation.php');
+        die();
+        break;
+    
+    
     case 'edit_equipment':
         
         $name = filter_input(INPUT_POST, 'name');
-        $equipID = equipment_DB::get_equipment($equipID);
+        $equipment = equipment_DB::get_equipment($equipID);
         
-        $name = $equipID->getName();
+        $name = $equipment->getName();
         
         if (!isset($error_message)) {
             $error_message = [];
@@ -441,7 +489,22 @@
         break;
     
     case 'location_to_conference':
+        
+        $locationID = filter_input(INPUT_POST, 'locationID', FILTER_VALIDATE_INT);
+        
+        $location = locations_db::get_location($locationID);
+        $room_num = $location->getRoom_num();
+        
+        $conferences = conference_db::select_all();
+        
+        
         include('view/add_location_to_conference.php');
+        die();
+        break;
+    
+    case 'add_location_conference':
+        
+        include('view/add_confirmation.php');
         die();
         break;
     
@@ -533,9 +596,29 @@
 
         die();
         break;
+        
+    case '':
+        include('');
+        die();
+        break;
     
+     
     case 'title_to_conference':
+        
+        $titleID = filter_input(INPUT_POST, 'titleID', FILTER_VALIDATE_INT);
+        
+        $title = title_db::get_title($titleID);
+        $title_name = $title->getTitle_name();
+        
+        $conferences = conference_db::select_all();
+        
         include('view/add_title_to_conference.php');
+        die();
+        break;
+    
+    case 'add_title_conference':
+        
+        include('view/add_confirmation.php');
         die();
         break;
     

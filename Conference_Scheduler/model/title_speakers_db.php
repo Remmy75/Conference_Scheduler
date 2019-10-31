@@ -17,14 +17,14 @@ class title_speakers_db {
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $equipment = [];
+        $title_speakers = [];
 
         foreach ($rows as $value) {
-            $equipment[$value['title_speakerID']] = new equipment($value['title_speakerID'], $value['titleID'], $value['speakerID']);
+            $title_speakers[$value['title_speakerID']] = new title_speakers($value['title_speakerID'], $value['titleID'], $value['speakerID']);
         }
         $statement->closeCursor();
 
-        return $equipment;
+        return $title_speakers;
     }
 
 
@@ -70,14 +70,14 @@ class title_speakers_db {
         $statement->bindValue(':titleID', $titleID);
         $statement->execute();
         $user = $statement->fetch();
-        $title_speaker = [];
+        $title_speakers = [];
 
         foreach ($rows as $value) {
-            $title_speaker[$value['$title_speakerID']] = new title_speaker($value['$title_speakerID'], $value['speakerID'], $value['titleID']);
+            $title_speakers[$value['$title_speakerID']] = new title_speakers($value['$title_speakerID'], $value['speakerID'], $value['titleID']);
         }
         $statement->closeCursor();
 
-        return $title_speaker;
+        return $title_speakers;
     }
     
     public static function delete_by_ID($title_speakerID) {

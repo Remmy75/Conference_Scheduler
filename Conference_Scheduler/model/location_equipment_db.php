@@ -17,14 +17,14 @@ class location_equipment_db {
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $location_equipment = [];
+        $location_equipments = [];
 
         foreach ($rows as $value) {
-            $location_equipment[$value['location_equipID']] = new location_equipment($value['location_equipID'], $value['equipID'], $value['locationID']);
+            $location_equipments[$value['location_equipID']] = new location_equipment($value['location_equipID'], $value['equipID'], $value['locationID']);
         }
         $statement->closeCursor();
 
-        return $location_equipment;
+        return $location_equipments;
     }
 
 
@@ -56,14 +56,14 @@ class location_equipment_db {
         $statement->bindValue(':locationID', $locationID);
         $statement->execute();
         $user = $statement->fetch();
-        $title_need = [];
+        $location = [];
 
         foreach ($rows as $value) {
-            $title_need[$value['location_equipID']] = new title_need($value['location_equipID'], $value['equipID'], $value['locationID']);
+            $location[$value['location_equipID']] = new location($value['location_equipID'], $value['equipID'], $value['locationID']);
         }
         $statement->closeCursor();
 
-        return $title_need;
+        return $location;
     }
     
     public static function delete_by_ID($location_equipID) {

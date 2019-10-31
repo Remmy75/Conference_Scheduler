@@ -15,14 +15,14 @@ class equipment_db {
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $equipment = [];
+        $equipments = [];
 
         foreach ($rows as $value) {
-            $equipment[$value['equipID']] = new equipment($value['equipID'], $value['name']);
+            $equipments[$value['equipID']] = new equipment($value['equipID'], $value['name']);
         }
         $statement->closeCursor();
 
-        return $equipment;
+        return $equipments;
     }
     
     public static function get_equipment($equipID) {
@@ -33,9 +33,9 @@ class equipment_db {
         $statement = $db->prepare($query);
         $statement->bindValue(':equipID', $equipID);
         $statement->execute();
-        $user = $statement->fetch();
+        $equipment = $statement->fetch();
         $statement->closeCursor();
-        return $user;
+        return $equipment;
     }
 
 

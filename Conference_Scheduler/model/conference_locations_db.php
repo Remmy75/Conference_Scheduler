@@ -15,14 +15,14 @@ class conference_locations_db {
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $conference_location = [];
+        $conference_locations = [];
 
         foreach ($rows as $value) {
-            $conference_location[$value['conference_locationsID']] = new conference_location($value['conference_locationsID'], $value['locationID']);
+            $conference_locations[$value['conference_locationsID']] = new conference_location($value['conference_locationsID'], $value['locationID']);
         }
         $statement->closeCursor();
 
-        return $conference_location;
+        return $conference_locations;
     }
 
 
