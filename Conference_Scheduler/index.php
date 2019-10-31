@@ -142,13 +142,13 @@
         
         $speakerID = filter_input(INPUT_POST, 'speakerID', FILTER_VALIDATE_INT);
     
-        $speaker = speakers_db::get_speaker($speakerID);
-        $_SESSION['currentSpeaker'] = $speaker;
-        
-        $fName = $speaker->getFname();
-        $lName = $speaker->getLname();
-        $phone_num = $speaker->getPhone_num();
-        $email = $speaker->getEmail();
+        $speakers = speakers_db::get_speaker($speakerID);
+        $_SESSION['currentSpeaker'] = $speakers;
+        var_dump($speakerID);
+        $fName = $speakers->getFname();
+        $lName = $speakers->getLname();
+        $phone_num = $speakers->getPhone_num();
+        $email = $speakers->getEmail();
         
         $error_message = [];
         $error_message['fname'] = '';

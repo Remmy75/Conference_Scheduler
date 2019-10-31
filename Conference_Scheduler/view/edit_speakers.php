@@ -22,6 +22,8 @@ if (!isset($error_message)) {
     $error_message['phone_num'] = '';
     $error_message['email'] = '';
 }
+
+
 ?>
 
 <?php include 'view/header.php'; ?>
@@ -31,7 +33,7 @@ if (!isset($error_message)) {
             <div class="heading"> 
            <h1>Conference Scheduler</h1>
             </div>
-             
+            
             <?php include 'view/nav.php'; ?>
         <div class="content">
             <main>
