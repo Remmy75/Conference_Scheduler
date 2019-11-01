@@ -33,9 +33,11 @@ class equipment_db {
         $statement = $db->prepare($query);
         $statement->bindValue(':equipID', $equipID);
         $statement->execute();
-        $equipment = $statement->fetch();
+        $row = $statement->fetch();
+       
         $statement->closeCursor();
-        return $equipment;
+        return new equipment($row['equipID'], $row['name']);
+
     }
 
 

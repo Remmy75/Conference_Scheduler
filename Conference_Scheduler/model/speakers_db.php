@@ -1,17 +1,5 @@
 <?php
 
-//speakerID
-//fname
-//lname
-//phone_num
-//email
-//
-//$speakerID
-//$fname
-//$lname
-//$phone_num
-//$email
-//need to add fields to finish
 class speakers_db {
     
     public static function select_all() {
@@ -41,10 +29,11 @@ class speakers_db {
         $statement->execute();
         $row = $statement->fetch();
         
-        $speakers[$row['speakerID']] = new speakers($row['speakerID'], $row['fName'], $row['lName'], $row['phone_num'], $row['email']);
-        
         $statement->closeCursor();
-        return $speakers;
+        return new speakers($row['speakerID'], $row['fName'], $row['lName'], $row['phone_num'], $row['email']);
+        
+        
+        
     }
     
     

@@ -47,7 +47,7 @@ class title_needs_db {
     
     public static function get_needs_by_titleID($titleID) {
         $db = Database::getDB();
-        $query = 'SELECT *
+        $query = 'SELECT equipmentID
               FROM title_needs
               WHERE titleID = :titleID';
 

@@ -159,11 +159,9 @@ class conference_db {
         $statement->execute();
         $value = $statement->fetch();
         
-        $conference[$value['conference_num']] = new conference($value['conference_num'], $value['conference_name'], $value['conference_location'], $value['start_time'], $value['end_time'], $value['lunch'], $value['session_length'], $value['break_length']);
-
         $statement->closeCursor();
+        return new conference($value['conference_num'], $value['conference_name'], $value['conference_location'], $value['start_time'], $value['end_time'], $value['lunch'], $value['session_length'], $value['break_length']);
 
-        return $conference;
     }
     
     public static function update_conference($conference_num, $conference_name, $conference_location, $start_time, $end_time, $lunch, $session_length, $break_length) {
