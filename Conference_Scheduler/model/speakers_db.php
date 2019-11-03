@@ -41,10 +41,10 @@ class speakers_db {
         $statement->execute();
         $row = $statement->fetch();
         
-        $speakers[$row['speakerID']] = new speakers($row['speakerID'], $row['fName'], $row['lName'], $row['phone_num'], $row['email']);
+        $speaker[$row['speakerID']] = new speakers($row['speakerID'], $row['fName'], $row['lName'], $row['phone_num'], $row['email']);
         
         $statement->closeCursor();
-        return $speakers;
+        return $speaker;
     }
     
     
