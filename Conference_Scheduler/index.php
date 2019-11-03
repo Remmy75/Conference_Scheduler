@@ -151,12 +151,12 @@
         $email = $speaker->getEmail();
         
         $error_message = [];
-        $error_message['fname'] = '';
-        $error_message['lname'] = '';
+        $error_message['fName'] = '';
+        $error_message['lName'] = '';
         $error_message['phone_num'] = '';
         $error_message['email'] = '';
         
-        include('view/edit_speakers');
+        include('view/edit_speakers.php');
         die();
         break;
     
@@ -232,14 +232,35 @@
         break;
     
     case 'add_speakers_title':
-        include('view/add_confirmation.php');
+        
+        $speakerID = filter_input(INPUT_POST, 'speakerID', FILTER_VALIDATE_INT);
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['checkbox'] = '';
+        }
+        
+        if(!empty($_POST['title'])){
+            
+            foreach($_POST['title'] as $t) {
+                speaker_title_db::add_title_speakers($titleID, $speakerID);
+            }
+            
+            include('view/add_confirmation.php');
+        } else {
+            
+            $error_message['checkbox'] = 'You must select at least 1 location.';
+            
+            include('view/add_speakers_to_titles.php');
+            exit();
+        }
+     
         die();
         break;
     
-    
     case 'equipment':
         
-        $equipment = equipment_db::select_all();
+        $equipments = equipment_db::select_all();
         
         include('view/view_equipment.php');
         die();
@@ -307,7 +328,28 @@
     
     case 'add_equipment_title':
         
-        include('view/add_confirmation.php');
+        $equipID = filter_input(INPUT_POST, 'equipID', FILTER_VALIDATE_INT);
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['checkbox'] = '';
+        }
+        
+        if(!empty($_POST['title'])){
+            
+            foreach($_POST['title'] as $t) {
+                location_equipment_db::add_location_equipment($equipID, $a);
+            }
+            
+            include('view/add_confirmation.php');
+        } else {
+            
+            $error_message['checkbox'] = 'You must select at least 1 location.';
+            
+            include('view/add_equipment_to_titles.php');
+            exit();
+        }
+     
         die();
         break;
     
@@ -328,15 +370,36 @@
     
     case 'add_equipment_location':
         
+       
+        $equipID = filter_input(INPUT_POST, 'equipID', FILTER_VALIDATE_INT);
         
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['checkbox'] = '';
+        }
         
-        include('view/add_confirmation.php');
+        if(!empty($_POST['location'])){
+            
+            foreach($_POST['location'] as $l) {
+                location_equipment_db::add_location_equipment($equipID, $l);
+            }
+            
+            include('view/add_confirmation.php');
+        } else {
+            
+            $error_message['checkbox'] = 'You must select at least 1 location.';
+            
+            include('view/add_equipment_to_locations.php');
+            exit();
+        }
+        
         die();
         break;
     
     
     case 'edit_equipment':
         
+        $equipID = filter_input(INPUT_POST, 'equipID', FILTER_VALIDATE_INT);
         $name = filter_input(INPUT_POST, 'name');
         $equipment = equipment_DB::get_equipment($equipID);
         
@@ -403,7 +466,7 @@
             $error_message['room_num'] = '';
         }
         
-        include('view/enter_locations');
+        include('view/enter_locations.php');
         die();
         break;
     
@@ -504,10 +567,31 @@
     
     case 'add_location_conference':
         
-        include('view/add_confirmation.php');
+        $locationID = filter_input(INPUT_POST, 'locationID', FILTER_VALIDATE_INT);
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['checkbox'] = '';
+        }
+        
+        if(!empty($_POST['conference'])){
+            
+            foreach($_POST['conference'] as $c) {
+                location_equipment_db::add_location_equipment($locationID, $c);
+            }
+            
+            include('view/add_confirmation.php');
+        } else {
+            
+            $error_message['checkbox'] = 'You must select at least 1 location.';
+            
+            include('view/add_location_to_conference.php');
+            exit();
+        }
+     
         die();
         break;
-    
+        
     case 'titles':
         
         $titles = title_db::select_all();
@@ -527,12 +611,12 @@
             $error_message['title_name'] = '';
         }
         
-        include('view/add_title');
+        include('view/add_title.php');
         die();
         break;
     
     
-    case 'enter_title':
+    case 'add_title':
          
         $title_name = filter_input(INPUT_POST, 'title_name');
        
@@ -557,11 +641,11 @@
     
     case 'edit_title':
         
-        $title_name = filter_input(INPUT_POST, 'title_name');
+        $titleID = filter_input(INPUT_POST, 'titleID', FILTER_VALIDATE_INT);
         
-        $titleID = title_db::get_title($titleID);
+        $title = title_db::get_title($titleID);
         
-        $title_name = $titleID->getTitle_name();
+        $title_name = $title->getTitle_name();
         
         if (!isset($error_message)) {
             $error_message = [];
@@ -574,6 +658,7 @@
     
     case 'commitTitleUpdate':
         
+        $titleID = filter_input(INPUT_POST, 'titleID', FILTER_VALIDATE_INT);
         $title_name = filter_input(INPUT_POST, 'title_name');
         
         if (!isset($error_message)) {
@@ -588,6 +673,7 @@
         if ($error_message['title_name'] != '' ) {
             include 'view/edit_title.php';
             exit();
+            
         } else {
 
                 title_db::update_title($titleID, $title_name);
@@ -618,7 +704,28 @@
     
     case 'add_title_conference':
         
-        include('view/add_confirmation.php');
+        $titleID = filter_input(INPUT_POST, 'titleID', FILTER_VALIDATE_INT);
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['checkbox'] = '';
+        }
+        
+        if(!empty($_POST['conference'])){
+            
+            foreach($_POST['conference'] as $c) {
+                location_equipment_db::add_location_equipment($locationID, $c);
+            }
+            
+            include('view/add_confirmation.php');
+        } else {
+            
+            $error_message['checkbox'] = 'You must select at least 1 location.';
+            
+            include('view/add_title_to_conference.php');
+            exit();
+        }
+     
         die();
         break;
     
@@ -707,8 +814,8 @@
         //time entered must be in military time ex. 0800, 1700
         $timePattern = '/^([01][0-9]|2[0-3]):([0-5][0-9])$/';
         $sTimeValid = preg_match($timePattern, $start_time);
-        $eTimeValid = preg_match($namePattern, $end_time);
-        $lTimeValid = preg_match($namePattern, $lunch);
+        $eTimeValid = preg_match($timePattern, $end_time);
+        $lTimeValid = preg_match($timePattern, $lunch);
         
         if ($start_time === null || $start_time === "") {
             $error_message['start_time'] = 'You must enter a start time in military time (ex 0800, 1700)';

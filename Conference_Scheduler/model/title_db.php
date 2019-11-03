@@ -1,12 +1,6 @@
 <?php
 
 
-//titleID
-//title_name
-//
-//$titleID
-//$title_name
-//need to add fields to finish
 class title_db {
     
     public static function select_all() {
@@ -34,15 +28,16 @@ class title_db {
         $statement = $db->prepare($query);
         $statement->bindValue(':titleID', $titleID);
         $statement->execute();
-        $title = $statement->fetch();
+        $row = $statement->fetch();
         $statement->closeCursor();
-        return $title;
+    
+        return new title($row['titleID'], $row['title_name']);
     }
 
     public static function add_title($title_name) {
     $db = Database::getDB();
 
-    $query = 'INSERT INTO users
+    $query = 'INSERT INTO title
                  (title_name)
               VALUES
                  (:title_name)';

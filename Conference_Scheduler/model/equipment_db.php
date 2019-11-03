@@ -18,7 +18,7 @@ class equipment_db {
         $equipments = [];
 
         foreach ($rows as $value) {
-            $equipments[$value['equipID']] = new equipment($value['equipID'], $value['name']);
+            $equipments[$value['equipID']] = new equipment($value['equipID'], $value['Name']);
         }
         $statement->closeCursor();
 
@@ -33,9 +33,11 @@ class equipment_db {
         $statement = $db->prepare($query);
         $statement->bindValue(':equipID', $equipID);
         $statement->execute();
-        $equipment = $statement->fetch();
+        $row = $statement->fetch();
+       
         $statement->closeCursor();
-        return $equipment;
+        return new equipment($row['equipID'], $row['Name']);
+
     }
 
 

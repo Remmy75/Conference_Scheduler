@@ -16,7 +16,7 @@
                         <th>Equipment ID</th>
                         <th>Name</th>
                     </tr>
-                        <?php foreach ($equipment as $e) : ?>
+                        <?php foreach ($equipments as $e) : ?>
                             <tr>                
                                 <td><?php echo htmlspecialchars($e->getEquipID()); ?></td>
                                 <td><?php echo htmlspecialchars($e->getName()); ?></td>

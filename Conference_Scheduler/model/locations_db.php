@@ -33,13 +33,10 @@ class locations_db {
         $statement->execute();
         $row = $statement->fetch();
 
-        
-        $locations[$row['locationID']] = new locations(
+        $statement->closeCursor();
+        return new locations(
                 $row['locationID'], $row['bldg_name'], $row['room_num']);
 
-        $statement->closeCursor();
-
-        return $locations;
     }
 
     public static function get_locations($bldg_name) {
