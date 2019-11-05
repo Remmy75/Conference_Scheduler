@@ -80,4 +80,21 @@ class location_equipment_db {
             display_db_error($error_message);
         }
     }
+    
+    public static function select_locations_with_equip() {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT locationID, equipID FROM location_equipment order by locationID';
+        $statement = $db->prepare($queryUsers);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $location_equipments = [];
+
+        foreach ($rows as $value) {
+            $location_equipments[$value['locationID']] = new location_equipment($value['locationID'], $value['equipID']);
+        }
+        $statement->closeCursor();
+
+        return $location_equipments;
+    }
 }

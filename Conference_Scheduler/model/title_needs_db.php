@@ -65,4 +65,20 @@ class title_needs_db {
         return $title_needs;
     }
     
+    public static function select_titles_with_equip() {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT titleID, equipmentID FROM title_needs order by titleID';
+        $statement = $db->prepare($queryUsers);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $title_needs = [];
+
+        foreach ($rows as $value) {
+            $title_needs[$value['titleID']] = new title_needs($value['titleID'], $value['equipmentID']);
+        }
+        $statement->closeCursor();
+
+        return $title_needs;
+    }
 }
