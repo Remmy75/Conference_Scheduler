@@ -65,12 +65,10 @@ class title_needs_db {
         return $title_needs;
     }
     
-    public static function select_titles_with_equipment() {
+    public static function select_titles_with_equip() {
         $db = Database::getDB();
 
-        $queryUsers = 'select titleID, equipmentID
-                        from title_needs
-                        group by titleID';
+        $queryUsers = 'SELECT titleID, equipmentID FROM title_needs order by titleID';
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
@@ -83,5 +81,4 @@ class title_needs_db {
 
         return $title_needs;
     }
-    
 }
