@@ -75,7 +75,7 @@ class title_needs_db {
         $title_needs = [];
 
         foreach ($rows as $value) {
-            $title_needs[$value['titleID']] = new title_needs($value['titleID'], $value['equipmentID']);
+            $title_needs[$value['titleID']][] = new title_needs($value['titleID'], $value['equipmentID']);
         }
         $statement->closeCursor();
 
