@@ -73,23 +73,22 @@ print_r($result);
                 //if matched will assign the title to the location and die
                     //if not a match, will cycle through the next title and go through this again
 
-//Once it runs through if a title is matched then it needs to be removed from the array of arrays
-//Or deleted from the variable list
-unset($variable);//this to remove from an array 
+//Will need to do a check first to see if any of the locations will have to little of the equipment to use.
+//need to figure out logic to see about running through on a title multiple times to match with a location using the array_diff
 
-//example of comparing 2 arrays to see if they match
-function identical_values( $arrayA , $arrayB ) {
 
-    sort( $arrayA );
-    sort( $arrayB );
-
-    return $arrayA == $arrayB;
-}
-
-for() {//pull title
+$current_placement_session = 1;//whenever all the locations are used it adds 1 to this to put into the db for what session it is
+$title_placed = 0;//need to have this add to itself until it matches the # of totel titles
+$location_placement_counter = 0;//adds to this everytime a location is placed, when it hits $total_locations it adds 1 to $current_placement_session
+do{
+for($t = 0; $t <= $title_needs.length; $t++){
+    $title = $title_needs[$t];
+    //pull title
     if(){//title hasnt been run through these
-    for() {//pull location
-        if(){//check if title has been assigned
+    for($l = 0; $l <= $location_equipments.length; $l++) {
+        $location.$l = $location_equipments($l);
+        $location_session = location_title_db::get_session_by_locationID($locationID);//pull location
+        if($location_session !== $current_placement_session){//check if location has been assigned
             //run $intersectResult = array_intersect($location, $title);
             //run $diffResult = array_diff($location, $title);
             if(count($intersectResult) == count($location) && count($intersectResult) == count($title)) {//if for array_intersect
@@ -105,7 +104,8 @@ for() {//pull title
                 //set a counter and once it hits the same # of locations start a new session
                 //drop out of all these and start over til the titles are all taken
             }else if(empty($diffResult)) {//if the intersect doesnt match then will try to match with this
-                
+                //can do a variable that will increment everytime the same title goes throug and use that as a parameter for this if statement
+                //example would be if($diffResult <= (count($diffResult) + $diffIncrement))
             }
         }
             
@@ -119,14 +119,162 @@ for() {//pull title
         }
     }
 }
+} while ($title_placed < $total_titles);
 
 
-//
-function sort_by_length($arrays) {
-    $lengths = array_map('count', $arrays);
-    asort($lengths);
-    $return = array();
-    foreach(array_keys($lengths) as $k)
-        $return[$k] = $arrays[$k];
-    return $return;
+//example using usort to sort the arrays from largest to smallest
+$sorted_title_array = title_needs_db::select_titles_with_equip();
+
+usort($sorted_title_array, function($a, $b)
+{
+    if($a[count('equipID')] == $b[count('equipID')])
+    {
+        return 0;
+    } 
+    else if($a[count('equipID')] > $b[count('equipID')])
+    {
+        return -1;
+    } 
+    else 
+    {
+        return 1;
+    }
+    
+});
+
+<?php
+$priorities = array(5, 8, 3, 7, 3);
+
+usort($priorities, function($a, $b)
+{
+    if ($a == $b)
+    {
+        echo "a ($a) is same priority as b ($b), keeping the same\n";
+        return 0;
+    }
+    else if ($a > $b)
+    {
+        echo "a ($a) is higher priority than b ($b), moving b down array\n";
+        return -1;
+    }
+    else {
+        echo "b ($b) is higher priority than a ($a), moving b up array\n";               
+        return 1;
+    }
+});
+
+echo "Sorted priorities:\n";
+var_dump($priorities);
+?>
+
+Output:
+
+b (8) is higher priority than a (3), moving b up array
+b (5) is higher priority than a (3), moving b up array
+b (7) is higher priority than a (3), moving b up array
+a (3) is same priority as b (3), keeping the same
+a (8) is higher priority than b (3), moving b down array
+b (8) is higher priority than a (7), moving b up array
+b (8) is higher priority than a (5), moving b up array
+b (8) is higher priority than a (3), moving b up array
+a (5) is higher priority than b (3), moving b down array
+a (7) is higher priority than b (5), moving b down array
+
+Sorted priorities:
+array(5) {
+  [0]=> int(8)
+  [1]=> int(7)
+  [2]=> int(5)
+  [3]=> int(3)
+  [4]=> int(3)
 }
+
+<?php
+$arr = [
+    [
+        "name"=> "Sally",
+        "nick_name"=> "sal",
+        "availability"=> "0",
+        "is_fav"=> "0"
+    ],
+    [
+        "name"=> "David",
+        "nick_name"=> "dav07",
+        "availability"=> "0",
+        "is_fav"=> "1"
+    ],
+    [
+        "name"=> "Zen",
+        "nick_name"=> "zen",
+        "availability"=> "1",
+        "is_fav"=> "0"
+    ],
+    [
+        "name"=> "Jackson",
+        "nick_name"=> "jack",
+        "availability"=> "1",
+        "is_fav"=> "1"
+    ],
+    [
+        "name"=> "Rohit",
+        "nick_name"=> "rod",
+        "availability"=> "0",
+        "is_fav"=> "0"
+    ],
+
+];
+
+usort($arr,function($a,$b){
+    $c = $b[count('equipID')] - $a[count('equipID'];
+   
+    return $c;
+});
+
+print_r($arr);
+?>
+
+Output:
+
+Array
+(
+    [0] => Array
+        (
+            [name] => Jackson
+            [nick_name] => jack
+            [availability] => 1
+            [is_fav] => 1
+        )
+
+    [1] => Array
+        (
+            [name] => David
+            [nick_name] => dav07
+            [availability] => 0
+            [is_fav] => 1
+        )
+
+    [2] => Array
+        (
+            [name] => Zen
+            [nick_name] => zen
+            [availability] => 1
+            [is_fav] => 0
+        )
+
+    [3] => Array
+        (
+            [name] => Rohit
+            [nick_name] => rod
+            [availability] => 0
+            [is_fav] => 0
+        )
+
+    [4] => Array
+        (
+            [name] => Sally
+            [nick_name] => sal
+            [availability] => 0
+            [is_fav] => 0
+        )
+
+)

@@ -72,7 +72,7 @@ class title_needs_db {
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $title_needs = [];
+        $title_needs = [][];
 
         foreach ($rows as $value) {
             $title_needs[$value['titleID']][] = new title_needs($value['titleID'], $value['equipmentID']);
