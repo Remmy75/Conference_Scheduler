@@ -144,7 +144,7 @@
     
         $speakers = speakers_db::get_speaker($speakerID);
         $_SESSION['currentSpeaker'] = $speakers;
-        var_dump($speakerID);
+        //var_dump($speakerID);
         $fName = $speakers->getFname();
         $lName = $speakers->getLname();
         $phone_num = $speakers->getPhone_num();
