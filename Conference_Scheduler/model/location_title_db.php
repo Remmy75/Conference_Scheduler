@@ -1,4 +1,4 @@
-<?php
+<<?php
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,7 +25,7 @@ class location_title_db {
         $locations = [];
 
         foreach ($rows as $value) {
-            $locations[$value['room_titleID']] = new locations($value['room_titleID'], $value['room_num'], $value['titleID'], $value['session']);
+            $locations[$value['location_titleID']] = new locations($value['location_titleID'], $value['locationID'], $value['titleID'], $value['session'], $value['conference_num']);
         }
         $statement->closeCursor();
 
@@ -46,5 +46,25 @@ class location_title_db {
         return $location_session;
     }
     
+    public static function assign_title_to_location($locationID, $titleID, $session, $conference_num) {
+        $db = Database::getDB();
+
+        $query = 'INSERT INTO location_title
+                 (locationID, titleID, session, conference_num)
+                 VALUES
+                 (:locationID, :titleID, :session, :conference_num)';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':locationID', $locationID);
+        $statement->bindValue(':titleID', $titleID);
+        $statement->bindValue(':session', $session);
+        $statement->bindValue(':conference_num', $conference_num);
+        $statement->execute();
+        $statement->closeCursor();
+    
+        $location_titleID = $db->lastInsertId();
+            return $location_titleID;
+    
+            
+    }
     
 }

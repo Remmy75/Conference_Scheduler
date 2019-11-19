@@ -144,7 +144,6 @@
     
         $speaker = speakers_db::get_speaker($speakerID);
         $_SESSION['currentSpeaker'] = $speaker;
-        var_dump($speakerID);
         $fName = $speaker->getFname();
         $lName = $speaker->getLname();
         $phone_num = $speaker->getPhone_num();
@@ -162,6 +161,7 @@
     
     case 'commitSpeakerUpdate':
         
+        $speakerID = filter_input(INPUT_POST, 'speakerID');
         $fName = filter_input(INPUT_POST, 'fname');
         $lName = filter_input(INPUT_POST, 'lname');
         $phone_num = filter_input(INPUT_POST, 'phone_num');
@@ -205,7 +205,7 @@
             exit();
         } else {
 
-               speakers_db::update_speakers($fName, $lName, $storeCity, $phone_num, $email);
+               speakers_db::update_speakers($speakersID, $fName, $lName, $phone_num, $email);
                 include 'view/update_confirmation.php';    
         }
         
@@ -416,6 +416,7 @@
         
     case 'commitEquipmentUpdate':
         
+        $equipID = filter_input(INPUT_POST, 'equipID');
         $name = filter_input(INPUT_POST, 'name');
         
         if (!isset($error_message)) {
@@ -522,6 +523,7 @@
     
     case 'commitLocationUpdate':
         
+        $locationID = filter_input(INPUT_POST, 'locationID');
         $bldg_name = filter_input(INPUT_POST, 'bldg_name');
         $room_num = filter_input(INPUT_POST, 'room_num');
         
