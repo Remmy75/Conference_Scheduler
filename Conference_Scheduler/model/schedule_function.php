@@ -40,6 +40,9 @@ print_r($result);
 //If array_intersect is used first, it could match up all rooms with titles that have the same #
 //Could use if(count($result) == count($location) && count($result) == count($title)) then assign it to that room
 
+
+//array_intersect shows the same between the arrays
+//array_diff shows whats different between arrays
 //Compare using array_diff smaller titles to larger locations to assign those. 
 //        If no items in the title that isnt in the location it can be assigned to that location
 
@@ -80,19 +83,21 @@ print_r($result);
 $current_placement_session = 1;//whenever all the locations are used it adds 1 to this to put into the db for what session it is
 $title_placed = 0;//need to have this add to itself until it matches the # of totel titles
 $location_placement_counter = 0;//adds to this everytime a location is placed, when it hits $total_locations it adds 1 to $current_placement_session
+$temp_conference_num = 1;
+$array[] = $location_title;
 do{
 for($t = 0; $t <= $title_needs.length; $t++){
     $title = $title_needs[$t];
     //pull title
     if(){//title hasnt been run through these
     for($l = 0; $l <= $location_equipments.length; $l++) {
-        $location.$l = $location_equipments($l);
+        $location = $location_equipments[$l];
         $location_session = location_title_db::get_session_by_locationID($locationID);//pull location
         if($location_session !== $current_placement_session){//check if location has been assigned
             //run $intersectResult = array_intersect($location, $title);
             //run $diffResult = array_diff($location, $title);
             if(count($intersectResult) == count($location) && count($intersectResult) == count($title)) {//if for array_intersect
-                //assign location and title
+                location_title_db::assign_location($location, $title, $current_placement_session, $temp_conference_num);//assign location and title, write to db, assign conference_num 1 which will be a temporary conf, delete after assigning to true db
                 //set a counter and once it hits the same # of locations start a new session
                 //drop out of all these and start over til the titles are all taken
             } else if(empty($diffResult)) {//if the intersect doesnt match then will try to match with this
