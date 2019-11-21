@@ -69,7 +69,7 @@ $location_placement_counter = 0;//adds to this everytime a location is placed, w
 $conference_num = 1;//temporary conference_num until the lineup is finalized
 $diff_increment = 0;//used to run through array_diff function after running through all locations for each title
 
-do{
+do{//need to check now if the titles have a speaker who is in another title that may be scheduled right after this one
 for($t = 0; $t <= $sorted_title_array.length; $t++){
     $title = $sorted_title_array[$t];
     if($diff_increment <= 0){//if diff_increment is 0, then the titles havent run through array_intersect
