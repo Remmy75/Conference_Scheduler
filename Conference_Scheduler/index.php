@@ -144,7 +144,6 @@
     
         $speaker = speakers_db::get_speaker($speakerID);
         $_SESSION['currentSpeaker'] = $speaker;
-        var_dump($speakerID);
         $fName = $speaker->getFname();
         $lName = $speaker->getLname();
         $phone_num = $speaker->getPhone_num();
@@ -156,19 +155,20 @@
         $error_message['phone_num'] = '';
         $error_message['email'] = '';
         
-        include('view/edit_speakers.php');
+        include 'view/edit_speakers.php';
         die();
         break;
     
     case 'commitSpeakerUpdate':
         
+        $speakerID = filter_input(INPUT_POST, 'speakerID');
         $fName = filter_input(INPUT_POST, 'fname');
         $lName = filter_input(INPUT_POST, 'lname');
         $phone_num = filter_input(INPUT_POST, 'phone_num');
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
        
         $error_message = [];
-        
+        $speakers = speakers_db::get_speaker($speakerID);
         $error_message['fname'] = '';
         $error_message['lname'] = '';
         $error_message['phone_num'] = '';
@@ -205,14 +205,10 @@
             exit();
         } else {
 
-               speakers_db::update_speakers($fName, $lName, $storeCity, $phone_num, $email);
+               speakers_db::update_speakers($speakerID, $fName, $lName, $phone_num, $email);
                 include 'view/update_confirmation.php';    
         }
         
-        die();
-        break;
-        
-        include('');
         die();
         break;
     
@@ -416,6 +412,7 @@
         
     case 'commitEquipmentUpdate':
         
+        $equipID = filter_input(INPUT_POST, 'equipID');
         $name = filter_input(INPUT_POST, 'name');
         
         if (!isset($error_message)) {
@@ -522,6 +519,7 @@
     
     case 'commitLocationUpdate':
         
+        $locationID = filter_input(INPUT_POST, 'locationID');
         $bldg_name = filter_input(INPUT_POST, 'bldg_name');
         $room_num = filter_input(INPUT_POST, 'room_num');
         
