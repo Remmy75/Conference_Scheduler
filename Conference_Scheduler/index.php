@@ -155,7 +155,7 @@
         $error_message['phone_num'] = '';
         $error_message['email'] = '';
         
-        include('view/edit_speakers.php');
+        include 'view/edit_speakers.php';
         die();
         break;
     
@@ -168,7 +168,7 @@
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
        
         $error_message = [];
-        
+        $speakers = speakers_db::get_speaker($speakerID);
         $error_message['fname'] = '';
         $error_message['lname'] = '';
         $error_message['phone_num'] = '';
@@ -205,14 +205,10 @@
             exit();
         } else {
 
-               speakers_db::update_speakers($speakersID, $fName, $lName, $phone_num, $email);
+               speakers_db::update_speakers($speakerID, $fName, $lName, $phone_num, $email);
                 include 'view/update_confirmation.php';    
         }
         
-        die();
-        break;
-        
-        include('');
         die();
         break;
     

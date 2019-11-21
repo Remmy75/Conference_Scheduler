@@ -81,6 +81,7 @@ class location_equipment_db {
         }
     }
     
+
     public static function select_locations_with_equip() {
         $db = Database::getDB();
 
@@ -88,10 +89,10 @@ class location_equipment_db {
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $location_equipments = [][];
+        $location_equipments = [];
 
         foreach ($rows as $value) {
-            $location_equipments[$value['locationID']][] = new location_equipment($value['locationID'], $value['equipID']);
+            $location_equipments[$value['locationID']] = new location_equipment($value['locationID'], $value['equipID']);
         }
         $statement->closeCursor();
 

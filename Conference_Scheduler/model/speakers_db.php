@@ -106,12 +106,7 @@ class speakers_db {
     
     public static function update_speakers($speakerID, $fname, $lname, $phone_num, $email) {
         $db = Database::getDB();
-        $query = 'UPDATE speakers
-              SET fname = :fname,
-                  lname = :lname,
-                  phone_num = :phone_num,
-                  email = :email
-              WHERE speakerID = :speakerID';
+        $query = 'UPDATE speakers SET fname = :fname, lname = :lname, phone_num = :phone_num, email = :email WHERE speakerID = :speakerID';
         $statement = $db->prepare($query);
         $statement->bindValue(':fname', $fname);
         $statement->bindValue(':lname', $lname);
