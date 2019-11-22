@@ -94,4 +94,41 @@ class title_speakers_db {
             display_db_error($error_message);
         }
     }
+    
+    public static function select_speakerID_with_titleID() {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT count(titleID) as titleID_count, speakerID FROM title_speakers order by speakerID';
+        $statement = $db->prepare($queryUsers);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $title_speaker = [];
+
+        foreach ($rows as $value) {
+            $title_speaker[$value['speakerID']] = new title_speakers($value['speakerID'], $value['titleID']);
+        }
+        $statement->closeCursor();
+
+        return $title_speaker;
+    }
+    
+    public static function get_titleID_by_speakerID($speakerID) {
+        $db = Database::getDB();
+        $query = 'SELECT *
+              FROM title_speakers
+              WHERE speakerID = :speakerID';
+
+        $statement = $db->prepare($query);
+        $statement->bindValue(':speakerID', $speakerID);
+        $statement->execute();
+        $user = $statement->fetch();
+        $title_speakers = [];
+
+        foreach ($rows as $value) {
+            $title_speakers[$value['$title_speakerID']] = new title_speakers($value['$title_speakerID'], $value['speakerID'], $value['titleID']);
+        }
+        $statement->closeCursor();
+
+        return $title_speakers;
+    }
 }

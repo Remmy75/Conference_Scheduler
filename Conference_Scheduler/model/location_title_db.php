@@ -83,4 +83,21 @@ class location_title_db {
             
     }
     
+    public static function select_with_conference_number($conference_num) {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT * FROM location_title where conference_num = :conference_num';
+        $statement = $db->prepare($queryUsers);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $location_titles = [];
+
+        foreach ($rows as $value) {
+            $locations[$value['location_titleID']] = new location_title($value['location_titleID'], $value['locationID'], $value['titleID'], $value['session'], $value['conference_num']);
+        }
+        $statement->closeCursor();
+
+        return $location_titles;
+    }
+    
 }
