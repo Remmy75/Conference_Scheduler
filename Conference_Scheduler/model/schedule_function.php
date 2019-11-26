@@ -246,3 +246,41 @@ for($t = 0; $t <= $title_needs.length; $t++){
     }
 }
 } while ($title_placed < $total_titles);
+
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+//need to place titles in rooms making sure that the same categories are not scheduled at the same time
+//have choice to place by either category or random
+//some speakers may have extended times
+//some may speak multiple times on the same title
+//if scheduling by category/track, could sort by title category and seperate according to category, then place
+
+
+
+//query to get titles with categories
+$titles = title_categories_db::select_all();//ordered by category, should be able to seperate into different arrays with each category being in its own
+$count = conference_speakers_db::get_category_count_for_conference($conferenceID);//gets count for how many different categories in the conference
+$categories = conference_speakers_db::get_categories_in_conference($conferenceID);//gets categories in the conference
+
+
+
+//place spots into location by category
+//then place by titleID
+//if title time is longer than 1 hour do +1 per time over and make sure they get placed back to back
+
+//pull titleID with categoryID
+    //run through array_column to get an array of array of categoryID as name and titleID's as values
+    //get count of how many values in the array of array
+    //figure out how many titles must be placed each session ie how many locations
+    //total_titles/total_locations = $num_of_sessions
+    //figure % of each category and that much should get placed each session
+    //formula 
+        //variables for formula
+        //total categories
+        //total titles in each category
+        //total locations
+        //number of sessions
+        //
+        //run this each placing of titles, it will change each session
+    
