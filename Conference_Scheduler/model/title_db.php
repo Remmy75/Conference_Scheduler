@@ -63,4 +63,24 @@ class title_db {
         $statement->closeCursor();
     }
     
+    public static function get_title_with_category_by_conference($conferenceID) {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT title.titleID, title_category.categoryID  FROM title_category join title on title_category.titleID = title.titleID join conference_speakers on title.titleID = conference_speakers.titleID WHERE conferenceID = :conferenceID ORDER BY title_category.categoryID';
+        $statement = $db->prepare($queryUsers);
+        $statement->bindValue(':titleID', $titleID);
+        $statement->bindValue(':categoryID', $categoryID);
+        $statement->bindValue(':conferenceID', $conferenceID);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $title_with_categories = [];
+
+        foreach ($rows as $value) {
+            array_push($title_with_categories, $value['titleID'], $value['categoryID']);
+        }
+        $statement->closeCursor();
+
+        return $title_with_categories;
+    }
+    
 }

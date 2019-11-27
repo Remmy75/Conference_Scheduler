@@ -262,12 +262,13 @@ for($t = 0; $t <= $title_needs.length; $t++){
 $titles = title_categories_db::select_all();//ordered by category, should be able to seperate into different arrays with each category being in its own
 $count = conference_speakers_db::get_category_count_for_conference($conferenceID);//gets count for how many different categories in the conference
 $categories = conference_speakers_db::get_categories_in_conference($conferenceID);//gets categories in the conference
-
+$f;
 
 
 //place spots into location by category
 //then place by titleID
 //if title time is longer than 1 hour do +1 per time over and make sure they get placed back to back
+***//have to add time length field to title table
 
 //pull titleID with categoryID
     //run through array_column to get an array of array of categoryID as name and titleID's as values
@@ -283,4 +284,8 @@ $categories = conference_speakers_db::get_categories_in_conference($conferenceID
         //number of sessions
         //
         //run this each placing of titles, it will change each session
-    
+
+$titles_with_categories = title_db::get_title_with_category_by_conference($conferenceID);
+$count = conference_speakers_db::get_category_count_for_conference($conferenceID);//gets count for how many different categories in the conference
+
+

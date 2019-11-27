@@ -93,7 +93,7 @@ class conference_speakers_db {
     public static function get_categories_in_conference($conferenceID) {
         $db = Database::getDB();
 
-        $queryUsers = 'select category.categoryID FROM title_category join conference_speakers on title_category.titleID = conference_speakers.titleID WHERE conference_speakersID = conferenenceID;';
+        $queryUsers = 'select category.categoryID FROM title_category join conference_speakers on title_category.titleID = conference_speakers.titleID WHERE conference_speakersID = conferenenceID order by category.categoryID;';
         $statement = $db->prepare($queryUsers);
         $statement->bindValue(':conferenceID', $conferenceID);
         $statement->bindValue(':categoryID', $categoryID);
