@@ -17,8 +17,8 @@ if (!isset($email)) {
 
 if (!isset($error_message)) {
     $error_message = [];
-    $error_message['fname'] = '';
-    $error_message['lname'] = '';
+    $error_message['fName'] = '';
+    $error_message['lName'] = '';
     $error_message['phone_num'] = '';
     $error_message['email'] = '';
 }
@@ -50,13 +50,13 @@ if (!isset($error_message)) {
                     <li class="form-row">
                         <label>First Name:</label>
                         <input type="text" name="fname" value="<?php echo htmlspecialchars($fName); ?>">
-                        <div id="error"><?php echo htmlspecialchars($error_message['fname']); ?></div>
+                        <div id="error"><?php echo htmlspecialchars($error_message['fName']); ?></div>
                     </li>
 
                     <li class="form-row">
                         <label>Last Name:</label>
                         <input type="text" name="lname" value="<?php echo htmlspecialchars($lName); ?>">
-                        <div id="error"><?php echo htmlspecialchars($error_message['lname']); ?></div>
+                        <div id="error"><?php echo htmlspecialchars($error_message['lName']); ?></div>
                     </li>
                     
                     <li class="form-row">

@@ -25,11 +25,25 @@ class location_title_db {
         $locations = [];
 
         foreach ($rows as $value) {
-            $locations[$value['room_titleID']] = new locations($value['room_titleID'], $value['room_num'], $value['titleID']);
+            $locations[$value['room_titleID']] = new locations($value['room_titleID'], $value['room_num'], $value['titleID'], $value['session']);
         }
         $statement->closeCursor();
 
         return $locations;
+    }
+    
+    public static function get_session_by_locationID($locationID) {
+        $db = Database::getDB();
+        $query = 'SELECT session
+              FROM location_title
+              WHERE locationID = :locationID';
+
+        $statement = $db->prepare($query);
+        $statement->bindValue(':locationID', $locationID);
+        $statement->execute();
+        $location_session = $statement->fetch();
+        $statement->closeCursor();
+        return $location_session;
     }
     
     

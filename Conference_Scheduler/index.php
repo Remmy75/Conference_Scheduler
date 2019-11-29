@@ -156,7 +156,7 @@
         $error_message['phone_num'] = '';
         $error_message['email'] = '';
         
-        include('view/edit_speakers');
+        include('view/edit_speakers.php');
         die();
         break;
     
@@ -260,7 +260,7 @@
     
     case 'equipment':
         
-        $equipment = equipment_db::select_all();
+        $equipments = equipment_db::select_all();
         
         include('view/view_equipment.php');
         die();
@@ -399,6 +399,7 @@
     
     case 'edit_equipment':
         
+        $equipID = filter_input(INPUT_POST, 'equipID', FILTER_VALIDATE_INT);
         $name = filter_input(INPUT_POST, 'name');
         $equipment = equipment_DB::get_equipment($equipID);
         
@@ -465,7 +466,7 @@
             $error_message['room_num'] = '';
         }
         
-        include('view/enter_locations');
+        include('view/enter_locations.php');
         die();
         break;
     
@@ -610,12 +611,12 @@
             $error_message['title_name'] = '';
         }
         
-        include('view/add_title');
+        include('view/add_title.php');
         die();
         break;
     
     
-    case 'enter_title':
+    case 'add_title':
          
         $title_name = filter_input(INPUT_POST, 'title_name');
        
@@ -640,11 +641,11 @@
     
     case 'edit_title':
         
-        $title_name = filter_input(INPUT_POST, 'title_name');
+        $titleID = filter_input(INPUT_POST, 'titleID', FILTER_VALIDATE_INT);
         
-        $titleID = title_db::get_title($titleID);
+        $title = title_db::get_title($titleID);
         
-        $title_name = $titleID->getTitle_name();
+        $title_name = $title->getTitle_name();
         
         if (!isset($error_message)) {
             $error_message = [];
@@ -657,6 +658,7 @@
     
     case 'commitTitleUpdate':
         
+        $titleID = filter_input(INPUT_POST, 'titleID', FILTER_VALIDATE_INT);
         $title_name = filter_input(INPUT_POST, 'title_name');
         
         if (!isset($error_message)) {
@@ -671,6 +673,7 @@
         if ($error_message['title_name'] != '' ) {
             include 'view/edit_title.php';
             exit();
+            
         } else {
 
                 title_db::update_title($titleID, $title_name);
@@ -811,8 +814,8 @@
         //time entered must be in military time ex. 0800, 1700
         $timePattern = '/^([01][0-9]|2[0-3]):([0-5][0-9])$/';
         $sTimeValid = preg_match($timePattern, $start_time);
-        $eTimeValid = preg_match($namePattern, $end_time);
-        $lTimeValid = preg_match($namePattern, $lunch);
+        $eTimeValid = preg_match($timePattern, $end_time);
+        $lTimeValid = preg_match($timePattern, $lunch);
         
         if ($start_time === null || $start_time === "") {
             $error_message['start_time'] = 'You must enter a start time in military time (ex 0800, 1700)';

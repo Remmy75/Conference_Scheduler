@@ -22,7 +22,7 @@
                         <th>Session Length</th>
                         <th>Break Length</th>
                     </tr>
-                        <?php foreach ($conference as $c) : ?>
+                        <?php foreach ($conferences as $c) : ?>
                             <tr>                
                                 <td><?php echo htmlspecialchars($c->getConference_num()); ?></td>
                                 <td><?php echo htmlspecialchars($c->getConference_name()); ?></td>

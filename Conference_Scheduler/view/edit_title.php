@@ -31,7 +31,7 @@ if (!isset($error_message)) {
                     </li>
                         
                     <li class="form-row">
-                        <label>First Name:</label>
+                        <label>Name:</label>
                         <input type="text" name="fname" value="<?php echo htmlspecialchars($title_name); ?>">
                         <div id="error"><?php echo htmlspecialchars($error_message['title_name']); ?></div>
                     </li>

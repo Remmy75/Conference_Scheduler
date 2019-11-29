@@ -1,10 +1,5 @@
 <?php
 
-//equipID
-//name
-//
-//$equipID
-//$name
 class equipment {
     private $equipID, $name;
     function __construct($equipID, $name) {

@@ -28,17 +28,17 @@ if (!isset($error_message)) {
                     
                     <ul class="form-wrapper">
                     <li class="form-row">
-                        <label>Speaker ID:</label><p><?php echo $equipID; ?></p></br>
+                        <label>Equipment ID:</label><p><?php echo $equipID; ?></p></br>
                     </li>
                         
                     <li class="form-row">
-                        <label>Email:</label>
+                        <label>Name:</label>
                         <input type="text" name="name" value="<?php echo htmlspecialchars($name); ?>">
                         <div id="error"><?php echo htmlspecialchars($error_message['name']); ?></div>
                     </li>
 
                     <li class="form-row">
-                    <button type="submit" value="commitEquipmentUpdate">Edit Equipment</button>
+                    <button type="submit" name="Edit Equipment">Edit Equipment</button>
                     </li>
                     
           

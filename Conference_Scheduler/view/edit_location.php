@@ -32,17 +32,17 @@ if (!isset($error_message)) {
                     
                     <ul class="form-wrapper">
                     <li class="form-row">
-                        <label>Speaker ID:</label><p><?php echo $locationID; ?></p></br>
+                        <label>Location ID:</label><p><?php echo $locationID; ?></p></br>
                     </li>
                         
                     <li class="form-row">
-                        <label>Email:</label>
+                        <label>Building Name:</label>
                         <input type="text" name="bldg_name" value="<?php echo htmlspecialchars($bldg_name); ?>">
                         <div id="error"><?php echo htmlspecialchars($error_message['bldg_name']); ?></div>
                     </li>
 
                     <li class="form-row">
-                        <label>Email:</label>
+                        <label>Room Number:</label>
                         <input type="text" name="room_num" value="<?php echo htmlspecialchars($room_num); ?>">
                         <div id="error"><?php echo htmlspecialchars($error_message['room_num']); ?></div>
                     </li>

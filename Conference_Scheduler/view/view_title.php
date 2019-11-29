@@ -16,7 +16,7 @@
                         <th>Title ID</th>
                         <th>Name</th>
                     </tr>
-                        <?php foreach ($title as $t) : ?>
+                        <?php foreach ($titles as $t) : ?>
                             <tr>                
                                 <td><?php echo htmlspecialchars($t->getTitleID()); ?></td>
                                 <td><?php echo htmlspecialchars($t->getTitle_name()); ?></td>
@@ -37,7 +37,7 @@
 
                 </table><br>
                 <form action="index.php" method="post">
-                    <input type="hidden" name="action" value="view_enter_title">
+                    <input type="hidden" name="action" value="view_enter_titles">
                     <input type="submit" value="Enter Title">
                 </form>
             </main>
