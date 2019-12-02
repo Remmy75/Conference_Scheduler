@@ -27,7 +27,7 @@ if (!isset($error_message)) {
             <div class="content"> 
                  <h2>Add Locations</h2>
                 <form action="index.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="add_locations">
+                    <input type="hidden" name="action" value="enter_location">
                     
                     <ul class="form-wrapper">
                     <li class="form-row">
@@ -43,7 +43,7 @@ if (!isset($error_message)) {
                     </li>
                     
                     <li class="form-row">
-                    <button type="submit" value="add_locations">Add Location</button>
+                    <button type="submit" value="enter_location">Add Location</button>
                     </li>
                     
           

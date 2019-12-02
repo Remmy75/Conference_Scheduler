@@ -23,9 +23,8 @@ if (!isset($error_message)) {
                                 <input type="checkbox" name="location[]" value="<?php echo htmlspecialchars($l->getLocationID()); ?>"><?php echo htmlspecialchars($l->getRoom_num()); ?><br>
                             <?php endforeach; ?>
                             <div id="error"><?php echo htmlspecialchars($error_message['checkbox']); ?></div>
-                        </form>
-                <form action="index.php" method="post">
                     <input type="hidden" name="action" value="add_equipment_location">
+                    <input type="hidden" name="equipID" value=<?php echo htmlspecialchars($equipID);?>>
                     <input type="submit" value="Add to Location">
                 </form>
             </main>

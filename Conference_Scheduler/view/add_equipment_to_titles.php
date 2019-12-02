@@ -23,9 +23,8 @@ if (!isset($error_message)) {
                                 <input type="checkbox" name="title[]" value="<?php echo htmlspecialchars($t->getTitleID()); ?>"><?php echo htmlspecialchars($t->getTitle_name()); ?><br>
                             <?php endforeach; ?> 
                             <div id="error"><?php echo htmlspecialchars($error_message['checkbox']); ?></div>
-                        </form>
-                <form action="index.php" method="post">
                     <input type="hidden" name="action" value="add_equipment_title">
+                    <input type="hidden" name="equipID" value=<?php echo $equipID; ?>>
                     <input type="submit" value="Add to Title">
                 </form>
             </main>

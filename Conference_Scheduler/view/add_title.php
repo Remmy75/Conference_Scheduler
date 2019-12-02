@@ -32,7 +32,7 @@ if (!isset($error_message)) {
                     </li>
                     
                     <li class="form-row">
-                    <button type="submit" value="add_title">Add Speaker Title</button>
+                    <button type="submit" value="add_title">Add Title</button>
                     </li>
                     
           

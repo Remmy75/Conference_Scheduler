@@ -13,7 +13,7 @@ class location_equipment_db {
    public static function select_all() {
         $db = Database::getDB();
 
-        $queryUsers = 'SELECT * FROM location_equipment';
+        $queryUsers = 'SELECT * FROM location_equip';
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
@@ -31,7 +31,7 @@ class location_equipment_db {
     public static function add_location_equipment($equipID, $locationID) {
     $db = Database::getDB();
 
-    $query = 'INSERT INTO users
+    $query = 'INSERT INTO location_equip
                  (equipID, locationID)
               VALUES
                  (:equipID, :locationID)';
@@ -45,11 +45,28 @@ class location_equipment_db {
             return $user_id;
     }
     
+    public static function add_location_to_conference($conference_num, $locationID) {
+    $db = Database::getDB();
+
+    $query = 'INSERT INTO conference_locations
+                 (conference_num, locationID)
+              VALUES
+                 (:conference_num, :locationID)';
+    $statement = $db->prepare($query);
+    $statement->bindValue(':conference_num', $conference_num);
+    $statement->bindValue(':locationID', $locationID);
+    $statement->execute();
+    $statement->closeCursor();
+    
+     $user_id = $db->lastInsertId();
+            return $user_id;
+    }
+    
     
     public static function get_equipment_by_location($locationID) {
         $db = Database::getDB();
         $query = 'SELECT *
-              FROM location_equipment
+              FROM location_equip
               WHERE locationID = :locationID';
 
         $statement = $db->prepare($query);
@@ -68,7 +85,7 @@ class location_equipment_db {
     
     public static function delete_by_ID($location_equipID) {
         $db = Database::getDB();
-        $query = 'DELETE from location_equipment WHERE location_equipID = :location_equipID';
+        $query = 'DELETE from location_equip WHERE location_equipID = :location_equipID';
         try {
             $statement = $db->prepare($query);
             $statement->bindValue(':location_equipID', $location_equipID);
@@ -81,17 +98,18 @@ class location_equipment_db {
         }
     }
     
+
     public static function select_locations_with_equip() {
         $db = Database::getDB();
 
-        $queryUsers = 'SELECT locationID, equipID FROM location_equipment order by locationID';
+        $queryUsers = 'SELECT locationID, equipID FROM location_equip order by locationID';
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $location_equipments = [][];
+        $location_equipments = [];
 
         foreach ($rows as $value) {
-            $location_equipments[$value['locationID']][] = new location_equipment($value['locationID'], $value['equipID']);
+            $location_equipments[$value['locationID']] = new location_equipment($value['locationID'], $value['equipID']);
         }
         $statement->closeCursor();
 

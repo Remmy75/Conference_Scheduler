@@ -16,22 +16,12 @@
                         <th>Conference Number</th>
                         <th>Conference Name</th>
                         <th>Location</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Lunch</th>
-                        <th>Session Length</th>
-                        <th>Break Length</th>
                     </tr>
                         <?php foreach ($conferences as $c) : ?>
                             <tr>                
                                 <td><?php echo htmlspecialchars($c->getConference_num()); ?></td>
                                 <td><?php echo htmlspecialchars($c->getConference_name()); ?></td>
                                 <td><?php echo htmlspecialchars($c->getConference_location()); ?></td>
-                                <td><?php echo htmlspecialchars($c->getStart_time()); ?></td>
-                                <td><?php echo htmlspecialchars($c->getEnd_time()); ?></td>
-                                <td><?php echo htmlspecialchars($c->getLunch()); ?></td>
-                                <td><?php echo htmlspecialchars($c->getSession_length()); ?></td>
-                                <td><?php echo htmlspecialchars($c->getBreak_length()); ?></td>
                                 <td><form action="index.php" method="post">
                                         <input type="hidden" name="action" value="view_conference">
                                         <input type="hidden" name="conference_num" value="<?php echo htmlspecialchars($c->getConference_num()); ?>">

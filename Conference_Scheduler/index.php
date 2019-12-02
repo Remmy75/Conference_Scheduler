@@ -11,6 +11,8 @@
     require('model/title_db.php');
     require('model/title_needs_db.php');
     require('model/title_speakers_db.php');
+    require('model/categories_db.php');
+    require('model/title_categories_db.php');
     
     require('model/locations.php');
     require('model/speakers.php');
@@ -23,12 +25,13 @@
     require('model/conference_speakers.php');
     require('model/equipment.php');
     require('model/location_equipment.php');
+    require('model/categories.php');
     
     $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds
     session_set_cookie_params($lifetime, '/');
     session_start();
     
-    $errors = '';
+    
 
     $action = filter_input(INPUT_POST, 'action');
     if ($action === NULL) {
@@ -37,6 +40,8 @@
         $action = 'home';
         }
     }
+    
+    $errors = '';
     
     
     switch ($action) {
@@ -142,13 +147,12 @@
         
         $speakerID = filter_input(INPUT_POST, 'speakerID', FILTER_VALIDATE_INT);
     
-        $speakers = speakers_db::get_speaker($speakerID);
-        $_SESSION['currentSpeaker'] = $speakers;
-        //var_dump($speakerID);
-        $fName = $speakers->getFname();
-        $lName = $speakers->getLname();
-        $phone_num = $speakers->getPhone_num();
-        $email = $speakers->getEmail();
+        $speaker = speakers_db::get_speaker($speakerID);
+        $_SESSION['currentSpeaker'] = $speaker;
+        $fName = $speaker->getFname();
+        $lName = $speaker->getLname();
+        $phone_num = $speaker->getPhone_num();
+        $email = $speaker->getEmail();
         
         $error_message = [];
         $error_message['fName'] = '';
@@ -156,19 +160,20 @@
         $error_message['phone_num'] = '';
         $error_message['email'] = '';
         
-        include('view/edit_speakers.php');
+        include 'view/edit_speakers.php';
         die();
         break;
     
     case 'commitSpeakerUpdate':
         
+        $speakerID = filter_input(INPUT_POST, 'speakerID');
         $fName = filter_input(INPUT_POST, 'fname');
         $lName = filter_input(INPUT_POST, 'lname');
         $phone_num = filter_input(INPUT_POST, 'phone_num');
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
        
         $error_message = [];
-        
+        $speakers = speakers_db::get_speaker($speakerID);
         $error_message['fname'] = '';
         $error_message['lname'] = '';
         $error_message['phone_num'] = '';
@@ -205,14 +210,10 @@
             exit();
         } else {
 
-               speakers_db::update_speakers($fName, $lName, $storeCity, $phone_num, $email);
+               speakers_db::update_speakers($speakerID, $fName, $lName, $phone_num, $email);
                 include 'view/update_confirmation.php';    
         }
         
-        die();
-        break;
-        
-        include('');
         die();
         break;
     
@@ -226,6 +227,7 @@
         $lName = $speaker->getLname();
         
         $titles = title_db::select_all();
+
         
         include('view/add_speakers_to_titles.php');
         die();
@@ -234,22 +236,29 @@
     case 'add_speakers_title':
         
         $speakerID = filter_input(INPUT_POST, 'speakerID', FILTER_VALIDATE_INT);
+        $titleID = filter_input(INPUT_POST, 'title');
+        //$titleID = $_POST['title'];
+        var_dump($_POST['title']);
+        var_dump($speakerID);
         
         if (!isset($error_message)) {
             $error_message = [];
             $error_message['checkbox'] = '';
         }
         
-        if(!empty($_POST['title'])){
+        
+        if(isset($_POST['title'])){
             
-            foreach($_POST['title'] as $t) {
-                speaker_title_db::add_title_speakers($titleID, $speakerID);
+            $titleID = $_POST['title'];
+            
+            foreach($titleID as $t) {
+                title_speakers_db::add_title_speakers($t, $speakerID);
             }
             
             include('view/add_confirmation.php');
         } else {
-            
-            $error_message['checkbox'] = 'You must select at least 1 location.';
+
+            $error_message['checkbox'] = 'You must select at least 1 title.';
             
             include('view/add_speakers_to_titles.php');
             exit();
@@ -282,7 +291,7 @@
         die();
         break;
         
-    case 'enter_equipment':
+    case 'add_equipment':
         
         $name = filter_input(INPUT_POST, 'name');
         
@@ -329,16 +338,20 @@
     case 'add_equipment_title':
         
         $equipID = filter_input(INPUT_POST, 'equipID', FILTER_VALIDATE_INT);
+        //$titleID = filter_input(INPUT_POST, 'title');
+        var_dump($_POST['title']);
         
         if (!isset($error_message)) {
             $error_message = [];
             $error_message['checkbox'] = '';
         }
         
-        if(!empty($_POST['title'])){
+        if(isset($_POST['title'])){
             
-            foreach($_POST['title'] as $t) {
-                location_equipment_db::add_location_equipment($equipID, $a);
+            $titleID = $_POST['title'];
+            
+            foreach($titleID as $t) {
+                title_needs_db::add_title_need($equipID, $t);
             }
             
             include('view/add_confirmation.php');
@@ -360,11 +373,11 @@
         $equipment = equipment_db::get_equipment($equipID);
         $name = $equipment->getName();
         
-        $locations = locations_bd::select_all();
+        $locations = locations_db::select_all();
         
         
         
-        include('view/add_equipment_to_locations');
+        include('view/add_equipment_to_locations.php');
         die();
         break;
     
@@ -416,6 +429,7 @@
         
     case 'commitEquipmentUpdate':
         
+        $equipID = filter_input(INPUT_POST, 'equipID');
         $name = filter_input(INPUT_POST, 'name');
         
         if (!isset($error_message)) {
@@ -475,15 +489,17 @@
         $bldg_name = filter_input(INPUT_POST, 'bldg_name');
         $room_num = filter_input(INPUT_POST, 'room_num');
        
+        
         $error_message = [];
         $error_message['bldg_name'] = '';
         $error_message['room_num'] = '';
+        
 
-        if ($bldg_name === null || $bldg_name === "") {
+        if ($bldg_name === null || $bldg_name === '') {
             $error_message['bldg_name'] = 'You must enter the buildings name.';
         } 
         
-        if ($room_num === null || $room_num === "") {
+        if ($room_num === null || $room_num === '') {
             $error_message['room_num'] = 'You must enter the room number.';
         } 
 
@@ -522,6 +538,7 @@
     
     case 'commitLocationUpdate':
         
+        $locationID = filter_input(INPUT_POST, 'locationID');
         $bldg_name = filter_input(INPUT_POST, 'bldg_name');
         $room_num = filter_input(INPUT_POST, 'room_num');
         
@@ -574,16 +591,18 @@
             $error_message['checkbox'] = '';
         }
         
-        if(!empty($_POST['conference'])){
+        if(isset($_POST['conference'])){
             
-            foreach($_POST['conference'] as $c) {
-                location_equipment_db::add_location_equipment($locationID, $c);
+            $conference_num = $_POST['conference'];
+            
+            foreach($conference_num as $c) {
+                conference_locations_db::add_conference_locations($c, $locationID);
             }
             
             include('view/add_confirmation.php');
         } else {
             
-            $error_message['checkbox'] = 'You must select at least 1 location.';
+            $error_message['checkbox'] = 'You must select at least 1 conference.';
             
             include('view/add_location_to_conference.php');
             exit();
@@ -642,6 +661,7 @@
     case 'edit_title':
         
         $titleID = filter_input(INPUT_POST, 'titleID', FILTER_VALIDATE_INT);
+        $title_name = filter_input(INPUT_POST, 'title_name');
         
         $title = title_db::get_title($titleID);
         
@@ -711,16 +731,20 @@
             $error_message['checkbox'] = '';
         }
         
-        if(!empty($_POST['conference'])){
+        if(isset($_POST['conference'])){
             
-            foreach($_POST['conference'] as $c) {
-                location_equipment_db::add_location_equipment($locationID, $c);
+            $conference_num = $_POST['conference'];
+            
+            foreach($conference_num as $c) {
+                
+                conference_speakers_db::add_conference_title($titleID, $c);
+                
             }
             
             include('view/add_confirmation.php');
         } else {
             
-            $error_message['checkbox'] = 'You must select at least 1 location.';
+            $error_message['checkbox'] = 'You must select at least 1 conference.';
             
             include('view/add_title_to_conference.php');
             exit();
@@ -747,35 +771,10 @@
             $conference_location = '';
         }
 
-        if (!isset($start_time)) {
-            $start_time = '';
-        }
-
-        if (!isset($end_time)) {
-            $end_time = '';
-        }
-
-        if (!isset($lunch)) {
-            $lunch = '';
-        }
-
-        if (!isset($session_length)) {
-            $session_length = '';
-        }
-
-        if (!isset($break_length)) {
-            $break_length = '';
-        }
-
         if (!isset($error_message)) {
             $error_message = [];
             $error_message['conference_name'] = '';
             $error_message['conference_location'] = '';
-            $error_message['start_time'] = '';
-            $error_message['end_time'] = '';
-            $error_message['lunch'] = '';
-            $error_message['session_length'] = '';
-            $error_message['break_length'] = '';
         }
         
         include('view/enter_conferences.php');
@@ -786,22 +785,10 @@
         
         $conference_name = filter_input(INPUT_POST, 'conference_name');
         $conference_location = filter_input(INPUT_POST, 'conference_location');
-        $start_time = filter_input(INPUT_POST, 'start_time');
-        $end_time = filter_input(INPUT_POST, 'end_time');
-        $lunch = filter_input(INPUT_POST, 'lunch');
-        $session_length = filter_input(INPUT_POST, 'session_length', FILTER_VALIDATE_FLOAT);
-        $break_length = filter_input(INPUT_POST, 'break_length', FILTER_VALIDATE_FLOAT);
        
         $error_message = [];
         $error_message['conference_name'] = '';
         $error_message['conference_location'] = '';
-        $error_message['start_time'] = '';
-        $error_message['end_time'] = '';
-        $error_message['lunch'] = '';
-        $error_message['session_length'] = '';
-        $error_message['break_length'] = '';
-
-        
 
         if ($conference_name === null || $conference_name === "") {
             $error_message['conference_name'] = 'You must enter a conference name.';
@@ -811,52 +798,13 @@
             $error_message['conference_location'] = 'You must enter a conference location.';
         } 
         
-        //time entered must be in military time ex. 0800, 1700
-        $timePattern = '/^([01][0-9]|2[0-3]):([0-5][0-9])$/';
-        $sTimeValid = preg_match($timePattern, $start_time);
-        $eTimeValid = preg_match($timePattern, $end_time);
-        $lTimeValid = preg_match($timePattern, $lunch);
         
-        if ($start_time === null || $start_time === "") {
-            $error_message['start_time'] = 'You must enter a start time in military time (ex 0800, 1700)';
-        } else if ($sTimeValid === FALSE || $sTimeValid === 0) {
-            $error_message['start_time'] = 'You must enter the time in military time (ex 0800, 1700)';
-        }
-
-        if ($end_time === null || $end_time === "") {
-            $error_message['end_time'] = 'You must enter an end time in military time (ex 0800, 1700)';
-        } else if ($eTimeValid === FALSE || $eTimeValid === 0) {
-            $error_message['end_time'] = 'You must enter the time in military time (ex 0800, 1700)';
-        }
-        
-        if ($lunch === null || $lunch === "") {
-            $error_message['lunch'] = 'You must enter a lunch time in military time (ex 0800, 1700)';
-        } else if ($lTimeValid === FALSE || $lTimeValid === 0) {
-            $error_message['lunch'] = 'You must enter the lunch time in military time (ex 0800, 1700)';
-        }
-        
-        $floatPattern = '/^-?(?:\d+|\d*\.\d+)$/';
-        $sessionValid = preg_match($floatPattern, $session_length);
-        $breakValid = preg_match($floatPattern, $break_length);
-        
-        if ($session_length === null || $session_length === "") {
-            $error_message['session_length'] = 'You must enter a session length';
-        } else if ($sessionValid === FALSE || $sessionValid === 0) {
-            $error_message['session_length'] = 'You must enter session length in 1.00 float format (ex. .75 for 45 min)';
-        }
-        
-        if ($break_length === null || $break_length === "") {
-            $error_message['break_length'] = 'You must enter a break length';
-        } else if ($breakValid === FALSE || $breakValid === 0) {
-            $error_message['break_length'] = 'You must enter the break length in 1.00 format (ex .25 for 15 minutes)';
-        }
-        
-        if ($error_message['conference_name'] != '' || $error_message['conference_location'] != '' || $error_message['start_time'] != '' ||  $error_message['end_time'] != '' || $error_message['lunch'] != '' || $error_message['session_length'] != '' ||  $error_message['break_length'] != '') {
+        if ($error_message['conference_name'] != '' || $error_message['conference_location'] != '') {
             include 'view/enter_conferences.php';
             exit();
         } else {
 
-                conference_db::add_conference($conference_name, $conference_location, $start_time, $end_time, $lunch, $session_length, $break_length);
+                conference_db::add_conference($conference_name, $conference_location);
                 include 'view/add_confirmation.php';    
         }
         
@@ -871,20 +819,10 @@
         
         $conference_name = $conference_name->getConference_name();
         $conference_location = $conference_location->getConference_location();
-        $start_time = $start_time->getStart_time();
-        $end_time = $end_time->getEnd_time();
-        $lunch = $lunch->getLunch();
-        $session_length = $session_length->getSession_length();
-        $break_length = $break_length->getBreak_length();
         
         $error_message = [];
         $error_message['conference_name'] = '';
         $error_message['conference_location'] = '';
-        $error_message['start_time'] = '';
-        $error_message['end_time'] = '';
-        $error_message['lunch'] = '';
-        $error_message['session_length'] = '';
-        $error_message['break_length'] = '';
         
         include('view/edit_speakers');
         die();
@@ -894,21 +832,10 @@
         
         $conference_name = filter_input(INPUT_POST, 'conference_name');
         $conference_location = filter_input(INPUT_POST, 'conference_location');
-        $start_time = filter_input(INPUT_POST, 'start_time');
-        $end_time = filter_input(INPUT_POST, 'end_time');
-        $lunch = filter_input(INPUT_POST, 'lunch');
-        $session_length = filter_input(INPUT_POST, 'session_length', FILTER_VALIDATE_FLOAT);
-        $break_length = filter_input(INPUT_POST, 'break_length', FILTER_VALIDATE_FLOAT);
        
         $error_message = [];
         $error_message['conference_name'] = '';
         $error_message['conference_location'] = '';
-        $error_message['start_time'] = '';
-        $error_message['end_time'] = '';
-        $error_message['lunch'] = '';
-        $error_message['session_length'] = '';
-        $error_message['break_length'] = '';
-
         
 
         if ($conference_name === null || $conference_name === "") {
@@ -917,54 +844,14 @@
         
         if ($conference_location === null || $conference_location === "") {
             $error_message['conference_location'] = 'You must enter a conference location.';
-        } 
-        
-        //time entered must be in military time ex. 0800, 1700
-        $timePattern = '/^([01][0-9]|2[0-3]):([0-5][0-9])$/';
-        $sTimeValid = preg_match($timePattern, $start_time);
-        $eTimeValid = preg_match($namePattern, $end_time);
-        $lTimeValid = preg_match($namePattern, $lunch);
-        
-        if ($start_time === null || $start_time === "") {
-            $error_message['start_time'] = 'You must enter a start time in military time (ex 0800, 1700)';
-        } else if ($sTimeValid === FALSE || $sTimeValid === 0) {
-            $error_message['start_time'] = 'You must enter the time in military time (ex 0800, 1700)';
-        }
-
-        if ($end_time === null || $end_time === "") {
-            $error_message['end_time'] = 'You must enter an end time in military time (ex 0800, 1700)';
-        } else if ($eTimeValid === FALSE || $eTimeValid === 0) {
-            $error_message['end_time'] = 'You must enter the time in military time (ex 0800, 1700)';
         }
         
-        if ($lunch === null || $lunch === "") {
-            $error_message['lunch'] = 'You must enter a lunch time in military time (ex 0800, 1700)';
-        } else if ($lTimeValid === FALSE || $lTimeValid === 0) {
-            $error_message['lunch'] = 'You must enter the lunch time in military time (ex 0800, 1700)';
-        }
-        
-        $floatPattern = '/^-?(?:\d+|\d*\.\d+)$/';
-        $sessionValid = preg_match($floatPattern, $session_length);
-        $breakValid = preg_match($floatPattern, $break_length);
-        
-        if ($session_length === null || $session_length === "") {
-            $error_message['session_length'] = 'You must enter a session length';
-        } else if ($sessionValid === FALSE || $sessionValid === 0) {
-            $error_message['session_length'] = 'You must enter session length in 1.00 float format (ex. .75 for 45 min)';
-        }
-        
-        if ($break_length === null || $break_length === "") {
-            $error_message['break_length'] = 'You must enter a break length';
-        } else if ($breakValid === FALSE || $breakValid === 0) {
-            $error_message['break_length'] = 'You must enter the break length in 1.00 format (ex .25 for 15 minutes)';
-        }
-        
-        if ($error_message['conference_name'] != '' || $error_message['conference_location'] != '' || $error_message['start_time'] != '' ||  $error_message['end_time'] != '' || $error_message['lunch'] != '' || $error_message['session_length'] != '' ||  $error_message['break_length'] != '') {
+        if ($error_message['conference_name'] != '' || $error_message['conference_location'] != '' ) {
             include 'view/edit_conferences.php';
             exit();
         } else {
 
-                conference_db::update_conference($conference_name, $conference_location, $start_time, $end_time, $lunch, $session_length, $break_length);
+                conference_db::update_conference($conference_name, $conference_location);
                 include 'view/update_confirmation.php';    
         }
         
@@ -972,7 +859,15 @@
         break;
     
     case 'view_conference':
-        include('view/view_conference');
+        
+        $conference_num = filter_input(INPUT_POST, 'conference_num');
+        
+        $title = title_db::get_title_with_conference_num($conference_num);
+        $location = locations_db::get_location_with_conference_num($conference_num);
+        
+        
+        
+        include('view/view_conference.php');
         die();
         break;
     
@@ -981,28 +876,166 @@
         die();
         break;
     
-    case '':
-        include('');
+    
+    case 'view_enter_category':
+        
+        if (!isset($category_name)) {
+            $category_name = '';
+        }
+
+
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['category_name'] = '';
+        }
+        
+        include('view/enter_category.php');
         die();
         break;
     
-    case '':
-        include('');
+    case 'category':
+        
+        $categories = categories_db::select_all();
+        
+        include ('view/view_categories.php');
+        die();
+        break;
+        
+    case 'view_categories':
+        
+        if (!isset($category_name)) {
+            $category_name = '';
+        }
+
+
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['category_name'] = '';
+        }
+        
+        include('view/enter_category.php');
+        die();
+        break;
+        
+    case 'enter_category':
+        
+        $category_name = filter_input(INPUT_POST, 'category_name');
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['category_name'] = '';
+        }
+
+        $namePattern = '/^[a-zA-Z]/';
+        $nameValid = preg_match($namePattern, $category_name);
+
+        if ($category_name === null || $category_name === '') {
+            $error_message['category_name'] = 'You must enter a category name.';
+        } else if ($nameValid === FALSE || $nameValid === 0) {
+            $error_message['category_name'] = 'The name must start with a letter.';
+        }
+        
+
+        if ($error_message['category_name'] != '') {
+            include 'view/enter_category.php';
+            exit();
+        } else {
+
+                categories_db::add_category($category_name);
+                include 'view/add_confirmation.php';    
+        }
+
         die();
         break;
     
-    case '':
-        include('');
+    case 'edit_category':
+        
+        $categoryID = filter_input(INPUT_POST, 'categoryID', FILTER_VALIDATE_INT);
+        
+        $category = categories_DB::get_category($categoryID);
+        
+        $category_name = $category->getCategory_name();
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['category_name'] = '';
+        }
+        
+        include('view/edit_category.php');
         die();
         break;
     
-    case '':
-        include('');
+    case 'commitCategoryUpdate':
+        
+        $categoryID = filter_input(INPUT_POST, 'categoryID');
+        $category_name = filter_input(INPUT_POST, 'category_name');
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['category_name'] = '';
+        }
+
+        $namePattern = '/^[a-zA-Z]/';
+        $nameValid = preg_match($namePattern, $category_name);
+
+        if ($category_name === null || $category_name === "") {
+            $error_message['category_name'] = 'You must enter equipment name.';
+        } else if ($nameValid === FALSE || $nameValid === 0) {
+            $error_message['category_name'] = 'The name must start with a letter.';
+        }
+        
+
+        if ($error_message['category_name'] != '') {
+            include 'view/edit_category.php';
+            exit();
+        } else {
+
+                equipment_db::update_category($categoryID, $category_name);
+                include 'view/add_confirmation.php';    
+        }
+    
+    case 'category_to_title':
+        
+        $categoryID = filter_input(INPUT_POST, 'categoryID', FILTER_VALIDATE_INT);
+        
+        $category = categories_db::get_category($categoryID);
+        $category_name = $category->getCategory_name();
+        
+        $titles = title_db::select_all();
+        
+        include('view/add_category_to_titles.php');
         die();
         break;
     
-    case '':
-        include('');
+    case 'add_category_title':
+        
+        $categoryID = filter_input(INPUT_POST, 'categoryID', FILTER_VALIDATE_INT);
+        
+        
+        if (!isset($error_message)) {
+            $error_message = [];
+            $error_message['checkbox'] = '';
+        }
+        
+        if(isset($_POST['title'])){
+            
+            $titleID = $_POST['title'];
+           
+            foreach($titleID as $t) {
+                
+                title_categories_db::add_category_title($categoryID, $t);
+                
+            }
+            
+            include('view/add_confirmation.php');
+        } else {
+            
+            $error_message['checkbox'] = 'You must select at least 1 conference.';
+            
+            include('view/add_category_to_titles.php');
+            exit();
+        }
+     
         die();
         break;
     

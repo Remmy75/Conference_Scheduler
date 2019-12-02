@@ -88,6 +88,20 @@ class locations_db {
         $statement->execute();
         $statement->closeCursor();
     }
+    
+    public static function get_location_with_conference_num($conference_num) {
+        $db = Database::getDB();
+        $query = 'SELECT * FROM locations join conference_locations as locations.locationID = conference_locations.locationID join conferences as conference_locations.conference_num = conference.conference_num WHERE conference_num = :conference_num';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':conference_num', $conference_num);
+        $statement->execute();
+        $row = $statement->fetch();
+
+        $statement->closeCursor();
+        return new locations(
+                $row['locationID'], $row['bldg_name'], $row['room_num']);
+
+    }
 
 }
 ?>

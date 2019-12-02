@@ -20,12 +20,11 @@ if (!isset($error_message)) {
                 <p>Please choose which conference you would like to add <?php echo htmlspecialchars($titleID);?>  <?php echo htmlspecialchars($title_name); ?> to:</p>
                         <form action="index.php" method="post">
                             <?php foreach ($conferences as $c) : ?>
-                                <input type="checkbox" name="location[]" value="<?php echo htmlspecialchars($c->getConference_num()); ?>"><?php echo htmlspecialchars($c->getConference_name()); ?><br>
+                                <input type="checkbox" name="conference[]" value="<?php echo htmlspecialchars($c->getConference_num()); ?>"><?php echo htmlspecialchars($c->getConference_name()); ?><br>
                             <?php endforeach; ?> 
                             <div id="error"><?php echo htmlspecialchars($error_message['checkbox']); ?></div>
-                        </form>
-                <form action="index.php" method="post">
                     <input type="hidden" name="action" value="add_title_conference">
+                    <input type="hidden" name="titleID" value=<?php echo htmlspecialchars($titleID);?>>
                     <input type="submit" value="Add to Conference">
                 </form>
             </main>

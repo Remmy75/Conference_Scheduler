@@ -26,15 +26,35 @@ class conference_locations_db {
     }
 
 
-    public static function add_conference_locations($locationID) {
+    public static function add_conference_locations($conference_num, $locationID) {
     $db = Database::getDB();
 
     $query = 'INSERT INTO conference_locations
-                 (locationID)
+                 (conference_num, locationID)
               VALUES
-                 (:locationID)';
+                 (:conference_num, :locationID)';
     $statement = $db->prepare($query);
     $statement->bindValue(':locationID', $locationID);
+    $statement->bindValue(':conference_num', $conference_num);
+    $statement->execute();
+    $statement->closeCursor();
+    
+     $user_id = $db->lastInsertId();
+            return $user_id;
+    
+            
+    }
+    
+    public static function add_conference_titles($conference_num, $titleID) {
+    $db = Database::getDB();
+
+    $query = 'INSERT INTO conference_speakers
+                 (conference_num, titleID)
+              VALUES
+                 (:conference_num, :titleID)';
+    $statement = $db->prepare($query);
+    $statement->bindValue(':titleID', $titleID);
+    $statement->bindValue(':conference_num', $conference_num);
     $statement->execute();
     $statement->closeCursor();
     

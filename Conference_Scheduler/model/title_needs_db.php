@@ -20,7 +20,7 @@ class title_needs_db {
         $title_needs = [];
 
         foreach ($rows as $value) {
-            $title_needs[$value['title_needsID']] = new title_needs($value['title_needsID'], $value['equipmentID'], $value['titleID']);
+            $title_needs[$value['title_needsID']] = new title_needs($value['title_needsID'], $value['equipID'], $value['titleID']);
         }
         $statement->closeCursor();
 
@@ -28,15 +28,15 @@ class title_needs_db {
     }
 
 
-    public static function add_title_need($equipmentID, $titleID) {
+    public static function add_title_need($equipID, $titleID) {
     $db = Database::getDB();
 
     $query = 'INSERT INTO title_needs
-                 (equipmentID, titleID)
+                 (equipID, titleID)
               VALUES
-                 (:equipmentID, :titleID)';
+                 (:equipID, :titleID)';
     $statement = $db->prepare($query);
-    $statement->bindValue(':equipmentID', $equipmentID);
+    $statement->bindValue(':equipID', $equipID);
     $statement->bindValue(':titleID', $titleID);
     $statement->execute();
     $statement->closeCursor();
@@ -58,7 +58,7 @@ class title_needs_db {
         $title_needs = [];
 
         foreach ($rows as $value) {
-            $title_needs[$value['title_needsID']] = new title_needs($value['title_needsID'], $value['equipmentID'], $value['titleID']);
+            $title_needs[$value['title_needsID']] = new title_needs($value['title_needsID'], $value['equipID'], $value['titleID']);
         }
         $statement->closeCursor();
 
@@ -68,14 +68,14 @@ class title_needs_db {
     public static function select_titles_with_equip() {
         $db = Database::getDB();
 
-        $queryUsers = 'SELECT titleID, equipmentID FROM title_needs order by titleID';
+        $queryUsers = 'SELECT titleID, equipID FROM title_needs order by titleID';
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $title_needs = [][];
+        $title_needs = [];
 
         foreach ($rows as $value) {
-            $title_needs[$value['titleID']][] = new title_needs($value['titleID'], $value['equipmentID']);
+            $title_needs[$value['titleID']] = new title_needs($value['titleID'], $value['equipID']);
         }
         $statement->closeCursor();
 

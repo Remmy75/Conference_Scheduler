@@ -24,7 +24,7 @@ if (!isset($error_message)) {
                 <h1>Edit Equipment</h1>
                 <form action="index.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="commitEquipmentUpdate">
-                    <input type="hidden" name="action" value="<?php echo $equipID; ?>">
+                    <input type="hidden" name="equipID" value="<?php echo $equipID; ?>">
                     
                     <ul class="form-wrapper">
                     <li class="form-row">

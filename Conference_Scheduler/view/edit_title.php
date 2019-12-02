@@ -23,7 +23,7 @@ if (!isset($error_message)) {
                 <h1>Edit Titles</h1>
                 <form action="index.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="commitTitleUpdate">
-                    <input type="hidden" name="action" value="<?php echo $titleID; ?>">
+                    <input type="hidden" name="title ID" value="<?php echo $titleID; ?>">
                     
                     <ul class="form-wrapper">
                     <li class="form-row">
@@ -32,7 +32,7 @@ if (!isset($error_message)) {
                         
                     <li class="form-row">
                         <label>Name:</label>
-                        <input type="text" name="fname" value="<?php echo htmlspecialchars($title_name); ?>">
+                        <input type="text" name="title_name" value="<?php echo htmlspecialchars($title_name); ?>">
                         <div id="error"><?php echo htmlspecialchars($error_message['title_name']); ?></div>
                     </li>
 

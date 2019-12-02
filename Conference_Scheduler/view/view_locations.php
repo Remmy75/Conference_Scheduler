@@ -39,7 +39,7 @@
 
                 </table><br>
                 <form action="index.php" method="post">
-                    <input type="hidden" name="action" value="enter_location">
+                    <input type="hidden" name="action" value="view_enter_locations">
                     <input type="submit" value="Enter Location">
                 </form>
             </main>

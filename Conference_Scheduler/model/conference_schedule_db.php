@@ -24,20 +24,20 @@ class conference_schedule_db {
         $conference_schedules = [];
 
         foreach ($rows as $value) {
-            $conference_schedules[$value['scheduleID']] = new conference_scheduled($value['scheduleID'], $value['conferenceID'], $value['titleID'], $value['locationID'], $value['time']);
+            $conference_schedules[$value['scheduleID']] = new conference_scheduled($value['scheduleID'], $value['conference_num'], $value['titleID'], $value['locationID']);
         }
         $statement->closeCursor();
 
         return $conference_schedules;
     }
 
-    public static function update_conference_schedule_conferenceID($scheduleID, $conferenceID) {
+    public static function update_conference_schedule_conference_num($scheduleID, $conference_num) {
         $db = Database::getDB();
         $query = 'UPDATE conference_schedule
-              SET conferenceID = :conferenceID,
+              SET conference_num = :conference_num,
               WHERE scheduleID = :scheduleID';
         $statement = $db->prepare($query);
-        $statement->bindValue(':conferenceID', $conferenceID);
+        $statement->bindValue(':conference_num', $conference_num);
         $statement->bindValue(':scheduleID', $scheduleID);
         $statement->execute();
         $statement->closeCursor();
@@ -67,30 +67,17 @@ class conference_schedule_db {
         $statement->closeCursor();
     }
     
-    public static function update_conference_schedule_time($scheduleID, $time) {
-        $db = Database::getDB();
-        $query = 'UPDATE conference_schedule
-              SET time = :time,
-              WHERE scheduleID = :scheduleID';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':time', $time);
-        $statement->bindValue(':scheduleID', $scheduleID);
-        $statement->execute();
-        $statement->closeCursor();
-    }
-    
-    public static function add_to_conference($conferenceID, $titleID, $locationID, $time) {
+    public static function add_to_conference($conference_num, $titleID, $locationID) {
     $db = Database::getDB();
 
     $query = 'INSERT INTO conference_schedule
-                 (conferenceID, titleID, locationID, time)
+                 (conference_num, titleID, locationID)
               VALUES
-                 (:conferenceID, :titleID, :locationID, :time)';
+                 (:conference_num, :titleID, :locationID)';
     $statement = $db->prepare($query);
-    $statement->bindValue(':conferenceID', $conferenceID);
+    $statement->bindValue(':conference_num', $conference_num);
     $statement->bindValue(':titleID', $titleID);
     $statement->bindValue(':locationID', $locationID);
-    $statement->bindValue(':time', $time);
     $statement->execute();
     $statement->closeCursor();
     
@@ -114,14 +101,14 @@ class conference_schedule_db {
         }
     }
 
-    public static function get_scheduled_by_conferenceID($conferenceID) {
+    public static function get_scheduled_by_conference_num($conference_num) {
         $db = Database::getDB();
         $query = 'SELECT conferenceID
               FROM conference_schedule
-              WHERE conferenceID = :conferenceID';
+              WHERE conference_num = :conference_num';
 
         $statement = $db->prepare($query);
-        $statement->bindValue(':conferenceID', $conferenceID);
+        $statement->bindValue(':conference_num', $conference_num);
         $statement->execute();
         $conference = $statement->fetch();
         $statement->closeCursor();

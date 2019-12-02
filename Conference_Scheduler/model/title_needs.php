@@ -8,11 +8,11 @@
 //$equipmentID
 //$titleID
 class title_needs {
-    private $title_needsID, $equipmentID, $titleID;
-    function __construct($title_needsID, $equipmentID, $titleID) {
+    private $title_needsID, $equipID, $titleID;
+    function __construct($title_needsID, $equipID, $titleID) {
         
         $this->title_needsID = $title_needsID;
-        $this->equipmentID = $equipmentID;
+        $this->equipID = $equipID;
         $this->titleID = $titleID;
         
         
@@ -22,8 +22,8 @@ class title_needs {
         return $this->title_needsID;
     }
 
-    function getEquipmentID() {
-        return $this->equipmentID;
+    function getEquipID() {
+        return $this->equipID;
     }
 
     function getTitleID() {
@@ -34,8 +34,8 @@ class title_needs {
         $this->title_needsID = $title_needsID;
     }
 
-    function setEquipmentID($equipmentID) {
-        $this->equipmentID = $equipmentID;
+    function setEquipmentID($equipID) {
+        $this->equipID = $equipID;
     }
 
     function setTitleID($titleID) {

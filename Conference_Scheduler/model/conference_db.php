@@ -13,7 +13,7 @@ class conference_db {
         $conferences = [];
 
         foreach ($rows as $value) {
-            $conferences[$value['conference_num']] = new conference($value['conference_num'], $value['conference_name'], $value['conference_location'], $value['start_time'], $value['end_time'], $value['lunch'], $value['session_length'], $value['break_length']);
+            $conferences[$value['conference_num']] = new conference($value['conference_num'], $value['conference_name'], $value['conference_location']);
         }
         $statement->closeCursor();
 
@@ -43,82 +43,17 @@ class conference_db {
         $statement->execute();
         $statement->closeCursor();
     }
-    
-    public static function update_conference_start_time($conference_num, $start_time) {
-        $db = Database::getDB();
-        $query = 'UPDATE conference_schedule
-              SET start_time = :start_time,
-              WHERE conference_num = :conference_num';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':start_time', $start_time);
-        $statement->bindValue(':conference_num', $conference_num);
-        $statement->execute();
-        $statement->closeCursor();
-    }
 
-     public static function update_conference_end_time($conference_num, $end_time) {
-        $db = Database::getDB();
-        $query = 'UPDATE conference_schedule
-              SET end_time = :end_time,
-              WHERE conference_num = :conference_num';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':end_time', $end_time);
-        $statement->bindValue(':conference_num', $conference_num);
-        $statement->execute();
-        $statement->closeCursor();
-    }
-    
-    public static function update_conference_lunch($conference_num, $lunch) {
-        $db = Database::getDB();
-        $query = 'UPDATE conference_schedule
-              SET lunch = :lunch,
-              WHERE conference_num = :conference_num';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':lunch', $lunch);
-        $statement->bindValue(':conference_num', $conference_num);
-        $statement->execute();
-        $statement->closeCursor();
-    }
-
-     public static function update_conference_session_length($conference_num, $session_length) {
-        $db = Database::getDB();
-        $query = 'UPDATE conference_schedule
-              SET session_length = :session_length,
-              WHERE conference_num = :conference_num';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':session_length', $session_length);
-        $statement->bindValue(':conference_num', $conference_num);
-        $statement->execute();
-        $statement->closeCursor();
-    }
-    
-    public static function update_conference_break_length($conference_num, $break_length) {
-        $db = Database::getDB();
-        $query = 'UPDATE conference_schedule
-              SET break_length = :break_length,
-              WHERE conference_num = :conference_num';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':break_length', $break_length);
-        $statement->bindValue(':conference_num', $conference_num);
-        $statement->execute();
-        $statement->closeCursor();
-    }
-
-    public static function add_conference($conference_name, $conference_location, $start_time, $end_time, $lunch, $session_length, $break_length) {
+    public static function add_conference($conference_name, $conference_location) {
     $db = Database::getDB();
 
     $query = 'INSERT INTO conferences
-                 (conference_name, conference_location, start_time, end_time, lunch, session_length, break_length)
+                 (conference_name, conference_location)
               VALUES
-                 (, :conference_name, :conference_location, :start_time, :end_time, :lunch, :session_length, :break_length)';
+                 (:conference_name, :conference_location)';
     $statement = $db->prepare($query);
     $statement->bindValue(':conference_name', $conference_name);
     $statement->bindValue(':conference_location', $conference_location);
-    $statement->bindValue(':start_time', $start_time);
-    $statement->bindValue(':end_time', $end_time);
-    $statement->bindValue(':lunch', $lunch);
-    $statement->bindValue(':session_length', $session_length);
-    $statement->bindValue(':break_length', $break_length);
     $statement->execute();
     $statement->closeCursor();
     
@@ -140,11 +75,11 @@ class conference_db {
         $value = $statement->fetch();
         
         $statement->closeCursor();
-        return new conference($value['conference_num'], $value['conference_name'], $value['conference_location'], $value['start_time'], $value['end_time'], $value['lunch'], $value['session_length'], $value['break_length']);
+        return new conference($value['conference_num'], $value['conference_name'], $value['conference_location']);
 
     }
     
-    public static function update_conference($conference_num, $conference_name, $conference_location, $start_time, $end_time, $lunch, $session_length, $break_length) {
+    public static function update_conference($conference_num, $conference_name, $conference_location) {
         $db = Database::getDB();
         $query = 'UPDATE conference_schedule
               SET conference_name = :conference_name,
@@ -152,11 +87,6 @@ class conference_db {
         $statement = $db->prepare($query);
         $statement->bindValue(':conference_name', $conference_name);
         $statement->bindValue(':conference_location', $conference_location);
-        $statement->bindValue(':start_time', $start_time);
-        $statement->bindValue(':end_time', $end_time);
-        $statement->bindValue(':lunch', $lunch);
-        $statement->bindValue(':session_length', $session_length);
-        $statement->bindValue(':break_length', $break_length);
         $statement->bindValue(':conference_num', $conference_num);
         $statement->execute();
         $statement->closeCursor();

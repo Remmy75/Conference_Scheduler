@@ -7,13 +7,7 @@
                     <input class="button" type="submit" value="Home">
                 </form>
             </td>
-                    <td>
-                        <form action="index.php" method="post">
-                            <input type="hidden" value="login" name="action">
-                            <input class="button" type="submit" value="Login">
-                        </form>
-                    </td>
-               
+                    
                     <td>
                         <form action="index.php" method="post">
                             <input type="hidden" value="conferences" name="action">
@@ -44,13 +38,12 @@
                                 <input class="button" type="submit" value="Titles">
                             </form>
                         </td>
-                    
-                <td>
-                    <form action="index.php" method="post">
-                        <input type="hidden" value="logout" name="action">
-                        <input class="button" type="submit" value="Logout">
-                    </form>
-                </td>
+                        <td>
+                            <form action="index.php" method="post">
+                                <input type="hidden" value="category" name="action">
+                                <input class="button" type="submit" value="Categories">
+                            </form>
+                        </td>
         </tr>
     </table>
 </div>

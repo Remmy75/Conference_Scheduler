@@ -37,7 +37,7 @@ if (!isset($error_message)) {
             <main>
                 <h1>Add Speakers</h1>
                 <form action="index.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="add_speakers">
+                    <input type="hidden" name="action" value="enter_speakers">
                     
                     <ul class="form-wrapper">
                     <li class="form-row">
@@ -66,7 +66,7 @@ if (!isset($error_message)) {
                     </li>
 
                     <li class="form-row">
-                    <button type="submit" value="add_speakers">Add Speaker</button>
+                    <button type="submit" value="enter_speakers">Add Speaker</button>
                     </li>
                     
           

@@ -1,55 +1,49 @@
 <?php
 
-//equipID
-//name
-//
-//$equipID
-//$name
-//need to add fields to finish
-class equipment_db {
+class categories_db {
     
     public static function select_all() {
         $db = Database::getDB();
 
-        $queryUsers = 'SELECT * FROM equipment';
+        $queryUsers = 'SELECT * FROM category';
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();
-        $equipments = [];
+        $categories = [];
 
         foreach ($rows as $value) {
-            $equipments[$value['equipID']] = new equipment($value['equipID'], $value['Name']);
+            $categories[$value['categoryID']] = new categories($value['categoryID'], $value['category_name']);
         }
         $statement->closeCursor();
 
-        return $equipments;
+        return $categories;
     }
     
-    public static function get_equipment($equipID) {
+     public static function get_category($categoryID) {
         $db = Database::getDB();
     
-        $query = 'SELECT * FROM equipment
-              WHERE equipID = :equipID';
+        $query = 'SELECT * FROM category
+              WHERE categoryID = :categoryID';
         $statement = $db->prepare($query);
-        $statement->bindValue(':equipID', $equipID);
+        $statement->bindValue(':categoryID', $categoryID);
         $statement->execute();
         $row = $statement->fetch();
        
         $statement->closeCursor();
-        return new equipment($row['equipID'], $row['Name']);
+        return new categories($row['categoryID'], $row['category_name']);
 
     }
 
 
-    public static function add_equipment($name) {
+    public static function add_category($category_name) {
         $db = Database::getDB();
 
-        $query = 'INSERT INTO equipment
-                 (name)
+        $query = 'INSERT INTO category
+                 (category_name)
                  VALUES
-                 (:name)';
+                 (:category_name)';
         $statement = $db->prepare($query);
-        $statement->bindValue(':name', $name);
+        $statement->bindValue(':category_name', $category_name);
         $statement->execute();
         $statement->closeCursor();
     
@@ -57,12 +51,12 @@ class equipment_db {
             return $user_id;   
     }
 
-    public static function delete_by_ID($equipID) {
+    public static function delete_by_ID($categoryID) {
         $db = Database::getDB();
-        $query = 'DELETE from equipment WHERE equipID = :equipID';
+        $query = 'DELETE from category WHERE categoryID = :categoryID';
         try {
             $statement = $db->prepare($query);
-            $statement->bindValue(':equipID', $equipID);
+            $statement->bindValue(':categoryID', $categoryID);
             $row_count = $statement->execute();
             $statement->closeCursor();
             return $row_count;
@@ -72,12 +66,14 @@ class equipment_db {
         }
     }
     
-    public static function update_equipment($equipID, $name) {
+    public static function update_category($categoryID, $category_name) {
         $db = Database::getDB();
-        $query = 'UPDATE equipment SET name = :name WHERE equipID = :equipID';
+        $query = 'UPDATE category
+              SET category_name = :category_name,
+              WHERE categoryID = :categoryID';
         $statement = $db->prepare($query);
-        $statement->bindValue(':name', $name);
-        $statement->bindValue(':equipID', $equipID);
+        $statement->bindValue(':category_name', $category_name);
+        $statement->bindValue(':categoryID', $categoryID);
         $statement->execute();
         $statement->closeCursor();
     }
