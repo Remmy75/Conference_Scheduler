@@ -102,6 +102,8 @@ class locations_db {
                 $row['locationID'], $row['bldg_name'], $row['room_num']);
 
     }
+    
+    
 
 }
 ?>

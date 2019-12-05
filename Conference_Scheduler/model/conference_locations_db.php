@@ -78,4 +78,24 @@ class conference_locations_db {
             display_db_error($error_message);
         }
     }
+    
+    public static function select_locations_with_conference_num_category_count($conference_num, $category_count) {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT locationID FROM conference_locations where conference_num = :conference_num limit :category_count';
+        $statement = $db->prepare($queryUsers);
+        $statement->bindValue(':conference_num', $conference_num);
+        $statement->bindValue(':category_count', $category_count);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $conference_locations = [];
+
+        foreach ($rows as $value) {
+            array_push($conference_locations, $value['locationID']);
+        }
+        $statement->closeCursor();
+
+        return $conference_locations;
+    }
+
 }
