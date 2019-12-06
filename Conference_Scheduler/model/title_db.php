@@ -86,7 +86,7 @@ class title_db {
     public static function get_title_with_conference_num($conference_num) {
         $db = Database::getDB();
     
-        $query = 'SELECT titleID, title_name FROM title join conference_speakers on title.titleID = conference_speakers.titleID join conferences as conference_speakers.conference_num = conferences.conference_num WHERE conference_num = :conference_num';
+        $query = 'SELECT title.titleID, title.title_name FROM title join conference_speakers on title.titleID = conference_speakers.titleID join conferences as conference_speakers.conference_num = conferences.conference_num WHERE conference_num = :conference_num';
         $statement = $db->prepare($query);
         $statement->bindValue(':conference_num', $conference_num);
         $statement->execute();

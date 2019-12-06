@@ -53,19 +53,6 @@ if (!isset($error_message)) {
                     </li>
                     
                     <li class="form-row">
-                    <label>Phone Number:</label>
-                    <input type="text" name="phone_num" value="<?php echo htmlspecialchars($phone_num); ?>">
-                    <div id="error"><?php echo htmlspecialchars($error_message['phone_num']); ?></div>
-                    </li>
-                    
-                    
-                    <li class="form-row">
-                    <label>Email:</label>
-                    <input type="text" name="email" value="<?php echo htmlspecialchars($email); ?>">
-                    <div id="error"><?php echo htmlspecialchars($error_message['email']); ?></div>
-                    </li>
-
-                    <li class="form-row">
                     <button type="submit" value="enter_speakers">Add Speaker</button>
                     </li>
                     

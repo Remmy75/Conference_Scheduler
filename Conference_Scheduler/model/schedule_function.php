@@ -271,6 +271,7 @@ $f;
 ***//have to add time length field to title table
 
 //pull titleID with categoryID
+
     //run through array_column to get an array of array of categoryID as name and titleID's as values
     //get count of how many values in the array of array
     //figure out how many titles must be placed each session ie how many locations

@@ -26,6 +26,8 @@ class title_speakers_db {
 
         return $title_speakers;
     }
+    
+    
 
 
     public static function add_title_speakers($titleID, $speakerID) {
@@ -93,12 +95,12 @@ class title_speakers_db {
             $error_message = $e->getMessage();
             display_db_error($error_message);
         }
-    }
-    
-    public static function select_speakerID_with_titleID() {
+    } 
+  
+    public static function select_speakerID_with_multiple_titleID() {
         $db = Database::getDB();
-
-        $queryUsers = 'SELECT count(titleID) as titleID_count, speakerID FROM title_speakers order by speakerID';
+                        
+        $queryUsers = 'SELECT titleID, speakerID FROM title_speakers where (SELECT speakerID FROM title_speakers GROUP BY speakerID HAVING COUNT(titleID) > 1';
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();

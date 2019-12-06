@@ -16,16 +16,12 @@
                         <th>Speaker ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Phone Number</th>
-                        <th>Email</th>
                     </tr>
                         <?php foreach ($speakers as $s) : ?>
                             <tr>                
                                 <td><?php echo htmlspecialchars($s->getSpeakerID()); ?></td>
                                 <td><?php echo htmlspecialchars($s->getFname()); ?></td>
                                 <td><?php echo htmlspecialchars($s->getLname()); ?></td>
-                                <td><?php echo htmlspecialchars($s->getPhone_Num()); ?></td>
-                                <td><?php echo htmlspecialchars($s->getEmail()); ?></td>
                                 <td><form action="index.php" method="post">
                                         <input type="hidden" name="action" value="edit_speakers">
                                         <input type="hidden" name="speakerID" value="<?php echo htmlspecialchars($s->getSpeakerID()); ?>">

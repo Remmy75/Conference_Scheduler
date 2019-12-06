@@ -62,6 +62,20 @@ class location_title_db {
         return $location_session;
     }
     
+    public static function get_session_by_titleID($titleID) {
+        $db = Database::getDB();
+        $query = 'SELECT session
+              FROM location_title
+              WHERE titleID = :titleID';
+
+        $statement = $db->prepare($query);
+        $statement->bindValue(':titleID', $titleID);
+        $statement->execute();
+        $location_session = $statement->fetch();
+        $statement->closeCursor();
+        return $title_session;
+    }
+    
     public static function assign_title_to_location($locationID, $titleID, $session, $conference_num) {
         $db = Database::getDB();
 
