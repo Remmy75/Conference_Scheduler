@@ -3,11 +3,11 @@
 
 <body>
     <div class="wrapper">
-            <div class="heading"> 
-           <h1>Conference Scheduler</h1>
-            </div>
-             
-            <?php include 'view/nav.php'; ?>
+        <div class="heading"> 
+            <h1>Conference Scheduler</h1>
+        </div>
+
+        <?php include 'view/nav.php'; ?>
         <div class="content">
             <main>
                 <h1>Conferences</h1>
@@ -17,18 +17,23 @@
                         <th>Conference Name</th>
                         <th>Location</th>
                     </tr>
-                        <?php foreach ($conferences as $c) : ?>
-                            <tr>                
-                                <td><?php echo htmlspecialchars($c->getConference_num()); ?></td>
-                                <td><?php echo htmlspecialchars($c->getConference_name()); ?></td>
-                                <td><?php echo htmlspecialchars($c->getConference_location()); ?></td>
-                                <td><form action="index.php" method="post">
-                                        <input type="hidden" name="action" value="view_conference">
-                                        <input type="hidden" name="conference_num" value="<?php echo htmlspecialchars($c->getConference_num()); ?>">
-                                        <input type="submit" value="View Conference">
-                                    </form></td>
-                            </tr>
-                        <?php endforeach; ?> 
+                    <?php foreach ($conferences as $c) : ?>
+                        <tr>                
+                            <td><?php echo htmlspecialchars($c->getConference_num()); ?></td>
+                            <td><?php echo htmlspecialchars($c->getConference_name()); ?></td>
+                            <td><?php echo htmlspecialchars($c->getConference_location()); ?></td>
+                            <td><form action="index.php" method="post">
+                                    <input type="hidden" name="action" value="view_conference">
+                                    <input type="hidden" name="conference_num" value="<?php echo htmlspecialchars($c->getConference_num()); ?>">
+                                    <input type="submit" value="View Conference">
+                                </form></td>
+                            <td><form action="index.php" method="post">
+                                    <input type="hidden" name="action" value="schedule_conference_choice">
+                                    <input type="hidden" name="conference_num" value="<?php echo htmlspecialchars($c->getConference_num()); ?>">
+                                    <input type="submit" value="Schedule Conference">
+                                </form></td>
+                        </tr>
+                    <?php endforeach; ?> 
 
                 </table><br>
                 <form action="index.php" method="post">
@@ -38,7 +43,7 @@
             </main>
         </div>
     </div>
-    
-<?php include 'view/footer.php'; ?>
+
+    <?php include 'view/footer.php'; ?>
 
 

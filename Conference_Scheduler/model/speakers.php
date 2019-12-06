@@ -12,14 +12,12 @@
 //$phone_num
 //$email
 class speakers {
-    private $speakerID, $fName, $lName, $phone_num, $email;
-    function __construct($speakerID, $fName, $lName, $phone_num, $email) {
+    private $speakerID, $fName, $lName;
+    function __construct($speakerID, $fName, $lName) {
         
         $this->speakerID = $speakerID;
         $this->fName = $fName;
         $this->lName = $lName;
-        $this->phone_num = $phone_num;
-        $this->email = $email;
     }
     
     function getSpeakerID() {
@@ -33,14 +31,6 @@ class speakers {
     function getLname() {
         return $this->lName;
     }
-
-    function getPhone_num() {
-        return $this->phone_num;
-    }
-
-    function getEmail() {
-        return $this->email;
-    }
     
     function setSpeakerID($speakerID) {
         $this->speakerID = $speakerID;
@@ -52,13 +42,5 @@ class speakers {
 
     function setLname($lName) {
         $this->lName = $lName;
-    }
-
-    function setPhone_num($phone_num) {
-        $this->phone_num = $phone_num;
-    }
-
-    function setEmail($email) {
-        $this->email = $email;
     }
 }

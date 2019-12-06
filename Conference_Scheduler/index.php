@@ -1039,18 +1039,31 @@
         die();
         break;
     
-    case '':
-        include('');
+    case 'track_schedule':
+        
+        $conference_num = filter_input(INPUT_POST, 'conference_num');
+        
+        require($_SERVER['DOCUMENT_ROOT'] . 'Conference_Scheduler/Conference_Scheduler/model/schedule_function.php');
+        track_schedule($conference_num);
+        include('view/schedule_printout.php');
         die();
         break;
     
-    case '':
-        include('');
+    case 'regular_schedule':
+        
+        $conference_num = filter_input(INPUT_POST, 'conference_num');
+        
+        require($_SERVER['DOCUMENT_ROOT'] . 'Conference_Scheduler/Conference_Scheduler/model/regular_conference_schedule.php');
+        regular_schedule($conference_num);
+        include('view/schedule_printout.php');
         die();
         break;
     
-    case '':
-        include('');
+    case 'schedule_conference_choice':
+        
+        $conference_num = filter_input(INPUT_POST, 'conference_num');
+        
+        include('view/conference_schedule_choice.php');
         die();
         break;
     

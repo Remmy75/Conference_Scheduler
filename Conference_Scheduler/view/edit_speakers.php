@@ -7,20 +7,10 @@ if (!isset($lName)) {
     $lName = '';
 }
 
-if (!isset($phone_num)) {
-    $phone_num = '';
-}
-
-if (!isset($email)) {
-    $email = '';
-}
-
 if (!isset($error_message)) {
     $error_message = [];
     $error_message['fName'] = '';
     $error_message['lName'] = '';
-    $error_message['phone_num'] = '';
-    $error_message['email'] = '';
 }
 
 
@@ -57,18 +47,6 @@ if (!isset($error_message)) {
                         <label>Last Name:</label>
                         <input type="text" name="lname" value="<?php echo htmlspecialchars($lName); ?>">
                         <div id="error"><?php echo htmlspecialchars($error_message['lName']); ?></div>
-                    </li>
-                    
-                    <li class="form-row">
-                        <label>Phone Number:</label>
-                        <input type="text" name="phone_num" value="<?php echo htmlspecialchars($phone_num); ?>">
-                        <div id="error"><?php echo htmlspecialchars($error_message['phone_num']); ?></div>
-                    </li> 
-                    
-                    <li class="form-row">
-                        <label>Email:</label>
-                        <input type="text" name="email" value="<?php echo htmlspecialchars($email); ?>">
-                        <div id="error"><?php echo htmlspecialchars($error_message['email']); ?></div>
                     </li>
 
                     <li class="form-row">
