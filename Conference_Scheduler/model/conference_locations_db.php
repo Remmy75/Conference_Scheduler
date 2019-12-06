@@ -18,6 +18,24 @@ class conference_locations_db {
         $conference_locations = [];
 
         foreach ($rows as $value) {
+            $conference_locations[$value['conference_locationsID']] = new conference_location($value['conference_locationsID'], $value['locationID']. $value['conference_num']);
+        }
+        $statement->closeCursor();
+
+        return $conference_locations;
+    }
+    
+     public static function select_all_with_conference_num($conference_num) {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT * FROM conference_locations where conference_num = :conference_num';
+        $statement = $db->prepare($queryUsers);
+        $statement->bindValue(':conference_num', $conference_num);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $conference_locations = [];
+
+        foreach ($rows as $value) {
             $conference_locations[$value['conference_locationsID']] = new conference_location($value['conference_locationsID'], $value['locationID']);
         }
         $statement->closeCursor();
@@ -98,4 +116,16 @@ class conference_locations_db {
         return $conference_locations;
     }
 
+    public static function location_count_by_conference_num($conference_num) {
+        $db = Database::getDB();
+
+        $queryUsers = 'SELECT count(locationID) FROM conference_locations where conference_num = :conference_num';
+        $statement = $db->prepare($queryUsers);
+        $statement->bindValue(':conference_num', $conference_num);
+        $statement->execute();
+        $rows = $statement->fetch();
+        $statement->closeCursor();
+
+        return $rows;
+    }
 }

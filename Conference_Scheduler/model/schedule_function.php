@@ -271,6 +271,7 @@ $f;
 ***//have to add time length field to title table
 
 //pull titleID with categoryID
+
     //run through array_column to get an array of array of categoryID as name and titleID's as values
     //get count of how many values in the array of array
     //figure out how many titles must be placed each session ie how many locations
@@ -325,7 +326,7 @@ array_push($appTime, $tutorInfo);
 //get all titles for the conference
                 $title = conference_speakers_db::get_titles_by_conference_num($conference_num);
                 $title_count = conference_speakers_db::get_title_count_conference($conference_num);
-                
+                $title_count_by_category = conference_speakers_db::get_title_count_by_category_in_conference($conference_num);
 //Need to match the amount of rooms to the amount of categories
                 $conference_location = conference_locations_db::select_locations_with_conference_num_category_count($conference_num, $category_count);
                
@@ -333,7 +334,7 @@ array_push($appTime, $tutorInfo);
                
                 for($i = 0; $i <= $category_count;$i++){
                    $session_number = 1;
-                    for($j = 0; <= $title_count; $j++)
+                    for($j = 0; <= $title_count_by_category; $j++)
                         location_title_db::assign_location($conference_location[$i], $title[$j], $session_number, $conference_num)
                          $session_number++;
                 }

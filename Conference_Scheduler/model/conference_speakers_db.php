@@ -18,7 +18,7 @@ class conference_speakers_db {
         $conferences_speakers = [];
 
         foreach ($rows as $value) {
-            $conferences_speakers[$value['conference_titleID']] = new conference_speakers($value['conference_titleID'], $value['titleID']);
+            $conferences_speakers[$value['conference_titleID']] = new conference_speakers($value['conference_titleID'], $value['titleID'], $value['conference_num']);
         }
         $statement->closeCursor();
 
@@ -112,7 +112,7 @@ class conference_speakers_db {
     public static function get_categories_in_conference($conference_num) {
         $db = Database::getDB();
 
-        $queryUsers = 'select category.categoryID FROM title_category join conference_speakers on title_category.titleID = conference_speakers.titleID WHERE conference_speakersID = conference_num order by category.categoryID;';
+        $queryUsers = 'select category.categoryID FROM title_category join conference_speakers on title_category.titleID = conference_speakers.titleID WHERE conference_num = conference_num order by category.categoryID;';
         $statement = $db->prepare($queryUsers);
         $statement->bindValue(':conference_num', $conference_num);
         $statement->bindValue(':categoryID', $categoryID);
@@ -122,6 +122,26 @@ class conference_speakers_db {
 
         foreach ($rows as $value) {
             array_push($conferences_categories, $value['categoryID']);
+        }
+        $statement->closeCursor();
+
+        return $conferences_categories;
+    }
+    
+    public static function get_titleID_and_categories_in_conference($conference_num) {
+        $db = Database::getDB();
+
+        $queryUsers = 'select titleID.conference_speakers, category.categoryID FROM title_category join conference_speakers on title_category.titleID = conference_speakers.titleID WHERE conference_num = conference_num order by category.categoryID;';
+        $statement = $db->prepare($queryUsers);
+        $statement->bindValue(':conference_num', $conference_num);
+        $statement->bindValue(':titleID', $titleID);
+        $statement->bindValue(':categoryID', $categoryID);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $conferences_categories = [];
+
+        foreach ($rows as $value) {
+            array_push($conferences_categories, $value['categoryID'], $value['titleID']);
         }
         $statement->closeCursor();
 
