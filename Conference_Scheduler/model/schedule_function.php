@@ -260,8 +260,8 @@ for($t = 0; $t <= $title_needs.length; $t++){
 
 //query to get titles with categories
 $titles = title_categories_db::select_all();//ordered by category, should be able to seperate into different arrays with each category being in its own
-$count = conference_speakers_db::get_category_count_for_conference($conferenceID);//gets count for how many different categories in the conference
-$categories = conference_speakers_db::get_categories_in_conference($conferenceID);//gets categories in the conference
+$count = conference_speakers_db::get_distinct_category_count_for_conference($conference_num);//gets count for how many different categories in the conference
+$categories = conference_speakers_db::get_categories_in_conference($conference_num);//gets categories in the conference
 $f;
 
 
@@ -271,6 +271,7 @@ $f;
 ***//have to add time length field to title table
 
 //pull titleID with categoryID
+
     //run through array_column to get an array of array of categoryID as name and titleID's as values
     //get count of how many values in the array of array
     //figure out how many titles must be placed each session ie how many locations
@@ -285,14 +286,15 @@ $f;
         //
         //run this each placing of titles, it will change each session
 
-$titles_with_categories = title_db::get_title_with_category_by_conference($conferenceID);
-$count = conference_speakers_db::get_category_count_for_conference($conferenceID);//gets count for how many different categories in the conference
+$titles_with_categories = title_db::get_title_with_category_by_conference($conference_num);
+$count = conference_speakers_db::get_category_count_for_conference($conference_num);//gets count for how many different categories in the conference
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------------
-
+$tutorInfo = array('tutorID' => $tutorID, 'appTime' => appointment_db::get_tutor_Times($tutorID, $appDate));
+array_push($appTime, $tutorInfo);
 
 //get all titles from a specific conference
 //get all rooms from a conference that will be used
@@ -313,8 +315,26 @@ $count = conference_speakers_db::get_category_count_for_conference($conferenceID
 		$category_percentage_to_place[$i] = round(($indivdual_category_total[$i]/$topic_count)*10);}
 		
 //need to figure out how to assign a cat name to the array with the % in them
+                
+//_____________________________________________________________________________________________________________________________________________-
+                
+                *************** Assigning Titles into Trach scheduling *****************
 
+//get count of how many different categories
+                $category_count = category_db::get_distinct_category_count_for_conference();
 
-
-
-
+//get all titles for the conference
+                $title = conference_speakers_db::get_titles_by_conference_num($conference_num);
+                $title_count = conference_speakers_db::get_title_count_conference($conference_num);
+                $title_count_by_category = conference_speakers_db::get_title_count_by_category_in_conference($conference_num);
+//Need to match the amount of rooms to the amount of categories
+                $conference_location = conference_locations_db::select_locations_with_conference_num_category_count($conference_num, $category_count);
+               
+//plug into a room 1 category and have it move to next room and place adifferent category, until all rooms are full them start over
+               
+                for($i = 0; $i <= $category_count;$i++){
+                   $session_number = 1;
+                    for($j = 0; <= $title_count_by_category; $j++)
+                        location_title_db::assign_location($conference_location[$i], $title[$j], $session_number, $conference_num)
+                         $session_number++;
+                }

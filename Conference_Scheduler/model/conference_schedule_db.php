@@ -30,7 +30,8 @@ class conference_schedule_db {
 
         return $conference_schedules;
     }
-
+    
+    
     public static function update_conference_schedule_conference_num($scheduleID, $conference_num) {
         $db = Database::getDB();
         $query = 'UPDATE conference_schedule
