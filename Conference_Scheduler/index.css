@@ -85,3 +85,26 @@ button-center {
    margin-right:auto;
      
   }
+  
+
+/*checkbox with text and checkbox inline
+.checkboxes label {
+  display: block;
+  padding-right: 10px;
+  padding-left: 22px;
+  text-indent: -22px;
+}
+.checkboxes input {
+  vertical-align: middle;
+}
+.checkboxes label span {
+  vertical-align: middle;
+}
+
+<form>
+  <div class="checkboxes">
+    <label for="x"><input type="checkbox" id="x" /> <span>Label text x so long that it will probably wrap so let's see how it goes with the proposed CSS (expected: two lines are aligned nicely)</span></label>
+    <label for="y"><input type="checkbox" id="y" /> <span>Label text y</span></label>
+    <label for="z"><input type="checkbox" id="z" /> <span>Label text z</span></label>
+  </div>
+</form>*/

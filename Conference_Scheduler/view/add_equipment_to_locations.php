@@ -20,7 +20,7 @@ if (!isset($error_message)) {
                 <p>Please choose which locations you would like to add <?php echo htmlspecialchars($equipID);?>  <?php echo htmlspecialchars($name); ?> to:</p>
                         <form action="index.php" method="post">
                             <?php foreach ($locations as $l) : ?>
-                                <input type="checkbox" name="location[]" value="<?php echo htmlspecialchars($l->getLocationID()); ?>"><?php echo htmlspecialchars($l->getRoom_num()); ?><br>
+                            <label><input type="checkbox" name="location[]" value="<?php echo htmlspecialchars($l->getLocationID()); ?>"><?php echo htmlspecialchars($l->getRoom_num()); ?></label><br>
                             <?php endforeach; ?>
                             <div id="error"><?php echo htmlspecialchars($error_message['checkbox']); ?></div>
                     <input type="hidden" name="action" value="add_equipment_location">
