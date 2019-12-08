@@ -1,20 +1,15 @@
 <?php
 
 
-class track_conference {
-    private $room_num, $title_name, $lName,  $category_name, $session_number, $conference_name;
-    function __construct($room_num, $title_name, $lName, $category_name, $session_number, $conference_name) {
-        
+class scheduled_conference {
+    private $room_num, $title_name, $lName, $session_number, $conference_name;
+    function __construct($room_num, $title_name, $lName, $session_number, $conference_name) {
         
         $this->room_num = $room_num;
         $this->title_name = $title_name;
         $this->lName = $lName;
-        $this->category_name = $category_name;
         $this->session_number = $session_number;
         $this->conference_name = $conference_name;
-        
-        
-        
     }
     
     function getRoom_num() {
@@ -28,11 +23,7 @@ class track_conference {
     function getLName() {
         return $this->lName;
     }
-    
-    function getCategory_name() {
-        return $this->category_name;
-    }
-    
+        
     function getSession_number() {
         return $this->session_number;
     }
@@ -40,7 +31,7 @@ class track_conference {
     function getConference_name() {
         return $this->conference_name;
     }
-
+    
     function setRoom_num($room_num) {
         $this->room_num = $room_num;
     }
@@ -52,11 +43,7 @@ class track_conference {
     function setLName($lName) {
         $this->lName = $lName;
     }
-    
-    function setCategory_name($category_name) {
-        $this->category_name = $category_name;
-    }
-    
+      
     function setSession_number($session_number) {
         $this->session_number = $session_number;
     }    

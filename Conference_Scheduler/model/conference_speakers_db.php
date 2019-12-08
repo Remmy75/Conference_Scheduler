@@ -27,10 +27,9 @@ class conference_speakers_db {
     
     public static function get_titles_by_with_category_conference_num($conference_num) {
     $db = Database::getDB();
-    $query = 'SELECT titleID, categoryID FROM title_category join conference_speakers on title_category.titleID = conference_speakers.titleID WHERE conference_num = :conference_num order by titleID;';
+    $query = 'SELECT title_categories.titleID, title_categories.categoryID FROM title_categories join conference_speakers on title_categories.titleID = conference_speakers.titleID WHERE conference_num = :conference_num order by titleID;';
     $statement = $db->prepare($query);
     $statement->bindValue(':conference_num', $conference_num);
-    $statement->bindValue(':titleID', $titleID);
     $statement->execute();
     $rows = $statement->fetchAll();
     $conference_titles  = [];
@@ -48,7 +47,6 @@ class conference_speakers_db {
     $query = 'SELECT titleID FROM conference_speakers WHERE conference_num = :conference_num order by titleID;';
     $statement = $db->prepare($query);
     $statement->bindValue(':conference_num', $conference_num);
-    $statement->bindValue(':titleID', $titleID);
     $statement->execute();
     $rows = $statement->fetchAll();
     $conference_titles  = [];
@@ -99,23 +97,22 @@ class conference_speakers_db {
     public static function get_distinct_category_count_for_conference($conference_num) {
         $db = Database::getDB();
     
-        $query = 'SELECT count(distinct title_category.categoryID) FROM title_category join conference_speakers on title_category.titleID = conference_speakers.titleID WHERE conference_num = :conference_num;';
+        $query = 'SELECT count(distinct title_categories.categoryID) FROM title_categories join conference_speakers on title_categories.titleID = conference_speakers.titleID WHERE conference_num = :conference_num';
         $statement = $db->prepare($query);
-        $statement->bindValue(':$conference_num', conference_num);
+        $statement->bindValue(':conference_num', $conference_num);
         $statement->execute();
         $row = $statement->fetch();
         $statement->closeCursor();
     
-        return new conference_count($row['conference_count']);
+        return $row;
     }
     
     public static function get_categories_in_conference($conference_num) {
         $db = Database::getDB();
 
-        $queryUsers = 'select category.categoryID FROM title_category join conference_speakers on title_category.titleID = conference_speakers.titleID WHERE conference_num = conference_num order by category.categoryID;';
+        $queryUsers = 'select category.categoryID FROM title_categories join conference_speakers on title_categories.titleID = conference_speakers.titleID WHERE conference_num = conference_num order by category.categoryID';
         $statement = $db->prepare($queryUsers);
         $statement->bindValue(':conference_num', $conference_num);
-        $statement->bindValue(':categoryID', $categoryID);
         $statement->execute();
         $rows = $statement->fetchAll();
         $conferences_categories = [];
@@ -134,8 +131,6 @@ class conference_speakers_db {
         $queryUsers = 'select titleID.conference_speakers, category.categoryID FROM title_category join conference_speakers on title_category.titleID = conference_speakers.titleID WHERE conference_num = conference_num order by category.categoryID;';
         $statement = $db->prepare($queryUsers);
         $statement->bindValue(':conference_num', $conference_num);
-        $statement->bindValue(':titleID', $titleID);
-        $statement->bindValue(':categoryID', $categoryID);
         $statement->execute();
         $rows = $statement->fetchAll();
         $conferences_categories = [];
@@ -151,17 +146,15 @@ class conference_speakers_db {
     public static function get_title_count_by_category_in_conference($conference_num) {
         $db = Database::getDB();
 
-        $queryUsers = 'select count(titleID.title_category), category.categoryID FROM title_category join conference_speakers on title_category.titleID = conference_speakers.titleID WHERE conference_num = :conference_num group by category.categoryID;';
+        $queryUsers = 'select count(title_categories.titleID) as "title_count", title_categories.categoryID FROM title_categories join conference_speakers on title_categories.titleID = conference_speakers.titleID WHERE conference_num = :conference_num group by title_categories.categoryID;';
         $statement = $db->prepare($queryUsers);
         $statement->bindValue(':conference_num', $conference_num);
-        $statement->bindValue(':categoryID', $categoryID);
-        $statement->bindValue(':titleID', $titleID);
         $statement->execute();
         $rows = $statement->fetchAll();
         $conferences_categories = [];
 
         foreach ($rows as $value) {
-            array_push($conferences_categories, $value['categoryID'], $value['count(titleID)']);
+            $conferences_categories = array($value['categoryID'] => $value['title_count']);
         }
         $statement->closeCursor();
 
@@ -171,14 +164,17 @@ class conference_speakers_db {
     public static function get_title_count_conference($conference_num) {
         $db = Database::getDB();
 
-        $queryUsers = 'select count(titleID), FROM conference_speakers WHERE conference_num = :conference_num;';
+        $queryUsers = 'select count(titleID) FROM conference_speakers WHERE conference_num = :conference_num;';
         $statement = $db->prepare($queryUsers);
         $statement->bindValue(':conference_num', $conference_num);
-        $statement->bindValue(':titleID', $titleID);
         $statement->execute();
         $rows = $statement->fetch();
 
         return $rows;
     }
+    
+    
+    
+    
 }
 

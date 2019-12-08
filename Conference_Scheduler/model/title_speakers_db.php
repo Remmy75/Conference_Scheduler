@@ -100,7 +100,7 @@ class title_speakers_db {
     public static function select_speakerID_with_multiple_titleID() {
         $db = Database::getDB();
                         
-        $queryUsers = 'SELECT titleID, speakerID FROM title_speakers where (SELECT speakerID FROM title_speakers GROUP BY speakerID HAVING COUNT(titleID) > 1';
+        $queryUsers = 'SELECT titleID, speakerID FROM title_speakers where (SELECT speakerID FROM title_speakers GROUP BY speakerID HAVING COUNT(titleID) > 1)';
         $statement = $db->prepare($queryUsers);
         $statement->execute();
         $rows = $statement->fetchAll();

@@ -23,9 +23,9 @@
                             <td><?php echo htmlspecialchars($c->getConference_name()); ?></td>
                             <td><?php echo htmlspecialchars($c->getConference_location()); ?></td>
                             <td><form action="index.php" method="post">
-                                    <input type="hidden" name="action" value="view_conference">
+                                    <input type="hidden" name="action" value="print_out_track_schedule">
                                     <input type="hidden" name="conference_num" value="<?php echo htmlspecialchars($c->getConference_num()); ?>">
-                                    <input type="submit" value="View Conference">
+                                    <input type="submit" value="Print Schedule">
                                 </form></td>
                             <td><form action="index.php" method="post">
                                     <input type="hidden" name="action" value="schedule_conference_choice">

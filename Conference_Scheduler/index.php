@@ -13,6 +13,7 @@
     require('model/title_speakers_db.php');
     require('model/categories_db.php');
     require('model/title_categories_db.php');
+    require('model/location_title_db.php');
     
     require('model/locations.php');
     require('model/speakers.php');
@@ -26,6 +27,10 @@
     require('model/equipment.php');
     require('model/location_equipment.php');
     require('model/categories.php');
+    require('model/scheduled_conference.php');
+    require('model/track_conference.php');
+    require('model/location_title.php');
+    
     
     $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds
     session_set_cookie_params($lifetime, '/');
@@ -1043,9 +1048,9 @@
         
         $conference_num = filter_input(INPUT_POST, 'conference_num');
         
-        require($_SERVER['DOCUMENT_ROOT'] . 'Conference_Scheduler/Conference_Scheduler/model/schedule_function.php');
+        require($_SERVER['DOCUMENT_ROOT'] . '/Conference_Scheduler/Conference_Scheduler/model/schedule_function.php');
         track_schedule($conference_num);
-        include('view/schedule_printout.php');
+        include('view/add_confirmation.php');
         die();
         break;
     
@@ -1053,9 +1058,9 @@
         
         $conference_num = filter_input(INPUT_POST, 'conference_num');
         
-        require($_SERVER['DOCUMENT_ROOT'] . 'Conference_Scheduler/Conference_Scheduler/model/regular_conference_schedule.php');
+        require($_SERVER['DOCUMENT_ROOT'] . '/Conference_Scheduler/Conference_Scheduler/model/regular_conference_schedule.php');
         regular_schedule($conference_num);
-        include('view/schedule_printout.php');
+        include('view/add_confirmation.php');
         die();
         break;
     
@@ -1067,13 +1072,27 @@
         die();
         break;
     
-    case '':
-        include('');
+    case 'print_out_track_schedule':
+        
+        $conference_num = filter_input(INPUT_POST, 'conference_num');
+        $records_placed = 1;
+        $num_sessions = location_title_db::get_distinct_session_by_conference_num($conference_num);
+        var_dump($num_sessions);
+        $conf_name = location_title_db::get_conference_name($conference_num);
+        var_dump($conf_name);
+        $location_title = location_title_db::select_with_conference_number($conference_num);
+        var_dump($location_title);
+        //$conference = location_title_db::track_conference_call($location_title->getLocationID(), $location_title->getTitleID(), $location_title->getSession(), $location_title->getConference_num());
+        include('view/track_schedule_printout.php');
         die();
         break;
     
-    case '':
-        include('');
+    case 'print_out_schedule':
+        $conference_num = filter_input(INPUT_POST, 'conference_num');
+        require 'model/scheduled_conference.php';
+        $location_title = location_title_db::select_all_by_conference_num($conference_num);
+        $conference = location_title_db::scheduled_conference_call($location_title->getLocationID(), $location_title->getTitleID(), $location_title->getSession(), $location_title->getConference_num());
+        include('view/scheduled_printout.php');
         die();
         break;
     }

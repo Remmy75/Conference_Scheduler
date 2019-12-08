@@ -91,7 +91,7 @@ class locations_db {
     
     public static function get_location_with_conference_num($conference_num) {
         $db = Database::getDB();
-        $query = 'SELECT * FROM locations join conference_locations as locations.locationID = conference_locations.locationID join conferences as conference_locations.conference_num = conference.conference_num WHERE conference_num = :conference_num';
+        $query = 'SELECT locationID FROM locations join conference_locations as locations.locationID = conference_locations.locationID join conferences as conference_locations.conference_num = conference.conference_num WHERE conference_num = :conference_num';
         $statement = $db->prepare($query);
         $statement->bindValue(':conference_num', $conference_num);
         $statement->execute();
@@ -103,6 +103,24 @@ class locations_db {
 
     }
     
+    public static function get_locationID_with_conference_num($conference_num) {
+        $db = Database::getDB();
+        $query = 'SELECT conference_locations.locationID FROM conference_locations WHERE conference_num = :conference_num';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':conference_num', $conference_num);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        
+        $locations = [];
+        
+        foreach ($rows as $value) {
+            array_push($locations, $value['locationID']);
+        }
+
+        $statement->closeCursor();
+        return $locations;
+
+    }
     
 
 }
