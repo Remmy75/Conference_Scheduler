@@ -69,7 +69,7 @@ class categories_db {
     public static function update_category($categoryID, $category_name) {
         $db = Database::getDB();
         $query = 'UPDATE category
-              SET category_name = :category_name,
+              SET category_name = :category_name
               WHERE categoryID = :categoryID';
         $statement = $db->prepare($query);
         $statement->bindValue(':category_name', $category_name);

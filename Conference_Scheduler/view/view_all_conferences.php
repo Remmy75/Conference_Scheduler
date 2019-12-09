@@ -13,7 +13,7 @@
                 <h1>Conferences</h1>
                 <table>
                     <tr>
-                        <th>Conference Number</th>
+                        <th>Conf #</th>
                         <th>Conference Name</th>
                         <th>Location</th>
                     </tr>
@@ -22,6 +22,11 @@
                             <td><?php echo htmlspecialchars($c->getConference_num()); ?></td>
                             <td><?php echo htmlspecialchars($c->getConference_name()); ?></td>
                             <td><?php echo htmlspecialchars($c->getConference_location()); ?></td>
+                            <td><form action="index.php" method="post">
+                                    <input type="hidden" name="action" value="edit_conference">
+                                    <input type="hidden" name="conference_num" value="<?php echo htmlspecialchars($c->getConference_num()); ?>">
+                                    <input type="submit" value="Edit Conference">
+                                </form></td>
                             <td><form action="index.php" method="post">
                                     <input type="hidden" name="action" value="print_out_track_schedule">
                                     <input type="hidden" name="conference_num" value="<?php echo htmlspecialchars($c->getConference_num()); ?>">

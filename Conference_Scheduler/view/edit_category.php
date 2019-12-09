@@ -1,3 +1,15 @@
+<?php
+if (!isset($name)) {
+    $name = '';
+}
+
+
+if (!isset($error_message)) {
+    $error_message = [];
+    $error_message['category_name'] = '';
+}
+?>
+
 <?php include 'view/header.php'; ?>
 
 <body>
@@ -9,24 +21,24 @@
             <?php include 'view/nav.php'; ?>
         <div class="content">
             <main>
-                <h1>Edit Titles</h1>
+                <h1>Edit Category</h1>
                 <form action="index.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="commitTitleUpdate">
-                    <input type="hidden" name="titleID" value="<?php echo $titleID; ?>">
+                    <input type="hidden" name="action" value="commitCategoryUpdate">
+                    <input type="hidden" name="categoryID" value="<?php echo $categoryID; ?>">
                     
                     <ul class="form-wrapper">
                     <li class="form-row">
-                        <label>Title ID:</label><p><?php echo $titleID; ?></p></br>
+                        <label>Equipment ID:</label><p><?php echo $categoryID; ?></p></br>
                     </li>
                         
                     <li class="form-row">
                         <label>Name:</label>
-                        <input type="text" name="title_name" value="<?php echo htmlspecialchars($title_name); ?>">
-                        <div id="error"><?php echo htmlspecialchars($error_message['title_name']); ?></div>
+                        <input type="text" name="category_name" value="<?php echo htmlspecialchars($category_name); ?>">
+                        <div id="error"><?php echo htmlspecialchars($error_message['category_name']); ?></div>
                     </li>
 
                     <li class="form-row">
-                    <button type="submit" name="Edit Title">Edit Title</button>
+                    <button type="submit" name="Edit Category">Edit Category</button>
                     </li>
                     
           

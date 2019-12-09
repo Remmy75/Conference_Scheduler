@@ -25,7 +25,7 @@
                                 <td><form action="index.php" method="post">
                                         <input type="hidden" name="action" value="edit_location">
                                         <input type="hidden" name="locationID" value="<?php echo htmlspecialchars($l->getLocationID()); ?>">
-                                        <input type="submit" value="Edit Equipment">
+                                        <input type="submit" value="Edit Location">
                                     </form>
                                 </td>
                                 <td><form action="index.php" method="post">

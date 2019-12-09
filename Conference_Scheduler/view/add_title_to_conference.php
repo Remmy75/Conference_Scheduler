@@ -17,11 +17,15 @@ if (!isset($error_message)) {
         <div class="content">
             <main>
                 <h1>Add Title to Conferences</h1>
-                <p>Please choose which conference you would like to add <?php echo htmlspecialchars($titleID);?>  <?php echo htmlspecialchars($title_name); ?> to:</p>
+                <p>Please choose which conference you would like to add <?php echo htmlspecialchars($title_name); ?> to:</p>
                         <form action="index.php" method="post">
-                            <?php foreach ($conferences as $c) : ?>
-                                <input type="checkbox" name="conference[]" value="<?php echo htmlspecialchars($c->getConference_num()); ?>"><?php echo htmlspecialchars($c->getConference_name()); ?><br>
-                            <?php endforeach; ?> 
+                            <div class="checkbox">
+                        <?php foreach ($conferences as $c) : ?>
+                            <div class="checkbox-container">
+                                <input type="radio" name="conference[]" id="<?php echo htmlspecialchars($c->getConference_name()); ?>" value="<?php echo htmlspecialchars($c->getConference_num()); ?>"><label for="<?php echo htmlspecialchars($c->getConference_name()); ?>"><?php echo htmlspecialchars($c->getConference_name()); ?></label>
+                            </div>
+                        <?php endforeach; ?> 
+                    </div>
                             <div id="error"><?php echo htmlspecialchars($error_message['checkbox']); ?></div>
                     <input type="hidden" name="action" value="add_title_conference">
                     <input type="hidden" name="titleID" value=<?php echo htmlspecialchars($titleID);?>>

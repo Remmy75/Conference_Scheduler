@@ -1,20 +1,4 @@
-<?php
-if (!isset($fName)) {
-    $fName = '';
-}
 
-if (!isset($lName)) {
-    $lName = '';
-}
-
-if (!isset($error_message)) {
-    $error_message = [];
-    $error_message['fName'] = '';
-    $error_message['lName'] = '';
-}
-
-
-?>
 
 <?php include 'view/header.php'; ?>
 
@@ -30,7 +14,7 @@ if (!isset($error_message)) {
                 <h1>Edit Speakers</h1>
                 <form action="index.php" method="post">
                     <input type="hidden" name="action" value="commitSpeakerUpdate">
-                    <input type="hidden" name="action" value="<?php echo $speakerID; ?>">
+                    <input type="hidden" name="speakerID" value="<?php echo $speakerID; ?>">
                     
                     <ul class="form-wrapper">
                     <li class="form-row">
@@ -39,13 +23,13 @@ if (!isset($error_message)) {
                         
                     <li class="form-row">
                         <label>First Name:</label>
-                        <input type="text" name="fname" value="<?php echo htmlspecialchars($fName); ?>">
+                        <input type="text" name="fName" value="<?php echo htmlspecialchars($fName); ?>">
                         <div id="error"><?php echo htmlspecialchars($error_message['fName']); ?></div>
                     </li>
 
                     <li class="form-row">
                         <label>Last Name:</label>
-                        <input type="text" name="lname" value="<?php echo htmlspecialchars($lName); ?>">
+                        <input type="text" name="lName" value="<?php echo htmlspecialchars($lName); ?>">
                         <div id="error"><?php echo htmlspecialchars($error_message['lName']); ?></div>
                     </li>
 

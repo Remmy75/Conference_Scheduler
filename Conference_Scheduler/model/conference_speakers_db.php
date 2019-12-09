@@ -25,7 +25,7 @@ class conference_speakers_db {
         return $conferences_speakers;
     }
     
-    public static function get_titles_by_with_category_conference_num($conference_num) {
+    public static function get_titles_with_category_conference_num($conference_num) {
     $db = Database::getDB();
     $query = 'SELECT title_categories.titleID, title_categories.categoryID FROM title_categories join conference_speakers on title_categories.titleID = conference_speakers.titleID WHERE conference_num = :conference_num order by titleID;';
     $statement = $db->prepare($query);
@@ -44,7 +44,24 @@ class conference_speakers_db {
 
     public static function get_titles_by_conference_num($conference_num) {
     $db = Database::getDB();
-    $query = 'SELECT titleID FROM conference_speakers WHERE conference_num = :conference_num order by titleID;';
+    $query = 'SELECT conference_speakers.titleID FROM title_categories join conference_speakers on title_categories.titleID = conference_speakers.titleID WHERE conference_num = :conference_num order by title_categories.categoryID;';
+    $statement = $db->prepare($query);
+    $statement->bindValue(':conference_num', $conference_num);
+    $statement->execute();
+    $rows = $statement->fetchAll();
+    $conference_titles  = [];
+
+        foreach ($rows as $value) {
+            array_push($conference_titles, $value['titleID']);
+        }
+        $statement->closeCursor();
+
+        return $conference_titles;
+}
+
+    public static function get_titles_by_conference_num_order_by_titleID($conference_num) {
+    $db = Database::getDB();
+    $query = 'SELECT conference_speakers.titleID FROM title_categories join conference_speakers on title_categories.titleID = conference_speakers.titleID WHERE conference_num = :conference_num order by conference_speakers.titleID;';
     $statement = $db->prepare($query);
     $statement->bindValue(':conference_num', $conference_num);
     $statement->execute();

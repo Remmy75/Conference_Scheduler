@@ -31,9 +31,7 @@ class speakers_db {
         
         $statement->closeCursor();
         return new speakers($row['speakerID'], $row['fName'], $row['lName']);
-        
-        
-        
+  
     }
     
     
@@ -52,30 +50,6 @@ class speakers_db {
     
         $user_id = $db->lastInsertId();
             return $user_id;       
-    }
-    
-    public static function update_speakers_fName($speakerID, $fname) {
-        $db = Database::getDB();
-        $query = 'UPDATE speakers
-              SET fname = :fname,
-              WHERE speakerID = :speakerID';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':fname', $fname);
-        $statement->bindValue(':speakerID', $speakerID);
-        $statement->execute();
-        $statement->closeCursor();
-    }
-    
-    public static function update_speakers_lName($speakerID, $lname) {
-        $db = Database::getDB();
-        $query = 'UPDATE speakers
-              SET lname = :lname,
-              WHERE speakerID = :speakerID';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':lname', $lname);
-        $statement->bindValue(':speakerID', $speakerID);
-        $statement->execute();
-        $statement->closeCursor();
     }
     
     public static function update_speakers($speakerID, $fname, $lname) {

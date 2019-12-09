@@ -79,7 +79,7 @@ class locations_db {
         $db = Database::getDB();
         $query = 'UPDATE locations
               SET bldg_name = :bldg_name,
-                  room_num = :room_num,
+                  room_num = :room_num
               WHERE locationID = :locationID';
         $statement = $db->prepare($query);
         $statement->bindValue(':bldg_name', $bldg_name);

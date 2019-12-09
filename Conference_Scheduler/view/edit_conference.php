@@ -28,7 +28,7 @@ if (!isset($error_message)) {
                 <h1>Edit Location</h1>
                 <form action="index.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="commitConferenceUpdate">
-                    <input type="hidden" name="conference number" value="<?php echo $conference_num; ?>">
+                    <input type="hidden" name="conference_num" value="<?php echo $conference_num; ?>">
                     
                     <ul class="form-wrapper">
                     <li class="form-row">

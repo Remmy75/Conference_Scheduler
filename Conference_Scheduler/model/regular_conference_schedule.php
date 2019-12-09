@@ -18,7 +18,7 @@ function regular_schedule($conference_num) {
     var_dump($loc_count);
 //    $titles_and_categories = conference_speakers_db::get_titles_by_with_category_conference_num($conference_num);
 //    var_dump($titles_and_categories);
-    $titles = conference_speakers_db::get_titles_by_conference_num($conference_num);
+    $titles = conference_speakers_db::get_titles_by_conference_num_order_by_titleID($conference_num);
     var_dump($titles);
 //    $multiple_titles_with_speakerID = title_speakers_db::select_speakerID_with_multiple_titleID();
 //    var_dump($multiple_titles_with_speakerID);

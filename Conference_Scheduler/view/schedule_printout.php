@@ -9,26 +9,37 @@
         <?php include 'view/nav.php'; ?>
         <div class="content">
             <main>
-                <h1><?php echo $conference->getConferenceName(); ?></h1>
-                <?php for ($i = 0; $i <= $num_sessions; $i++) { ?>
-                    <h2><?php echo 'Session ' . ($i + 1); ?></h2>
-                    <table>
-                        <tr>
-                            <th>Room Number</th>
-                            <th>Topic</th>
-                            <th>Speaker</th>
-                        </tr>
-                        <?php foreach ($conference as $c) : ?>
-                            <tr>
+                <h1><?php echo $conf_name[0]; ?></h1>
+                <h2>Schedule</h2>
+                    <h2>Schedule</h2>
+                    
+                        <?php for($i = 0; $i <= (sizeof($location_title)-1); ) {?>
+                            <ul>
+                                <?php $session_implode = implode("",location_title_db::get_session_by_titleID($location_title[($i+1)])); 
+                                $session_half = (int) ((strlen($session_implode)/2)); 
+                                $session_print = substr($session_implode, 0, $session_half);?>
+                                <li> Session: <?php echo $session_print; ?></li>
+                                <?php $room_num_implode = implode("",location_title_db::get_room_num($location_title[$i])); 
+                                $room_half = (int) ((strlen($room_num_implode)/2)); 
+                                $room_print = substr($room_num_implode, 0, $room_half);?>
+                                <li>Room #: <?php echo $room_print; ?></li>
+                                <?php $title_name_implode = implode("",location_title_db::get_title_name($location_title[($i+1)])); 
+                                $title_half = (int) ((strlen($title_name_implode)/2)); 
+                                $title_print = substr($title_name_implode, 0, $title_half);?>
+                                <li>Title Name: <?php echo $title_print; ?></li>
+                                <?php $speaker_name_implode = implode("",location_title_db::get_speaker_name($location_title[($i+1)])); 
+                                $speaker_half = (int) ((strlen($speaker_name_implode)/2)); 
+                                $speaker_print = substr($speaker_name_implode, 0, $speaker_half);?>
+                                <li>Speaker L-Name: <?php echo $speaker_print; ?></li>
+                                <?php $cat_name_implode = implode("",location_title_db::get_category_name($location_title[($i+1)])); 
+                                $cat_half = (int) ((strlen($cat_name_implode)/2)); 
+                                $cat_print = substr($cat_name_implode, 0, $cat_half);?>
+                                <li>Category: <?php echo $cat_print; ?></li>
 
-                                <td><?php echo htmlspecialchars($c->getRoom_num()); ?></td>
-                                <td><?php echo htmlspecialchars($c->getTitle_name()); ?></td>
-                                <td><?php echo htmlspecialchars($c->getLName()); ?></td>
-
-                            </tr>
-                        <?php endforeach; ?> 
-                    </table><br>
-                <?php } ?>
+                            </ul><hr>
+                        
+                    
+                        <?php $i+=3; } ?>
 
 
                 <?php include 'view/footer.php'; ?>

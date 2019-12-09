@@ -28,7 +28,7 @@ if (!isset($error_message)) {
                 <h1>Edit Location</h1>
                 <form action="index.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="commitLocationUpdate">
-                    <input type="hidden" name="action" value="<?php echo $locationID; ?>">
+                    <input type="hidden" name="locationID" value="<?php echo $locationID; ?>">
                     
                     <ul class="form-wrapper">
                     <li class="form-row">

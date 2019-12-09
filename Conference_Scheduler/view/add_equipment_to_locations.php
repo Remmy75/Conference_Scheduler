@@ -19,9 +19,13 @@ if (!isset($error_message)) {
                 <h1>Add Equipment to Locations</h1>
                 <p>Please choose which locations you would like to add <?php echo htmlspecialchars($equipID);?>  <?php echo htmlspecialchars($name); ?> to:</p>
                         <form action="index.php" method="post">
+                            <div class="checkboxes">
                             <?php foreach ($locations as $l) : ?>
-                            <label><input type="checkbox" name="location[]" value="<?php echo htmlspecialchars($l->getLocationID()); ?>"><?php echo htmlspecialchars($l->getRoom_num()); ?></label><br>
+                                <div class="checkbox-container">
+                                <input type="radio" name="location[]" id="<?php echo htmlspecialchars($l->getRoom_num()); ?>" value="<?php echo htmlspecialchars($l->getLocationID()); ?>"><label for="<?php echo htmlspecialchars($l->getRoom_num()); ?>"><?php echo htmlspecialchars($l->getRoom_num()); ?></label>
+                                </div>
                             <?php endforeach; ?>
+                            </div>
                             <div id="error"><?php echo htmlspecialchars($error_message['checkbox']); ?></div>
                     <input type="hidden" name="action" value="add_equipment_location">
                     <input type="hidden" name="equipID" value=<?php echo htmlspecialchars($equipID);?>>

@@ -19,30 +19,6 @@ class conference_db {
 
         return $conferences;
     }
-    
-    public static function update_conference_conference_name($conference_num, $conference_name) {
-        $db = Database::getDB();
-        $query = 'UPDATE conference_schedule
-              SET conference_name = :conference_name,
-              WHERE conference_num = :conference_num';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':conference_name', $conference_name);
-        $statement->bindValue(':conference_num', $conference_num);
-        $statement->execute();
-        $statement->closeCursor();
-    }
-
-     public static function update_conference_conference_location($conference_num, $conference_location) {
-        $db = Database::getDB();
-        $query = 'UPDATE conference_schedule
-              SET conference_location = :conference_location,
-              WHERE conference_num = :conference_num';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':conference_location', $conference_location);
-        $statement->bindValue(':conference_num', $conference_num);
-        $statement->execute();
-        $statement->closeCursor();
-    }
 
     public static function add_conference($conference_name, $conference_location) {
     $db = Database::getDB();
@@ -58,8 +34,7 @@ class conference_db {
     $statement->closeCursor();
     
     $user_id = $db->lastInsertId();
-        return $user_id;
-    
+        return $user_id;   
             
 }
     
@@ -81,9 +56,7 @@ class conference_db {
     
     public static function update_conference($conference_num, $conference_name, $conference_location) {
         $db = Database::getDB();
-        $query = 'UPDATE conference_schedule
-              SET conference_name = :conference_name,
-              WHERE conference_num = :conference_num';
+        $query = 'UPDATE conferences SET conference_name = :conference_name, conference_location = :conference_location WHERE conference_num = :conference_num';
         $statement = $db->prepare($query);
         $statement->bindValue(':conference_name', $conference_name);
         $statement->bindValue(':conference_location', $conference_location);

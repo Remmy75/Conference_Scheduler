@@ -20,13 +20,13 @@ class title_categories_db {
         return $title_categories;
     }
     
-    public static function add_category_title($titleID, $categoryID) {
+    public static function add_category_title($categoryID, $titleID) {
     $db = Database::getDB();
 
     $query = 'INSERT INTO title_categories
-                 (titleID, categoryID)
+                 (categoryID, titleID)
               VALUES
-                 (:titleID, :categoryID)';
+                 (:categoryID, :titleID)';
     $statement = $db->prepare($query);
     $statement->bindValue(':titleID', $titleID);
     $statement->bindValue(':categoryID', $categoryID);

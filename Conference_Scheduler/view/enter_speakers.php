@@ -7,20 +7,10 @@ if (!isset($lname)) {
     $lname = '';
 }
 
-if (!isset($phone_num)) {
-    $phone_num = '';
-}
-
-if (!isset($email)) {
-    $email = '';
-}
-
 if (!isset($error_message)) {
     $error_message = [];
     $error_message['fname'] = '';
     $error_message['lname'] = '';
-    $error_message['phone_num'] = '';
-    $error_message['email'] = '';
 }
 ?>
 
